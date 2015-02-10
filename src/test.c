@@ -1,5 +1,7 @@
 int testInt=2;		
 int[] testArray={101,102,103};
+int 123failure = 123;
+int cat3 = 4
 
 /* magic */
 void testMethod() {
