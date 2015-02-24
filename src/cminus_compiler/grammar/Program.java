@@ -9,6 +9,6 @@ package cminus_compiler.grammar;
  *
  * @author drees
  */
-public class ProgramClass {
+public class Program {
   
 }
