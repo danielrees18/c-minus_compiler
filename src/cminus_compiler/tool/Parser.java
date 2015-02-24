@@ -1,5 +1,7 @@
 package cminus_compiler.tool;
 
+import cminus_compiler.grammar.*;
+
 /**
  * Lorem Ipsum Dolor Sit Amet.
  *
@@ -11,20 +13,24 @@ package cminus_compiler.tool;
  * Description:
  */
 public class Parser {
-    public void parseProgram() {
+    public Program parseProgram() {
         
+        return null;
     }
-    public void parseDecl() {
+    public Declaration parseDecl() {
         
+        return null;
     }
-    public void parseVarDecl() {
+    public VarDeclaration parseVarDecl() {
         
+        return null;
     }
     public void parseTypeSpecifier() {
         
     }
-    public void parseFunDecl() {
+    public FunDeclaration parseFunDecl() {
         
+        return null;
     }
     public void parseParams() {
         
@@ -32,44 +38,55 @@ public class Parser {
     public void parseParam() {
         
     }
-    public void parseCompoundStmt() {
+    public CompoundStatement parseCompoundStmt() {
         
+        return null;
     }
-    public void parseStmt() {
+    public Statement parseStmt() {
         
+        return null;
     }
-    public void parseExpressionStmt() {
+    public ExpressionStatement parseExpressionStmt() {
         
+        return null;
     }
-    public void parseSelectionStmt() {
+    public SelectionStatement parseSelectionStmt() {
         
+        return null;
     }
-    public void parseIterationStmt() {
+    public IterationStatement parseIterationStmt() {
         
+        return null;
     }
-    public void parseReturnStmt() {
+    public ReturnStatement parseReturnStmt() {
         
+        return null;
     }
-    public void parseExpression() {
+    public Expression parseExpression() {
         
+        return null;
     }
-    public void parseExpPrime() {
+    public ExpressionPrime parseExpPrime() {
         
+        return null;
     }
-    public void parseExpDoubleprime() {
+    public ExpressionDoublePrime parseExpDoubleprime() {
         
+        return null;
     }
     public void parseVar() {
         
     }
-    public void parseSimpleExpression() {
+    public SimpleExpression parseSimpleExpression() {
         
+        return null;
     }
     public void parseRelop() {
         
     }
-    public void parseAdditiveExp() {
+    public AdditiveExpression parseAdditiveExp() {
         
+        return null;
     }
     public void parseAddop() {
         
