@@ -15,8 +15,15 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class FunDeclaration {
+public class FunDeclaration extends Declaration {
  
+    
+    public FunDeclaration() {
+        
+    }
+    
+    
+    @Override
     public String printTree() {
         String treeOutput = "";
         

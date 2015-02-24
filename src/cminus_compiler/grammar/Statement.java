@@ -15,6 +15,8 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class Statement {
-  
+public abstract class Statement {
+
+    public abstract String printTree();
+    
 }

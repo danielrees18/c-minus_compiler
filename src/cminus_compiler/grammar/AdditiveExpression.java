@@ -15,8 +15,9 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class AdditiveExpression {
+public class AdditiveExpression extends Expression {
 
+    @Override
     public String printTree() {
         String treeOutput = "";
         

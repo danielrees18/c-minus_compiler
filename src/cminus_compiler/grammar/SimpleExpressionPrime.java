@@ -15,6 +15,13 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class SimpleExpressionPrime {
-  
+public class SimpleExpressionPrime extends Expression {
+
+    @Override
+    public String printTree() {
+        String treeOutput = "";
+        
+        
+        return treeOutput;
+    }
 }

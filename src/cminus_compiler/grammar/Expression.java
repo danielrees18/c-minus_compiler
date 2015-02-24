@@ -15,12 +15,8 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class Expression {
+public abstract class Expression {
     
-    public String printTree() {
-        String treeOutput = "";
-        
-        
-        return treeOutput;
-    }
+    public abstract String printTree();
+    
 }

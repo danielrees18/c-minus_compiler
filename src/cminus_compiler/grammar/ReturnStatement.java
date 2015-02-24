@@ -15,8 +15,9 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class ReturnStatement {
-
+public class ReturnStatement extends Statement {
+    
+    @Override
     public String printTree() {
         String treeOutput = "";
         

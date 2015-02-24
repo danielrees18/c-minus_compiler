@@ -5,6 +5,8 @@
  */
 package cminus_compiler.grammar;
 
+import java.util.ArrayList;
+
 /** 
  *
  *
@@ -16,10 +18,29 @@ package cminus_compiler.grammar;
  * Description:
  */
 public class Program {
+    
+    // Program variables
+    private ArrayList<Declaration> declarations;
+    
+    
+    // Program constructor
+    public Program() {
+        declarations = new ArrayList<>();
+    }
+    
+       
+    // Program Methods
+    public void addDeclaration(Declaration declaration) {
+        declarations.add(declaration);
+    }
+    
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
         
+        for(Declaration declaration : declarations) {
+            builder.append(declaration.printTree());
+        }
         
-        return treeOutput;
+        return builder.toString();
     }
 }

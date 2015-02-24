@@ -15,6 +15,13 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class IterationStatement {
-  
+public class IterationStatement extends Statement {
+    
+    @Override
+    public String printTree() {
+        String treeOutput = "";
+        
+        
+        return treeOutput;
+    }
 }

@@ -15,8 +15,14 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class VarDeclaration {
+public class VarDeclaration extends Declaration {
 
+    public VarDeclaration() {
+        
+    }
+    
+
+    @Override
     public String printTree() {
         String treeOutput = "";
         

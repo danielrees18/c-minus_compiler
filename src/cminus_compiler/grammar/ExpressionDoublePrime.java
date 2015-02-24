@@ -15,8 +15,9 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class ExpressionDoublePrime {
+public class ExpressionDoublePrime extends Expression {
 
+    @Override
     public String printTree() {
         String treeOutput = "";
         
