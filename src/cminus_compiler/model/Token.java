@@ -23,6 +23,10 @@ public class Token {
         this(null, null);
     }
     
+    public Token(TokenType type) {
+        this(type, null);
+    }
+    
     public Token (TokenType type, Object data) {
         this.tokenType = type;
         this.tokenData = data;

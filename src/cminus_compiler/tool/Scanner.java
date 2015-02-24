@@ -191,7 +191,13 @@ public class Scanner implements ScannerInterface {
                     break;
                     
                 case IN_NUM:
-                    if(!Character.isDigit(c)) {
+                    // 1cat is invalid
+                    if(Character.isAlphabetic(c)) {
+                        
+                        saveCharacter = false;
+                        token.setTokenType(TokenType.ERROR);
+                        
+                    } else if(!Character.isDigit(c)) {
                         state = StateType.DONE;
                         saveCharacter = false;
                         token.setTokenType(TokenType.NUM_TOKEN);
@@ -201,7 +207,13 @@ public class Scanner implements ScannerInterface {
                     break;
                 
                 case IN_ID:
-                    if(!Character.isAlphabetic(c)) {
+                    // cat3 is invalid
+                    if(Character.isDigit(c)) {
+                        state = StateType.DONE;
+                        saveCharacter = false;
+                        token.setTokenType(TokenType.ERROR);
+                        
+                    } else if(!Character.isAlphabetic(c)) {
                         state = StateType.DONE;
                         saveCharacter = false;
                         token.setTokenType(TokenType.ID_TOKEN);
@@ -223,9 +235,10 @@ public class Scanner implements ScannerInterface {
             
             // Create token if done
             if(state == StateType.DONE) {
-                if(token.getTokenType() == TokenType.ID_TOKEN
-                        || token.getTokenType() == TokenType.NUM_TOKEN) {
+                if(token.getTokenType() == TokenType.ID_TOKEN) {
                     token = checkIfWordIsKeyword(token, tokenData);
+                } else {
+                    token.setTokenData(tokenData);
                 }
             }
         }

@@ -1,5 +1,6 @@
 package cminus_compiler.tool;
 
+import cminus_compiler.main.ScannerInterface;
 import cminus_compiler.model.Token;
 import cminus_compiler.model.TokenType;
 import java.io.BufferedReader;
@@ -41,7 +42,9 @@ public class Compiler {
         ArrayList<Token> tokens = new ArrayList();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file)); 
-            Scanner scanner = new Scanner(br);
+            
+//            ScannerInterface scanner = new Scanner(br);
+            ScannerInterface scanner = new CMinusFlexScanner(br);
             
             // scan for tokens while we haven't reached the end of the file
             while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
