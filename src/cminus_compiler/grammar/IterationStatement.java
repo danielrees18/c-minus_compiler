@@ -5,9 +5,15 @@
  */
 package cminus_compiler.grammar;
 
-/**
+/** 
  *
- * @author drees
+ *
+ * @authors Daniel Rees, Nathan Kallman
+ * @version 1.0
+ * File: IterationStatement.java
+ * Created: Feb 2015	
+ *
+ * Description:
  */
 public class IterationStatement {
   

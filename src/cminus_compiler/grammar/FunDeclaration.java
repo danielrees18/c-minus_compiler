@@ -5,10 +5,22 @@
  */
 package cminus_compiler.grammar;
 
-/**
+/** 
  *
- * @author drees
+ *
+ * @authors Daniel Rees, Nathan Kallman
+ * @version 1.0
+ * File: FunDeclaration.java
+ * Created: Feb 2015	
+ *
+ * Description:
  */
 public class FunDeclaration {
-  
+ 
+    public String printTree() {
+        String treeOutput = "";
+        
+        
+        return treeOutput;
+    }
 }
