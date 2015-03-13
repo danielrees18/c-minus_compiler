@@ -66,28 +66,26 @@ public class Parser {
         
         return null;
     }
-    public ExpressionPrime parseExpPrime() {
+    public BinaryOperation parseBinaryOperation() {
         
         return null;
     }
-    public ExpressionDoublePrime parseExpDoubleprime() {
+    public AssignmentOperation parseAssignmentOperation() {
         
         return null;
     }
-    public void parseVar() {
-        
+    public Var parseVar() {
+        return null;
     }
-    public SimpleExpression parseSimpleExpression() {
+    
+    public Num parseNum() {
         
         return null;
     }
     public void parseRelop() {
         
     }
-    public AdditiveExpression parseAdditiveExp() {
-        
-        return null;
-    }
+    
     public void parseAddop() {
         
     }
@@ -100,8 +98,8 @@ public class Parser {
     public void parseFactor() {
         
     }
-    public void parseCall() {
-        
+    public Call parseCall() {
+        return null;   
     }
     public void parseArgs() {
         
