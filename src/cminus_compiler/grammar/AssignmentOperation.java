@@ -10,15 +10,14 @@ package cminus_compiler.grammar;
  *
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0
- * File: ExpressionDoublePrime.java
- * Created: Feb 2015	
+ * File: AssignmentOperation.java
+ * Created: March 2015	
  *
  * Description:
  */
-public class ExpressionDoublePrime extends Expression {
-
-    @Override
-    public String printTree() {
+public class AssignmentOperation {
+       
+     public String printTree() {
         String treeOutput = "";
         
         

@@ -10,19 +10,18 @@ package cminus_compiler.grammar;
  *
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0
- * File: AdditiveExpression.java
- * Created: Feb 2015	
+ * File: BinaryOperation.java
+ * Created: March 2015	
  *
  * Description:
  */
-public class AdditiveExpression extends Expression {
-
-    @Override
-    public String printTree() {
+public class BinaryOperation {
+    
+    
+     public String printTree() {
         String treeOutput = "";
         
         
         return treeOutput;
     }
-  
 }

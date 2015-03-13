@@ -10,18 +10,16 @@ package cminus_compiler.grammar;
  *
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0
- * File: ExpressionPrime.java
- * Created: Feb 2015	
+ * File: Num.java
+ * Created: March 2015	
  *
  * Description:
  */
-public class ExpressionPrime extends Expression {
-
-    @Override
-    public String printTree() {
+public class Num {
+     public String printTree() {
         String treeOutput = "";
         
         
         return treeOutput;
-    }
+    }   
 }

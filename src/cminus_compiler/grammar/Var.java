@@ -6,14 +6,13 @@ package cminus_compiler.grammar;
  *
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0
- * File: IterationStatement.java
- * Created: Feb 2015	
+ * File: Var.java
+ * Created: March 2015	
  *
  * Description:
  */
-public class IterationStatement extends Statement {
-    
-    @Override
+public class Var {
+ 
     public String printTree() {
         String treeOutput = "";
         

@@ -10,15 +10,13 @@ package cminus_compiler.grammar;
  *
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0
- * File: SimpleExpression.java
- * Created: Feb 2015	
+ * File: Call.java
+ * Created: March 2015	
  *
  * Description:
  */
-public class SimpleExpression extends Expression {
-
-    @Override
-    public String printTree() {
+public class Call {
+        public String printTree() {
         String treeOutput = "";
         
         
