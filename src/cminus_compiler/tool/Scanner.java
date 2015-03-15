@@ -97,6 +97,7 @@ public class Scanner implements ScannerInterface {
                     
                     // Looking for symbols
                     } else {
+                        saveCharacter = false;
                         state = StateType.DONE;
                         switch(c) {
                             case '+':
@@ -109,50 +110,19 @@ public class Scanner implements ScannerInterface {
                                 token.setTokenType(TokenType.MULT_TOKEN);
                                 break;
                             case '/':
-                                if(viewNextChar() == '*') {
-                                    // /* comment state
-                                    state = StateType.IN_COMMENT;
-                                    saveCharacter = false;
-                                } else {
-                                    // Not a star, division op
-                                    token.setTokenType(TokenType.DIV_TOKEN);
-                                }
+                                state = StateType.IN_COMMENT_OPEN;
                                 break;
                             case '<':
-                                // <=
-                                if(viewNextChar() == '=') {
-                                    token.setTokenType(TokenType.LEQ_TOKEN);
-                                    getNextChar(); // Consume
-                                // <
-                                } else {
-                                    token.setTokenType(TokenType.LESS_TOKEN);
-                                }
+                                state = StateType.IN_LEQ;
                                 break;
                             case '>':
-                                // >=
-                                if(viewNextChar() == '=') {
-                                    token.setTokenType(TokenType.GEQ_TOKEN);
-                                    getNextChar(); // Consume
-                                // >
-                                } else {
-                                    token.setTokenType(TokenType.GREAT_TOKEN);
-                                }
+                                state = StateType.IN_GREQ;
                                 break;
                             case '=':
-                                // ==
-                                if(viewNextChar() == '=') {
-                                    token.setTokenType(TokenType.EQUAL_TOKEN);
-                                    getNextChar(); // Consume
-                                // =
-                                } else {
-                                    token.setTokenType(TokenType.ASSIGN_TOKEN);
-                                }
+                                state = StateType.IN_EQUALS;
                                 break;
                             case '!':
-                                if (viewNextChar() == '=') {
-                                    token.setTokenType(TokenType.NEQ_TOKEN);
-                                    getNextChar(); // Consume
-                                }
+                                state = StateType.IN_NEQ;
                                 break;
                             case ';':
                                 token.setTokenType(TokenType.SEMICOLON_TOKEN);
@@ -181,7 +151,22 @@ public class Scanner implements ScannerInterface {
                         }
                     }
                     break;
+                    
                 
+                case IN_COMMENT_OPEN:
+                    saveCharacter = false;
+                    if(viewNextChar() == '*') {
+                        // /* comment state
+                        state = StateType.IN_COMMENT;
+                        saveCharacter = false;
+                    } else {
+                        // Not a star, division op
+                        token.setTokenType(TokenType.DIV_TOKEN);
+                        state = StateType.DONE;
+                    }
+                    
+                    break;
+                    
                 case IN_COMMENT:
                     saveCharacter = false;
                     if(getNextChar() == '*' && viewNextChar() == '/') {
@@ -190,12 +175,63 @@ public class Scanner implements ScannerInterface {
                     }
                     break;
                     
+                case IN_EQUALS:
+                    state = StateType.DONE;
+                    saveCharacter = false;
+                    // ==
+                    if(viewNextChar() == '=') {
+                        token.setTokenType(TokenType.EQUAL_TOKEN);
+                        getNextChar(); // Consume
+                    // =
+                    } else {
+                        token.setTokenType(TokenType.ASSIGN_TOKEN);
+                    }
+                    break;
+                    
+                case IN_NEQ:
+                    if (viewNextChar() == '=') {
+                        state = StateType.DONE;
+                        token.setTokenType(TokenType.NEQ_TOKEN);
+                        getNextChar(); // Consume
+                    } 
+                    else {
+                        state = StateType.IN_ERROR;
+                        saveCharacter = true;
+                        getNextChar();
+                    }
+                    break;
+                    
+                case IN_GREQ:
+                    state = StateType.DONE;
+                    saveCharacter = false;
+                    // >=
+                    if(viewNextChar() == '=') {
+                        token.setTokenType(TokenType.GEQ_TOKEN);
+                        getNextChar(); // Consume
+                    // >
+                    } else {
+                        token.setTokenType(TokenType.GREAT_TOKEN);
+                    }          
+                    break;
+                    
+                case IN_LEQ:
+                    state = StateType.DONE;
+                    saveCharacter = false;
+                    // <=
+                    if(viewNextChar() == '=') {
+                        token.setTokenType(TokenType.LEQ_TOKEN);
+                        getNextChar(); // Consume
+                    // <
+                    } else {
+                        token.setTokenType(TokenType.LESS_TOKEN);
+                    }
+                    break;
+                    
                 case IN_NUM:
                     // 1cat is invalid
                     if(Character.isAlphabetic(c)) {
-                        
-                        saveCharacter = false;
-                        token.setTokenType(TokenType.ERROR);
+                        state = StateType.IN_ERROR;
+                        getNextChar();
                         
                     } else if(!Character.isDigit(c)) {
                         state = StateType.DONE;
@@ -209,9 +245,8 @@ public class Scanner implements ScannerInterface {
                 case IN_ID:
                     // cat3 is invalid
                     if(Character.isDigit(c)) {
-                        state = StateType.DONE;
-                        saveCharacter = false;
-                        token.setTokenType(TokenType.ERROR);
+                        state = StateType.IN_ERROR;
+                        getNextChar();
                         
                     } else if(!Character.isAlphabetic(c)) {
                         state = StateType.DONE;
@@ -222,6 +257,17 @@ public class Scanner implements ScannerInterface {
                     }
                     break;
 
+                case IN_ERROR:
+                    if(viewNextChar() != ' ' && viewNextChar() != '\n' && viewNextChar() != '\t') {
+                        saveCharacter = true;
+                        getNextChar();
+                    } else {
+                        state = StateType.DONE;
+                        token.setTokenType(TokenType.ERROR);
+                        saveCharacter = false;
+                    }
+                    break;    
+                    
                 case DONE:
                 default: // Should this happen, you're toast.
                     System.err.println("Your scanner sux: " + c);
@@ -238,6 +284,9 @@ public class Scanner implements ScannerInterface {
                 if(token.getTokenType() == TokenType.ID_TOKEN) {
                     token = checkIfWordIsKeyword(token, tokenData);
                 } else {
+                    if (tokenData != null && tokenData.isEmpty()) {
+                        tokenData = null;
+                    }
                     token.setTokenData(tokenData);
                 }
             }
