@@ -43,8 +43,8 @@ public class Compiler {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file)); 
             
-//            ScannerInterface scanner = new Scanner(br);
-            ScannerInterface scanner = new CMinusFlexScanner(br);
+            ScannerInterface scanner = new Scanner(br);
+//            ScannerInterface scanner = new CMinusFlexScanner(br);
             
             // scan for tokens while we haven't reached the end of the file
             while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
