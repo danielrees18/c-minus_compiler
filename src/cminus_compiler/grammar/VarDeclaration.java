@@ -19,8 +19,6 @@ public class VarDeclaration extends Declaration {
 
     int size;
     
-    
-    
     public VarDeclaration() {
         
     }

@@ -15,9 +15,14 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class AssignmentOperation {
-       
-     public String printTree() {
+public class AssignmentOperation extends Expression {
+    
+    private Var variable;
+    private Expression rightHandExpression;
+    private String operation = "=";
+    
+    @Override
+    public String printTree() {
         String treeOutput = "";
         
         

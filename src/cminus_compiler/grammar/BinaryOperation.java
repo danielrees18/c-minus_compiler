@@ -15,10 +15,14 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class BinaryOperation {
+public class BinaryOperation extends Expression {
     
+    private Expression leftHandExpression;
+    private Expression rightHandExpression;
+    private String operation;
     
-     public String printTree() {
+    @Override
+    public String printTree() {
         String treeOutput = "";
         
         

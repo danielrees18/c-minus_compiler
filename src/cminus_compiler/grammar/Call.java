@@ -5,6 +5,8 @@
  */
 package cminus_compiler.grammar;
 
+import java.util.ArrayList;
+
 /** 
  *
  *
@@ -15,8 +17,13 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class Call {
-        public String printTree() {
+public class Call extends Expression {
+    
+    private String callName;
+    private ArrayList<Expression> args;
+    
+    @Override
+    public String printTree() {
         String treeOutput = "";
         
         

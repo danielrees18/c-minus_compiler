@@ -11,8 +11,12 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class Var {
- 
+public class Var extends Expression {
+       
+    private String variableName;
+    private Expression expression;
+    
+    @Override
     public String printTree() {
         String treeOutput = "";
         

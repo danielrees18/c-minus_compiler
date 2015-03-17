@@ -15,8 +15,17 @@ package cminus_compiler.grammar;
  *
  * Description:
  */
-public class Num {
-     public String printTree() {
+public class Num extends Expression {
+
+    
+    private int value;
+    
+    public Num() {
+        
+    }
+    
+    @Override
+    public String printTree() {
         String treeOutput = "";
         
         
