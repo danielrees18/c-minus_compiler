@@ -17,7 +17,9 @@ import cminus_compiler.tool.Compiler;
 public class CMinusCompilerMain {
 
     public static void main(String[] args) {
-        File file = new File("./src/test.c");
+        
+//        File file = new File("./src/test.c");
+        File file = new File("./src/parse.c");
  
         Compiler compiler = new Compiler(file);
         compiler.compile();

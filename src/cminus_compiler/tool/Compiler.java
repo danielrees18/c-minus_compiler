@@ -4,6 +4,7 @@ import cminus_compiler.grammar.Declaration;
 import cminus_compiler.grammar.FunDeclaration;
 import cminus_compiler.grammar.Program;
 import cminus_compiler.grammar.VarDeclaration;
+import cminus_compiler.interfaces.ParserInterface;
 import cminus_compiler.interfaces.ScannerInterface;
 import cminus_compiler.model.Token;
 import cminus_compiler.model.TokenType;
@@ -43,21 +44,14 @@ public class Compiler {
      * Compile the c file passed to the constructor
      */
     public void compile() {
-        this.scan();
-        this.parse();
-    }
-    
-    /**
-     * Runs the scanner to lex the C- file
-     */
-    private void scan() {
         ArrayList<Token> tokens = new ArrayList();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file)); 
-            
+
             ScannerInterface scanner = new Scanner(br);
 //            ScannerInterface scanner = new CMinusFlexScanner(br);
             
+              
             // scan for tokens while we haven't reached the end of the file
             while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
                 Token token = scanner.getNextToken();
@@ -68,6 +62,11 @@ public class Compiler {
             
             // write tokens to output file
             writeTokensToFile(tokens);
+            
+            // parse
+            ParserInterface parser = new Parser(scanner);
+            Program program = parser.parse();
+            System.out.print(program.printTree());
             
         }
         catch (FileNotFoundException e) {

@@ -33,6 +33,17 @@ public class Token {
     }
     
     
+    // Public Methods
+    public boolean equals(TokenType type) {
+        return this.tokenType == type;
+    }
+
+    @Override
+    public String toString() {
+        return "Token{" + "tokenType=" + tokenType + ", tokenData=" + tokenData + '}';
+    }
+    
+    
     // Getters
     public TokenType getTokenType() {
         return tokenType;

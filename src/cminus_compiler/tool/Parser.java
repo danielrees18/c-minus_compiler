@@ -2,6 +2,12 @@ package cminus_compiler.tool;
 
 import cminus_compiler.grammar.*;
 import cminus_compiler.interfaces.ParserInterface;
+import cminus_compiler.interfaces.ScannerInterface;
+import cminus_compiler.model.CminusException;
+import cminus_compiler.model.Token;
+import static cminus_compiler.model.TokenType.EOF_TOKEN;
+import static cminus_compiler.model.TokenType.INT_TOKEN;
+import static cminus_compiler.model.TokenType.VOID_TOKEN;
 
 /**
  * Lorem Ipsum Dolor Sit Amet.
@@ -14,13 +20,49 @@ import cminus_compiler.interfaces.ParserInterface;
  * Description:
  */
 public class Parser implements ParserInterface {
-    public Program parseProgram() {
-        
-        return null;
+    
+    private ScannerInterface scanner;
+ 
+    // Constructor
+    public Parser(ScannerInterface scanner) {
+        this.scanner = scanner;
     }
-    public Declaration parseDecl() {
-        
-        return null;
+    
+    
+    // Interface Methods
+    @Override
+    public Program parse() {
+        Program program = null;
+        try {
+            program = parseProgram();
+        } catch (CminusException e) {
+            e.printStackTrace();
+        }
+        return program;
+    }
+    
+    
+    // Private Helper Methods
+    public Program parseProgram() throws CminusException {
+        Program program = new Program();
+        while(!scanner.viewNextToken().equals(EOF_TOKEN)) {
+            program.addDeclaration(parseDecl());
+        }
+        return program;
+    }
+    
+    public Declaration parseDecl() throws CminusException {
+        Declaration declaration = null;
+        Token nextToken = scanner.getNextToken();
+        if(nextToken.equals(VOID_TOKEN)) {
+            // something voidy
+        } else if (nextToken.equals(INT_TOKEN)) {
+            // something inty
+        } else {
+            // error
+            throw new CminusException("void or int", nextToken);
+        }
+        return declaration;
     }
     public VarDeclaration parseVarDecl() {
         
@@ -105,4 +147,5 @@ public class Parser implements ParserInterface {
     public void parseArgs() {
         
     }
+    
 }
