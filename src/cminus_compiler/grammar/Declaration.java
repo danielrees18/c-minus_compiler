@@ -17,8 +17,7 @@ package cminus_compiler.grammar;
  */
 public abstract class Declaration {
     
-    String declarationName;
-    
+    protected String declarationName;
     
     public abstract String printTree();
     

@@ -5,9 +5,8 @@ import cminus_compiler.interfaces.ParserInterface;
 import cminus_compiler.interfaces.ScannerInterface;
 import cminus_compiler.model.CminusException;
 import cminus_compiler.model.Token;
-import static cminus_compiler.model.TokenType.EOF_TOKEN;
-import static cminus_compiler.model.TokenType.INT_TOKEN;
-import static cminus_compiler.model.TokenType.VOID_TOKEN;
+import static cminus_compiler.model.TokenType.*;
+import java.util.ArrayList;
 
 /**
  * Lorem Ipsum Dolor Sit Amet.
@@ -42,109 +41,141 @@ public class Parser implements ParserInterface {
     }
     
     
-    // Private Helper Methods
-    public Program parseProgram() throws CminusException {
+    /*
+        PARSE GRAMMAR METHODS
+    */
+    
+    // 1. program → decl {decl}
+    private Program parseProgram() throws CminusException {
         Program program = new Program();
         while(!scanner.viewNextToken().equals(EOF_TOKEN)) {
-            program.addDeclaration(parseDecl());
+            program.addDeclaration(parseDeclaration());
         }
         return program;
     }
     
-    public Declaration parseDecl() throws CminusException {
+    // 2. decl → void ID fun-decl-prime | int ID decl-prime
+    private Declaration parseDeclaration() throws CminusException {
         Declaration declaration = null;
         Token nextToken = scanner.getNextToken();
+        
         if(nextToken.equals(VOID_TOKEN)) {
-            // something voidy
+            declaration = parseFunctionDeclarationPrime();
         } else if (nextToken.equals(INT_TOKEN)) {
-            // something inty
+            declaration = parseVariableDeclaration();
         } else {
-            // error
             throw new CminusException(nextToken, VOID_TOKEN, INT_TOKEN);
         }
         return declaration;
     }
-    public VarDeclaration parseVarDecl() {
         
-        return null;
-    }
-    public void parseTypeSpecifier() {
-        
-    }
-    public FunDeclaration parseFunDecl() {
-        
-        return null;
-    }
-    public void parseParams() {
-        
-    }
-    public void parseParam() {
-        
-    }
-    public CompoundStatement parseCompoundStmt() {
-        
-        return null;
-    }
-    public Statement parseStmt() {
-        
-        return null;
-    }
-    public ExpressionStatement parseExpressionStmt() {
-        
-        return null;
-    }
-    public SelectionStatement parseSelectionStmt() {
-        
-        return null;
-    }
-    public IterationStatement parseIterationStmt() {
-        
-        return null;
-    }
-    public ReturnStatement parseReturnStmt() {
-        
-        return null;
-    }
-    public Expression parseExpression() {
-        
-        return null;
-    }
-    public BinaryOperation parseBinaryOperation() {
-        
-        return null;
-    }
-    public AssignmentOperation parseAssignmentOperation() {
-        
-        return null;
-    }
-    public Var parseVar() {
+    //3. decl-prime → [ [ NUM ] ] ; |  ( params ) compound-stmt
+    private Declaration parseDeclarationPrime() throws CminusException {
         return null;
     }
     
-    public Num parseNum() {
+    // 4. var-decl → int ID [ [ NUM ] ] ;
+    private VarDeclaration parseVariableDeclaration() throws CminusException {
+        VarDeclaration declaration = null;
+        Token nextToken = scanner.viewNextToken();
+        
+        if(nextToken.equals(ID_TOKEN)) {
+            Token idToken = scanner.getNextToken();
+            nextToken = scanner.viewNextToken();
+            
+            declaration = new VarDeclaration();
+        } else {
+            
+        }
+        
+        return declaration;
+    }
+     
+    // 5. fun-decl-prime → ( params ) compound-stmt
+    private FunDeclaration parseFunctionDeclarationPrime() throws CminusException {
         
         return null;
     }
-    public void parseRelop() {
+    
+    // 6. params → param { , param } | void
+    private ArrayList<Param> parseParams() throws CminusException {
+        ArrayList<Param> params = new ArrayList<>();
+        
+        return params;
+    }
+    
+    // 7. param → int ID [ [ ] ]
+    private Param parseParam() throws CminusException {
+        Param param = null;
+        
+        return param;
+    }
+    
+    private CompoundStatement parseCompoundStmt() throws CminusException {
+        
+        return null;
+    }
+    
+    private Statement parseStmt() throws CminusException {
+        
+        return null;
+    }
+    private ExpressionStatement parseExpressionStmt() throws CminusException {
+        
+        return null;
+    }
+    private SelectionStatement parseSelectionStmt() throws CminusException {
+        
+        return null;
+    }
+    private IterationStatement parseIterationStmt() throws CminusException {
+        
+        return null;
+    }
+    private ReturnStatement parseReturnStmt() throws CminusException {
+        
+        return null;
+    }
+    private Expression parseExpression() throws CminusException {
+        
+        return null;
+    }
+    private BinaryOperation parseBinaryOperation() throws CminusException {
+        
+        return null;
+    }
+    private AssignmentOperation parseAssignmentOperation() throws CminusException {
+        
+        return null;
+    }
+    private Var parseVar() throws CminusException {
+        return null;
+    }
+    
+    private Num parseNum() throws CminusException {
+        
+        return null;
+    }
+    private void parseRelop() throws CminusException {
         
     }
     
-    public void parseAddop() {
+    private void parseAddop() throws CminusException {
         
     }
-    public void parseTerm() {
+    private void parseTerm() throws CminusException {
         
     }
-    public void parseMulop() {
+    private void parseMulop() throws CminusException {
         
     }
-    public void parseFactor() {
+    private void parseFactor() throws CminusException {
         
     }
-    public Call parseCall() {
+    private Call parseCall() throws CminusException {
         return null;   
     }
-    public void parseArgs() {
+    private void parseArgs() throws CminusException {
         
     }
     

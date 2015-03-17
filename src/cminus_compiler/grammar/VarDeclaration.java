@@ -19,11 +19,35 @@ public class VarDeclaration extends Declaration {
 
     int size;
     
-    public VarDeclaration() {
-        
+    
+    // Constructors
+    public VarDeclaration(int size, String name) {
+        this.size = size;
+        this.declarationName = name;
+    }
+
+    
+    // Getters
+    public int getSize() {
+        return size;
+    }
+
+    public String getDeclarationName() {
+        return declarationName;
+    }
+
+    
+    // Setters
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setDeclarationName(String declarationName) {
+        this.declarationName = declarationName;
     }
     
-
+    
+    // Public Methods
     @Override
     public String printTree() {
         String treeOutput = "VarDecl";

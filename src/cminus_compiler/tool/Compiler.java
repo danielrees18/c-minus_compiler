@@ -79,19 +79,6 @@ public class Compiler {
     }
     
     /**
-     * Runs the parse after lex
-     */
-    private void parse() {
-        Program program = new Program();
-        Declaration funDecl = new FunDeclaration();
-        Declaration varDecl = new VarDeclaration();
-        program.addDeclaration(varDecl);
-        program.addDeclaration(funDecl);
-        
-        System.out.println(program.printTree());
-    }
-    
-    /**
      * Write the array of tokens to the output file
      * @param tokens    -   ArrayList of tokens to write to file
      */
