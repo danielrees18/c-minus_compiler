@@ -189,6 +189,7 @@ public class Scanner implements ScannerInterface {
                     break;
                     
                 case IN_NEQ:
+                    saveCharacter = false;
                     if (viewNextChar() == '=') {
                         state = StateType.DONE;
                         token.setTokenType(TokenType.NEQ_TOKEN);
