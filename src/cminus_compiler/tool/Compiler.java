@@ -52,29 +52,30 @@ public class Compiler {
 //            ScannerInterface scanner = new CMinusFlexScanner(br);
             
               
-            // scan for tokens while we haven't reached the end of the file
-            while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
-                Token token = scanner.getNextToken();
-                tokens.add(token);
-            }
-            
-            br.close();
-            
-            // write tokens to output file
-            writeTokensToFile(tokens);
-            
+//            // scan for tokens while we haven't reached the end of the file
+//            while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
+//                Token token = scanner.getNextToken();
+//                tokens.add(token);
+//            }
+//            
+//            br.close();
+//            
+//            // write tokens to output file
+//            writeTokensToFile(tokens);
+//            
             // parse
             ParserInterface parser = new Parser(scanner);
             Program program = parser.parse();
-            System.out.print(program.printTree());
+            System.out.println(program.printTree());
             
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        
     }
     
     /**

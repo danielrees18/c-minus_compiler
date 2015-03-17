@@ -60,7 +60,7 @@ public class Parser implements ParserInterface {
             // something inty
         } else {
             // error
-            throw new CminusException("void or int", nextToken);
+            throw new CminusException(nextToken, VOID_TOKEN, INT_TOKEN);
         }
         return declaration;
     }

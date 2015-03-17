@@ -13,6 +13,7 @@ public class CminusException extends Exception {
 
     private String errorMessage;
     
+    // Constructors
     public CminusException(String message) {
         super(message);
     }  
@@ -21,11 +22,17 @@ public class CminusException extends Exception {
         super("Invalid token. Expected " + expected + ". Found " + found.toString());
     }
     
+    /**
+     * Constructor builds an error message that converts found tokens and expected types into nice English
+     * @param found -   Token found from the parser
+     * @param expectedTypes     -   Token types that the parser was expecting
+     */
     public CminusException(Token found, TokenType... expectedTypes) {
         super();
-        errorMessage = "Invalid token. Expected " + getExpectedTypesString(expectedTypes) + ". Found " + found.toString();
+        errorMessage = generateErrorMessage(expectedTypes, found);
     }
 
+    // Fancy error logging
     @Override
     public String getMessage() {
         if(errorMessage != null) {
@@ -35,17 +42,20 @@ public class CminusException extends Exception {
         return super.getMessage(); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private static String getExpectedTypesString(TokenType[] types) {
+    private String generateErrorMessage(TokenType[] types, Token found) {
         StringBuilder builder = new StringBuilder();
-        
+        builder.append("Invalid token. Expected ");
         for(int i = 0; i < types.length; i++) {
-            builder.append(types[i].toString());
-            if (types.length > 1 && i == types.length -1) {
-                builder.append(" or ");
-            } else {
+            builder.append(types[i].toString()); 
+            if(i < types.length - 2) {
                 builder.append(", ");
-            }
+            } else if (i == types.length - 2) {
+                builder.append(" or ");
+            } 
         }
+        
+        builder.append(". Found ");
+        builder.append(found.toString());
         
         return builder.toString();
     }
