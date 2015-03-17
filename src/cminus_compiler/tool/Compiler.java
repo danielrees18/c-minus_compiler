@@ -4,7 +4,7 @@ import cminus_compiler.grammar.Declaration;
 import cminus_compiler.grammar.FunDeclaration;
 import cminus_compiler.grammar.Program;
 import cminus_compiler.grammar.VarDeclaration;
-import cminus_compiler.main.ScannerInterface;
+import cminus_compiler.interfaces.ScannerInterface;
 import cminus_compiler.model.Token;
 import cminus_compiler.model.TokenType;
 import java.io.BufferedReader;

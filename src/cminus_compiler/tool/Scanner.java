@@ -1,6 +1,6 @@
 package cminus_compiler.tool;
 
-import cminus_compiler.main.ScannerInterface;
+import cminus_compiler.interfaces.ScannerInterface;
 import cminus_compiler.model.StateType;
 import cminus_compiler.model.Token;
 import cminus_compiler.model.TokenType;

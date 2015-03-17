@@ -1,6 +1,7 @@
 package cminus_compiler.tool;
 
 import cminus_compiler.grammar.*;
+import cminus_compiler.interfaces.ParserInterface;
 
 /**
  * Lorem Ipsum Dolor Sit Amet.
@@ -12,7 +13,7 @@ import cminus_compiler.grammar.*;
  *
  * Description:
  */
-public class Parser {
+public class Parser implements ParserInterface {
     public Program parseProgram() {
         
         return null;
