@@ -1,6 +1,8 @@
 
 package cminus_compiler.grammar;
 
+import java.util.ArrayList;
+
 /** 
  *
  *
@@ -12,6 +14,9 @@ package cminus_compiler.grammar;
  * Description:
  */
 public class CompoundStatement extends Statement {
+    
+    private ArrayList<VarDeclaration> variableDeclartions;
+    private ArrayList<Statement> statements;
     
     @Override
     public String printTree() {

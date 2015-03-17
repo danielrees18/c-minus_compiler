@@ -17,6 +17,8 @@ package cminus_compiler.grammar;
  */
 public class ReturnStatement extends Statement {
     
+    private Expression expression;
+    
     @Override
     public String printTree() {
         String treeOutput = "";

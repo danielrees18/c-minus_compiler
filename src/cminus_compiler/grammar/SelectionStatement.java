@@ -17,6 +17,11 @@ package cminus_compiler.grammar;
  */
 public class SelectionStatement extends Statement {
     
+    private Expression expression;
+    private Statement primaryStatement;
+    private Statement optionalStatement;
+    
+    
     @Override
     public String printTree() {
         String treeOutput = "";

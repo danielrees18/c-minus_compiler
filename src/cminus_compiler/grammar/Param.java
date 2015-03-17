@@ -17,4 +17,12 @@ package cminus_compiler.grammar;
  */
 public class Param {
     
+    private String paramName;
+    private boolean isArray;
+    
+    public Param() {
+        
+    }
+    
+    
 }
