@@ -1,5 +1,9 @@
 package cminus_compiler.tool;
 
+import cminus_compiler.grammar.Declaration;
+import cminus_compiler.grammar.FunDeclaration;
+import cminus_compiler.grammar.Program;
+import cminus_compiler.grammar.VarDeclaration;
 import cminus_compiler.main.ScannerInterface;
 import cminus_compiler.model.Token;
 import cminus_compiler.model.TokenType;
@@ -39,6 +43,14 @@ public class Compiler {
      * Compile the c file passed to the constructor
      */
     public void compile() {
+        this.scan();
+        this.parse();
+    }
+    
+    /**
+     * Runs the scanner to lex the C- file
+     */
+    private void scan() {
         ArrayList<Token> tokens = new ArrayList();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file)); 
@@ -49,7 +61,6 @@ public class Compiler {
             // scan for tokens while we haven't reached the end of the file
             while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
                 Token token = scanner.getNextToken();
-                System.out.println("Token Found: " + token.getTokenType().toString());
                 tokens.add(token);
             }
             
@@ -57,6 +68,7 @@ public class Compiler {
             
             // write tokens to output file
             writeTokensToFile(tokens);
+            
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -64,6 +76,19 @@ public class Compiler {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Runs the parse after lex
+     */
+    private void parse() {
+        Program program = new Program();
+        Declaration funDecl = new FunDeclaration();
+        Declaration varDecl = new VarDeclaration();
+        program.addDeclaration(varDecl);
+        program.addDeclaration(funDecl);
+        
+        System.out.println(program.printTree());
     }
     
     /**
@@ -109,6 +134,7 @@ public class Compiler {
 
             }
             writer.close();
+            System.out.println("Finished writing tokens to " + fout.getName());
         }
         catch (IOException e) {
             e.printStackTrace();

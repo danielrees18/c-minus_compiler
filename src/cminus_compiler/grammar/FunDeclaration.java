@@ -1,6 +1,8 @@
 
 package cminus_compiler.grammar;
 
+import java.util.ArrayList;
+
 /** 
  *
  *
@@ -13,6 +15,9 @@ package cminus_compiler.grammar;
  */
 public class FunDeclaration extends Declaration {
  
+    private String returnType;
+    private ArrayList<Param> params;
+    private CompoundStatement compoundStatement;
     
     public FunDeclaration() {
         
@@ -21,7 +26,7 @@ public class FunDeclaration extends Declaration {
     
     @Override
     public String printTree() {
-        String treeOutput = "";
+        String treeOutput = "FunDecl";
         
         
         return treeOutput;

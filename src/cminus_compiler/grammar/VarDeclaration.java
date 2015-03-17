@@ -17,6 +17,10 @@ package cminus_compiler.grammar;
  */
 public class VarDeclaration extends Declaration {
 
+    int size;
+    
+    
+    
     public VarDeclaration() {
         
     }
@@ -24,7 +28,7 @@ public class VarDeclaration extends Declaration {
 
     @Override
     public String printTree() {
-        String treeOutput = "";
+        String treeOutput = "VarDecl";
         
         
         return treeOutput;
