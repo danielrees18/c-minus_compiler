@@ -63,7 +63,7 @@ public class Parser implements ParserInterface {
         if(nextToken.equals(VOID_TOKEN)) {
             declaration = parseFunctionDeclarationPrime("void");
         } else if (nextToken.equals(INT_TOKEN)) {
-            declaration = parseVariableDeclaration();
+            declaration = parseDeclarationPrime(match(ID_TOKEN));
         } else {
             throw new CminusException(nextToken, VOID_TOKEN, INT_TOKEN);
         }
@@ -71,7 +71,25 @@ public class Parser implements ParserInterface {
     }
         
     //3. decl-prime → [ [ NUM ] ] ; |  ( params ) compound-stmt
-    private Declaration parseDeclarationPrime() throws CminusException {
+    private Declaration parseDeclarationPrime(Token ID) throws CminusException {
+        Declaration declaration = null;
+        Token nextToken = scanner.viewNextToken();
+        if (nextToken.equals(LBRACKET_TOKEN)) {
+            match(LBRACKET_TOKEN);
+            Num number = new Num(match(NUM_TOKEN));
+            match(RBRACKET_TOKEN);
+            declaration = new VarDeclaration(number, ID);
+        }
+        else if (nextToken.equals(SEMICOLON_TOKEN)) {
+            
+        }
+        else if (nextToken.equals(LPAREN_TOKEN)) {
+            
+        }
+        else {
+            //error
+        }
+        
         return null;
     }
     
@@ -198,12 +216,12 @@ public class Parser implements ParserInterface {
      * @return  -   True if the types match. Throws otherwise
      * @throws CminusException  -   Throws if the next token type doesn't equal the expected type
      */
-    private boolean match(TokenType expectedType) throws CminusException {
+    private Token match(TokenType expectedType) throws CminusException {
         Token token = scanner.getNextToken();
         if(!token.equals(expectedType)) {
             throw new CminusException(token, expectedType);
         }
         
-        return true;
+        return token;
     }
 }

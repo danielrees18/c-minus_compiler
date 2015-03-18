@@ -5,6 +5,8 @@
  */
 package cminus_compiler.grammar;
 
+import cminus_compiler.model.Token;
+
 /** 
  *
  *
@@ -24,6 +26,10 @@ public class Num extends Expression {
     public Num() {
         this(0);
     }
+    
+    public Num(Token token) {
+       this((int) token.getTokenData());
+   }
 
     public Num(int value) {
         this.value = value;

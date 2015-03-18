@@ -5,6 +5,8 @@
  */
 package cminus_compiler.grammar;
 
+import cminus_compiler.model.Token;
+
 /** 
  *
  *
@@ -23,6 +25,10 @@ public class VarDeclaration extends Declaration {
     // Constructors
     public VarDeclaration() {
         this(0, null);
+    }
+    
+    public VarDeclaration (Num number, Token ID) {
+        this(number.getValue(), (String)ID.getTokenData());
     }
     
     public VarDeclaration(int size, String name) {
