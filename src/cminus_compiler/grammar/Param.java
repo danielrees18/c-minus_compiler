@@ -23,7 +23,7 @@ public class Param {
     private boolean isArray;
     
     public Param() {
-        this(null, false);
+        this("", false);
     }
     
     public Param(Token ID, boolean isArray) {
