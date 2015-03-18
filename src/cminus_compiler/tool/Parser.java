@@ -102,12 +102,25 @@ public class Parser implements ParserInterface {
     // 4. var-decl → int ID [ [ NUM ] ] ;
     private VarDeclaration parseVariableDeclaration() throws CminusException {
         VarDeclaration declaration = null;
-        Token nextToken = scanner.viewNextToken();
+        match(INT_TOKEN);
         
+        Token nextToken = scanner.viewNextToken();
         if(nextToken.equals(ID_TOKEN)) {
-            
+            Token ID = scanner.getNextToken();
+            nextToken = scanner.viewNextToken();
+            if (nextToken.equals(LBRACKET_TOKEN)) {
+                match(LBRACKET_TOKEN);
+                Num num = new Num(match(NUM_TOKEN));
+                match(RBRACKET_TOKEN);
+                declaration = new VarDeclaration(num, ID);
+            }
+            else {
+                declaration = new VarDeclaration(new Num(), ID);
+            }
+            match(SEMICOLON_TOKEN);
         } else {
-            
+            //error
+            throw new CminusException(nextToken, ID_TOKEN);
         }
         
         return declaration;
@@ -168,16 +181,22 @@ public class Parser implements ParserInterface {
     // 8. compound-stmt → { { var-decl } { stmt } }
     private CompoundStatement parseCompoundStatement() throws CminusException {
         CompoundStatement compoundStatement = null;
-        match(RCURLY_TOKEN);
+        match(LCURLY_TOKEN);
         ArrayList<VarDeclaration> localDeclarations = new ArrayList<>();
         ArrayList<Statement> statements = new ArrayList<>();
         Token nextToken = scanner.viewNextToken();
-        if (nextToken.equals(LCURLY_TOKEN)) {
+        if (nextToken.equals(RCURLY_TOKEN)) {
             // this is a compound statement of do nothing
             compoundStatement = new CompoundStatement();
         }
         else if (nextToken.equals(INT_TOKEN)) {
             // there is at least one var-decl
+            localDeclarations.add(parseVariableDeclaration());
+            nextToken = scanner.viewNextToken();
+            while (nextToken.equals(INT_TOKEN)) {
+                localDeclarations.add(parseVariableDeclaration());
+                nextToken = scanner.viewNextToken();
+            }
         }
         // first set of stmt => (, NUM, ID, {, if, while, return, ; 
         else if (nextToken.equals(LPAREN_TOKEN) || nextToken.equals(NUM_TOKEN) 
@@ -191,7 +210,7 @@ public class Parser implements ParserInterface {
             throw new CminusException(nextToken, ERROR);
         }
         
-        match(LCURLY_TOKEN);
+        match(RCURLY_TOKEN);
         return compoundStatement;
     }
     
