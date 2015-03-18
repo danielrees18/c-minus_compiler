@@ -24,6 +24,7 @@ public class Parser implements ParserInterface {
     
     private ScannerInterface scanner;
     private TokenType[] firstOfStatement = {LPAREN_TOKEN, LCURLY_TOKEN, NUM_TOKEN, ID_TOKEN, IF_TOKEN, WHILE_TOKEN, RETURN_TOKEN, SEMICOLON_TOKEN};
+    private TokenType[] firstOfExpressionStatement = { SEMICOLON_TOKEN, COMMA_TOKEN, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN };
  
         
     // Constructor
@@ -245,21 +246,89 @@ public class Parser implements ParserInterface {
         
         return statement;
     }
+    
+    // 10. expression-stmt → [ expression ] ; 
     private ExpressionStatement parseExpressionStatement() throws CminusException {
+        ExpressionStatement expressionStatement = null;
         
-        return null;
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(SEMICOLON_TOKEN)) {
+            // End of line. Consume and return empty statement
+            expressionStatement = new ExpressionStatement();
+            match(SEMICOLON_TOKEN);
+            
+        } else if(isInFirstOfExpressionStatement(nextToken)) {
+            expressionStatement = new ExpressionStatement(parseExpression());
+            
+        } else {
+          throw new CminusException(nextToken, firstOfExpressionStatement);
+        }
+        
+        return expressionStatement;
     }
+    
+    // 11. selection-stmt → if ( expression ) stmt [ else stmt ]
     private SelectionStatement parseSelectionStatement() throws CminusException {
+        // SelectionStatement object to be returned
+        SelectionStatement statement = new SelectionStatement();
         
-        return null;
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(IF_TOKEN)) {
+            match(IF_TOKEN);
+            match(LPAREN_TOKEN);
+            statement.setExpression(parseExpression());
+            match(RPAREN_TOKEN);
+            statement.setPrimaryStatement(parseStatement());
+            
+            // Optional else statement. If not found, do not throw error
+            if(scanner.viewNextToken().equals(ELSE_TOKEN)) {
+                match(ELSE_TOKEN);
+                statement.setOptionalStatement(parseStatement());
+            }
+        } else {
+            throw new CminusException(nextToken, IF_TOKEN);
+        }
+        
+        return statement;
     }
+    
+    // 12. iteration-stmt → while ( expression ) stmt
     private IterationStatement parseIterationStatement() throws CminusException {
+        IterationStatement statement = new IterationStatement();
         
-        return null;
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(WHILE_TOKEN)) {
+            match(WHILE_TOKEN);
+            match(LPAREN_TOKEN);
+            statement.setExpression(parseExpression());
+            match(RPAREN_TOKEN);
+            statement.setStatement(parseStatement());
+        } else {
+            throw new CminusException(nextToken, WHILE_TOKEN);
+        }
+        
+        return statement;
     }
+    
+    // 13. return-stmt → return [ expression ] ;
     private ReturnStatement parseReturnStatement() throws CminusException {
+        ReturnStatement statement = new ReturnStatement();
         
-        return null;
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(RETURN_TOKEN)) {
+            match(RETURN_TOKEN);
+           
+            // Optional expression exists if semicolon is not next. If not found, do not throw error
+            if(!scanner.viewNextToken().equals(SEMICOLON_TOKEN)) {
+                statement.setExpression(parseExpression());
+            }
+            
+            match(SEMICOLON_TOKEN);
+        } else {
+            throw new CminusException(nextToken, RETURN_TOKEN);
+        }
+        
+        return statement;
     }
     private Expression parseExpression() throws CminusException {
         
@@ -333,4 +402,6 @@ public class Parser implements ParserInterface {
         return token.equals(SEMICOLON_TOKEN) || token.equals(COMMA_TOKEN) || token.equals(LPAREN_TOKEN) 
                     || token.equals(NUM_TOKEN) || token.equals(ID_TOKEN);
     }
+    
+    
 }
