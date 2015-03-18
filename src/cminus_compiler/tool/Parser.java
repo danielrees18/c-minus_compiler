@@ -368,7 +368,11 @@ public class Parser implements ParserInterface {
         
         return expression;
     }
-    private BinaryOperation parseBinaryOperation() throws CminusException {
+    
+    // 19. relop → <= | < | > | >= | == | !=
+    // 22. addop → + | -
+    // 25. mulop →  * | / 
+    private BinaryOperation parseBinaryOperation(Expression lhs) throws CminusException {
         
         return null;
     }
