@@ -23,7 +23,9 @@ import java.util.ArrayList;
 public class Parser implements ParserInterface {
     
     private ScannerInterface scanner;
+    private TokenType[] firstOfStatement = {LPAREN_TOKEN, LCURLY_TOKEN, NUM_TOKEN, ID_TOKEN, IF_TOKEN, WHILE_TOKEN, RETURN_TOKEN, SEMICOLON_TOKEN};
  
+        
     // Constructor
     public Parser(ScannerInterface scanner) {
         this.scanner = scanner;
@@ -195,23 +197,48 @@ public class Parser implements ParserInterface {
         return compoundStatement;
     }
     
+    // 9. stmt → expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt
     private Statement parseStmt() throws CminusException {
+        // Statement to be returned
+        Statement statement = null;
+        
+        // Look ahead to the next token
+        Token nextToken = scanner.viewNextToken();
+        if(this.isInFirstOfExpressionStatement(nextToken)) {
+            // Parse expression statement
+            statement = parseExpressionStatement();
+        } else if (nextToken.equals(LCURLY_TOKEN)) {
+            // Parse Compound statement
+            statement = parseCompoundStatement();
+        } else if (nextToken.equals(IF_TOKEN)) {
+            // Parse selection statement
+            statement = parseSelectionStatement();
+        } else if (nextToken.equals(WHILE_TOKEN)) {
+            // Parse iteration statement
+            statement = parseIterationStatement();
+        } else if (nextToken.equals(RETURN_TOKEN)) {
+            // Parse return statement
+            statement = parseReturnStatement();
+        } else {
+            // error
+            throw new CminusException(nextToken, firstOfStatement);
+        }
+        
+        return statement;
+    }
+    private ExpressionStatement parseExpressionStatement() throws CminusException {
         
         return null;
     }
-    private ExpressionStatement parseExpressionStmt() throws CminusException {
+    private SelectionStatement parseSelectionStatement() throws CminusException {
         
         return null;
     }
-    private SelectionStatement parseSelectionStmt() throws CminusException {
+    private IterationStatement parseIterationStatement() throws CminusException {
         
         return null;
     }
-    private IterationStatement parseIterationStmt() throws CminusException {
-        
-        return null;
-    }
-    private ReturnStatement parseReturnStmt() throws CminusException {
+    private ReturnStatement parseReturnStatement() throws CminusException {
         
         return null;
     }
@@ -275,5 +302,16 @@ public class Parser implements ParserInterface {
         }
         
         return token;
+    }
+    
+    /**
+     * Evaluates the token.getTokenType and compares it to the first set of expression-statement.
+     * expression-statement =>  ; , (, NUM, ID
+     * @param token -   Token being evaluated
+     * @return  -   True if token.equals(SEMICOLON || COMMA || LPAREN || NUM || ID). False otherwise
+     */
+    private boolean isInFirstOfExpressionStatement(Token token) {
+        return token.equals(SEMICOLON_TOKEN) || token.equals(COMMA_TOKEN) || token.equals(LPAREN_TOKEN) 
+                    || token.equals(NUM_TOKEN) || token.equals(ID_TOKEN);
     }
 }
