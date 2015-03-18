@@ -167,8 +167,32 @@ public class Parser implements ParserInterface {
     
     // 8. compound-stmt → { { var-decl } { stmt } }
     private CompoundStatement parseCompoundStatement() throws CminusException {
+        CompoundStatement compoundStatement = null;
+        match(RCURLY_TOKEN);
+        ArrayList<VarDeclaration> localDeclarations = new ArrayList<>();
+        ArrayList<Statement> statements = new ArrayList<>();
+        Token nextToken = scanner.viewNextToken();
+        if (nextToken.equals(LCURLY_TOKEN)) {
+            // this is a compound statement of do nothing
+            compoundStatement = new CompoundStatement();
+        }
+        else if (nextToken.equals(INT_TOKEN)) {
+            // there is at least one var-decl
+        }
+        // first set of stmt => (, NUM, ID, {, if, while, return, ; 
+        else if (nextToken.equals(LPAREN_TOKEN) || nextToken.equals(NUM_TOKEN) 
+                || nextToken.equals(ID_TOKEN) || nextToken.equals(IF_TOKEN) 
+                || nextToken.equals(WHILE_TOKEN) || nextToken.equals(RETURN_TOKEN) 
+                || nextToken.equals(SEMICOLON_TOKEN)) {
+            // there is at least one stmt
+        }
+        else {
+            //error
+            throw new CminusException(nextToken, ERROR);
+        }
         
-        return null;
+        match(LCURLY_TOKEN);
+        return compoundStatement;
     }
     
     private Statement parseStmt() throws CminusException {
