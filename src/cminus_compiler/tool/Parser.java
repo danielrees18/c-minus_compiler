@@ -217,7 +217,7 @@ public class Parser implements ParserInterface {
     }
     
     // 9. stmt → expression-stmt | compound-stmt | selection-stmt | iteration-stmt | return-stmt
-    private Statement parseStmt() throws CminusException {
+    private Statement parseStatement() throws CminusException {
         // Statement to be returned
         Statement statement = null;
         
