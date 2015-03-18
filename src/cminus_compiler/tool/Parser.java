@@ -133,17 +133,39 @@ public class Parser implements ParserInterface {
     // 6. params → param { , param } | void
     private ArrayList<Param> parseParams() throws CminusException {
         ArrayList<Param> params = new ArrayList<>();
+        Token nextToken = scanner.viewNextToken();
+        if (nextToken.equals(VOID_TOKEN)) {
+            // just pass up an empty arraylist
+        }
+        else {
+            params.add(parseParam());
+            nextToken = scanner.viewNextToken();
+            while (!nextToken.equals(RPAREN_TOKEN)) {
+                match(COMMA_TOKEN);
+                params.add(parseParam());
+            }
+        }
         
         return params;
     }
     
     // 7. param → int ID [ [ ] ]
     private Param parseParam() throws CminusException {
-        Param param = null;
+        match(INT_TOKEN);
+        Token ID = scanner.getNextToken();
+        boolean isArray = false;
+        if (scanner.viewNextToken().equals(RBRACKET_TOKEN)) {
+            match(RBRACKET_TOKEN);
+            match(LBRACKET_TOKEN);
+            isArray = true;
+        }
+        
+        Param param = new Param(ID, isArray);
         
         return param;
     }
     
+    // 8. compound-stmt → { { var-decl } { stmt } }
     private CompoundStatement parseCompoundStatement() throws CminusException {
         
         return null;
