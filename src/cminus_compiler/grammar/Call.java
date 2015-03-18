@@ -21,7 +21,40 @@ public class Call extends Expression {
     
     private String callName;
     private ArrayList<Expression> args;
+
     
+    // Constructors
+    public Call() {
+        this(null, new ArrayList<>());
+    }
+
+    public Call(String callName, ArrayList<Expression> args) {
+        this.callName = callName;
+        this.args = args;
+    }
+
+    
+    // Getters
+    public String getCallName() {
+        return callName;
+    }
+
+    public ArrayList<Expression> getArgs() {
+        return args;
+    }
+
+    
+    // Setters
+    public void setCallName(String callName) {
+        this.callName = callName;
+    }
+
+    public void setArgs(ArrayList<Expression> args) {
+        this.args = args;
+    }
+    
+    
+    // Public Methods
     @Override
     public String printTree() {
         String treeOutput = "";

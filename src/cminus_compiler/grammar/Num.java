@@ -17,13 +17,32 @@ package cminus_compiler.grammar;
  */
 public class Num extends Expression {
 
-    
     private int value;
     
+    
+    // Constructors
     public Num() {
-        
+        this(0);
+    }
+
+    public Num(int value) {
+        this.value = value;
+    }
+
+    
+    // Getters
+    public int getValue() {
+        return value;
+    }
+
+    
+    // Setters
+    public void setValue(int value) {
+        this.value = value;
     }
     
+    
+    // Public Methods
     @Override
     public String printTree() {
         String treeOutput = "";
@@ -31,4 +50,11 @@ public class Num extends Expression {
         
         return treeOutput;
     }   
+
+    @Override
+    public String toString() {
+        return Integer.toString(value);
+    }
+    
+    
 }

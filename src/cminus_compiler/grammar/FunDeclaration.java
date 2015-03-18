@@ -15,15 +15,52 @@ import java.util.ArrayList;
  */
 public class FunDeclaration extends Declaration {
  
-    private String returnType;
+    private String returnType;  // TODO: Can we avoid having returnType as a String?
     private ArrayList<Param> params;
     private CompoundStatement compoundStatement;
     
+    
+    // Constructors
     public FunDeclaration() {
-        
+        this(null, new ArrayList<>(), null);
+    }
+
+    public FunDeclaration(String returnType, ArrayList<Param> params, CompoundStatement compoundStatement) {
+        this.returnType = returnType;
+        this.params = params;
+        this.compoundStatement = compoundStatement;
     }
     
     
+    // Getters
+    public String getReturnType() {
+        return returnType;
+    }
+
+    public ArrayList<Param> getParams() {
+        return params;
+    }
+
+    public CompoundStatement getCompoundStatement() {
+        return compoundStatement;
+    }
+
+    
+    // Setters
+    public void setReturnType(String returnType) {
+        this.returnType = returnType;
+    }
+
+    public void setParams(ArrayList<Param> params) {
+        this.params = params;
+    }
+
+    public void setCompoundStatement(CompoundStatement compoundStatement) {
+        this.compoundStatement = compoundStatement;
+    }
+
+    
+    // Public Methods
     @Override
     public String printTree() {
         String treeOutput = "FunDecl";

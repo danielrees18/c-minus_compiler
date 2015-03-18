@@ -21,6 +21,10 @@ public class VarDeclaration extends Declaration {
     
     
     // Constructors
+    public VarDeclaration() {
+        this(0, null);
+    }
+    
     public VarDeclaration(int size, String name) {
         this.size = size;
         this.declarationName = name;
@@ -32,20 +36,12 @@ public class VarDeclaration extends Declaration {
         return size;
     }
 
-    public String getDeclarationName() {
-        return declarationName;
-    }
-
     
     // Setters
     public void setSize(int size) {
         this.size = size;
     }
 
-    public void setDeclarationName(String declarationName) {
-        this.declarationName = declarationName;
-    }
-    
     
     // Public Methods
     @Override

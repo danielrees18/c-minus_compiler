@@ -5,6 +5,7 @@ import cminus_compiler.interfaces.ParserInterface;
 import cminus_compiler.interfaces.ScannerInterface;
 import cminus_compiler.model.CminusException;
 import cminus_compiler.model.Token;
+import cminus_compiler.model.TokenType;
 import static cminus_compiler.model.TokenType.*;
 import java.util.ArrayList;
 
@@ -60,7 +61,7 @@ public class Parser implements ParserInterface {
         Token nextToken = scanner.getNextToken();
         
         if(nextToken.equals(VOID_TOKEN)) {
-            declaration = parseFunctionDeclarationPrime();
+            declaration = parseFunctionDeclarationPrime("void");
         } else if (nextToken.equals(INT_TOKEN)) {
             declaration = parseVariableDeclaration();
         } else {
@@ -80,10 +81,7 @@ public class Parser implements ParserInterface {
         Token nextToken = scanner.viewNextToken();
         
         if(nextToken.equals(ID_TOKEN)) {
-            Token idToken = scanner.getNextToken();
-            nextToken = scanner.viewNextToken();
             
-            declaration = new VarDeclaration();
         } else {
             
         }
@@ -92,9 +90,20 @@ public class Parser implements ParserInterface {
     }
      
     // 5. fun-decl-prime → ( params ) compound-stmt
-    private FunDeclaration parseFunctionDeclarationPrime() throws CminusException {
+    private FunDeclaration parseFunctionDeclarationPrime(String returnType) throws CminusException {
+        FunDeclaration declaration = null;
+        Token nextToken = scanner.viewNextToken();
         
-        return null;
+        if (nextToken.equals(LPAREN_TOKEN)) {
+            this.match(LPAREN_TOKEN);
+            ArrayList<Param> params = parseParams();
+            this.match(RPAREN_TOKEN);
+            
+            CompoundStatement compoundStatement = parseCompoundStatement();
+            declaration = new FunDeclaration(returnType, params, compoundStatement);
+        } else {
+        }
+        return declaration;
     }
     
     // 6. params → param { , param } | void
@@ -111,7 +120,7 @@ public class Parser implements ParserInterface {
         return param;
     }
     
-    private CompoundStatement parseCompoundStmt() throws CminusException {
+    private CompoundStatement parseCompoundStatement() throws CminusException {
         
         return null;
     }
@@ -179,4 +188,22 @@ public class Parser implements ParserInterface {
         
     }
     
+    
+    
+    // Parsing Helping Methods
+    
+    /**
+     * Consumes the next token in the scanner and matches it to the expected type.
+     * @param expectedType  -   Type expected to receive
+     * @return  -   True if the types match. Throws otherwise
+     * @throws CminusException  -   Throws if the next token type doesn't equal the expected type
+     */
+    private boolean match(TokenType expectedType) throws CminusException {
+        Token token = scanner.getNextToken();
+        if(!token.equals(expectedType)) {
+            throw new CminusException(token, expectedType);
+        }
+        
+        return true;
+    }
 }

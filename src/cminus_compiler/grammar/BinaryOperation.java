@@ -20,7 +20,49 @@ public class BinaryOperation extends Expression {
     private Expression leftHandExpression;
     private Expression rightHandExpression;
     private String operation;
+
     
+    // Constructors
+    public BinaryOperation() {
+        this(null, null, null);
+    }
+
+    public BinaryOperation(Expression leftHandExpression, Expression rightHandExpression, String operation) {
+        this.leftHandExpression = leftHandExpression;
+        this.rightHandExpression = rightHandExpression;
+        this.operation = operation;
+    }
+
+    
+    // Getters
+    public Expression getLeftHandExpression() {
+        return leftHandExpression;
+    }
+
+    public Expression getRightHandExpression() {
+        return rightHandExpression;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    
+    // Setters
+    public void setLeftHandExpression(Expression leftHandExpression) {
+        this.leftHandExpression = leftHandExpression;
+    }
+
+    public void setRightHandExpression(Expression rightHandExpression) {
+        this.rightHandExpression = rightHandExpression;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+    
+    
+    // Public Methods
     @Override
     public String printTree() {
         String treeOutput = "";

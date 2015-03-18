@@ -21,8 +21,42 @@ public class Param {
     private boolean isArray;
     
     public Param() {
-        
+        this(null, false);
+    }
+
+    public Param(String paramName, boolean isArray) {
+        this.paramName = paramName;
+        this.isArray = isArray;
     }
     
+    
+    // Getters
+
+    public String getParamName() {
+        return paramName;
+    }
+
+    public boolean isArray() {
+        return isArray;
+    }
+
+    
+    // Setters
+    public void setParamName(String paramName) {
+        this.paramName = paramName;
+    }
+
+    public void setIsArray(boolean isArray) {
+        this.isArray = isArray;
+    }
+    
+    
+    // Public Methods
+    public String printTree() {
+        String treeOutput = "";
+        
+        
+        return treeOutput;
+    }
     
 }

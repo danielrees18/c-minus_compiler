@@ -17,8 +17,23 @@ package cminus_compiler.grammar;
  */
 public abstract class Declaration {
     
+    // Attributes
     protected String declarationName;
     
+    
+    // Getters
+    public String getDeclarationName() {
+        return declarationName;
+    }
+
+    
+    // Setters
+    public void setDeclarationName(String declarationName) {
+        this.declarationName = declarationName;
+    }
+    
+    
+    // Abstract Methods
     public abstract String printTree();
     
 }
