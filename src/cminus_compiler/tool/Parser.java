@@ -7,6 +7,7 @@ import cminus_compiler.model.CminusException;
 import cminus_compiler.model.Token;
 import cminus_compiler.model.TokenType;
 import static cminus_compiler.model.TokenType.*;
+import com.sun.org.apache.xpath.internal.functions.FunctionDef1Arg;
 import java.util.ArrayList;
 
 /**
@@ -81,16 +82,21 @@ public class Parser implements ParserInterface {
             declaration = new VarDeclaration(number, ID);
         }
         else if (nextToken.equals(SEMICOLON_TOKEN)) {
-            
+            declaration = new VarDeclaration(new Num(), ID);
         }
         else if (nextToken.equals(LPAREN_TOKEN)) {
-            
+            match(LPAREN_TOKEN);
+            ArrayList<Param> params = parseParams();
+            match(RPAREN_TOKEN);
+            CompoundStatement compound_statement = parseCompoundStatement();
+            declaration = new FunDeclaration("int", params, compound_statement);
         }
         else {
             //error
+            throw new CminusException(nextToken, LBRACKET_TOKEN, SEMICOLON_TOKEN, LPAREN_TOKEN);
         }
         
-        return null;
+        return declaration;
     }
     
     // 4. var-decl → int ID [ [ NUM ] ] ;
