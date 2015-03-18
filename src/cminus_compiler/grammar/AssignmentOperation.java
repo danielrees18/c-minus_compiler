@@ -60,9 +60,13 @@ public class AssignmentOperation extends Expression {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
+        builder.append(operation);
+        builder.append("\n---");
+        builder.append(variable.printTree());
+        builder.append("\n---");
+        builder.append(rightHandExpression.printTree());
         
-        
-        return treeOutput;
+        return builder.toString();
     }
 }

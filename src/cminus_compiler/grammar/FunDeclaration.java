@@ -63,9 +63,18 @@ public class FunDeclaration extends Declaration {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "FunDecl";
+        StringBuilder builder = new StringBuilder();
+        builder.append(returnType);
+        builder.append("\n");
+        builder.append(declarationName);
+        for(Param param : params) {
+            builder.append("\n---");
+            builder.append(param.printTree());
+        }
         
+        builder.append("\n---");
+        builder.append(compoundStatement.printTree());
         
-        return treeOutput;
+        return builder.toString();
     }
 }

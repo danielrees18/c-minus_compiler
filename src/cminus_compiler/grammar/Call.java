@@ -57,9 +57,12 @@ public class Call extends Expression {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
-        
-        
-        return treeOutput;
+        StringBuilder builder = new StringBuilder();
+        builder.append(callName);
+        for(Expression arg : args) {
+            builder.append("\n---");
+            builder.append(arg.printTree());
+        }        
+        return builder.toString();
     }
 }

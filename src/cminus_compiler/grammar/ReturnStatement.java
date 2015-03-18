@@ -44,9 +44,10 @@ public class ReturnStatement extends Statement {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
+        builder.append("return\n---");
+        builder.append(expression.toString());
         
-        
-        return treeOutput;
+        return builder.toString();
     }
 }

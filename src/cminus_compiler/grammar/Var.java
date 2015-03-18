@@ -51,9 +51,11 @@ public class Var extends Expression {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
+        builder.append(variableName);
+        builder.append("\n---");
+        builder.append(expression.printTree());
         
-        
-        return treeOutput;
+        return builder.toString();
     }
 }

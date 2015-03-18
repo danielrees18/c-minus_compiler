@@ -51,9 +51,10 @@ public class IterationStatement extends Statement {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
+        builder.append(expression.printTree());
+        builder.append(statement.printTree());
         
-        
-        return treeOutput;
+        return builder.toString();
     }
 }

@@ -65,9 +65,13 @@ public class BinaryOperation extends Expression {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
+        builder.append(operation);
+        builder.append("\n---");
+        builder.append(leftHandExpression.printTree());
+        builder.append("\n---");
+        builder.append(rightHandExpression.printTree());
         
-        
-        return treeOutput;
+        return builder.toString();
     }
 }
