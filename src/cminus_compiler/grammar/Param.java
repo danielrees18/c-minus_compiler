@@ -5,6 +5,8 @@
  */
 package cminus_compiler.grammar;
 
+import cminus_compiler.model.Token;
+
 /** 
  *
  *
@@ -22,6 +24,10 @@ public class Param {
     
     public Param() {
         this(null, false);
+    }
+    
+    public Param(Token ID, boolean isArray) {
+        this((String)ID.getTokenData(), isArray);
     }
 
     public Param(String paramName, boolean isArray) {
