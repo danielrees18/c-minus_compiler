@@ -350,9 +350,23 @@ public class Parser implements ParserInterface {
         
         return statement;
     }
+    
+    // 14. expression → ( expression ) simple-exp-prime | NUM simple-exp-prime | ID exp-prime
     private Expression parseExpression() throws CminusException {
+        Expression expression = null;
         
-        return null;
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(LPAREN_TOKEN)) {
+            
+        } else if (nextToken.equals(NUM_TOKEN)) {
+            
+        } else if (nextToken.equals(ID_TOKEN)) {
+            
+        } else {
+            throw new CminusException(nextToken, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
+        }
+        
+        return expression;
     }
     private BinaryOperation parseBinaryOperation() throws CminusException {
         
