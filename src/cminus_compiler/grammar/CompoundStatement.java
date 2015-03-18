@@ -53,9 +53,18 @@ public class CompoundStatement extends Statement {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
         
+        for(VarDeclaration decl : variableDeclartions) {
+            builder.append("\n---");
+            builder.append(decl.printTree());
+        }
         
-        return treeOutput;
+        for(Statement stmt : statements) {
+            builder.append("\n---");
+            builder.append(stmt.printTree());
+        }
+        
+        return builder.toString();
     }
 }

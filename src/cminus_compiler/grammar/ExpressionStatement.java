@@ -44,9 +44,6 @@ public class ExpressionStatement extends Statement {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
-        
-        
-        return treeOutput;
+        return expression.printTree();
     }
 }

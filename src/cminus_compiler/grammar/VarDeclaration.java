@@ -21,7 +21,6 @@ public class VarDeclaration extends Declaration {
 
     int size;
     
-    
     // Constructors
     public VarDeclaration() {
         this(0, null);
@@ -52,9 +51,12 @@ public class VarDeclaration extends Declaration {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "VarDecl";
+        StringBuilder builder = new StringBuilder();
+        builder.append(declarationName);
+        builder.append("\n Size: ");
+        builder.append(size);
         
         
-        return treeOutput;
+        return builder.toString();
     }
 }

@@ -23,7 +23,7 @@ public class Param {
     private boolean isArray;
     
     public Param() {
-        this(null, false);
+        this("", false);
     }
     
     public Param(Token ID, boolean isArray) {
@@ -59,10 +59,12 @@ public class Param {
     
     // Public Methods
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
+        builder.append(paramName);
+        builder.append("is array: ");
+        builder.append(isArray);
         
-        
-        return treeOutput;
+        return builder.toString();
     }
     
 }

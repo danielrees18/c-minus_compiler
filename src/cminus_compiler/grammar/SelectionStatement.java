@@ -65,9 +65,13 @@ public class SelectionStatement extends Statement {
     // Public Methods
     @Override
     public String printTree() {
-        String treeOutput = "";
+        StringBuilder builder = new StringBuilder();
+        builder.append(expression.printTree());
+        builder.append(primaryStatement.printTree());
+        if(optionalStatement != null) {
+            builder.append(optionalStatement.printTree());
+        }
         
-        
-        return treeOutput;
+        return builder.toString();
     }
 }
