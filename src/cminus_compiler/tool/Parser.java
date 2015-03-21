@@ -357,16 +357,111 @@ public class Parser implements ParserInterface {
         
         Token nextToken = scanner.viewNextToken();
         if(nextToken.equals(LPAREN_TOKEN)) {
-            
+            match(LPAREN_TOKEN);
+            parseExpression();
+            match(RPAREN_TOKEN);
+            expression = parseSimpleExpressionPrime();
         } else if (nextToken.equals(NUM_TOKEN)) {
-            
+            Token numToken = match(NUM_TOKEN);
+            expression = parseSimpleExpressionPrime(numToken);
         } else if (nextToken.equals(ID_TOKEN)) {
-            
+            Token idToken = match(ID_TOKEN);
+            expression = parseExpressionPrime(idToken);
         } else {
             throw new CminusException(nextToken, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
         }
         
         return expression;
+    }
+    
+    // 15. exp-prime → = expression | simple-exp-prime | ( args ) simple-exp-prime | [ expression ] exp-doubleprime
+    private Expression parseExpressionPrime(Token prevToken) throws CminusException {
+        Expression expression = null;
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(ASSIGN_TOKEN)) {
+            match(ASSIGN_TOKEN);
+            expression = parseExpression();
+            
+        } else if (nextToken.equals(LPAREN_TOKEN)) {
+            match(LPAREN_TOKEN);
+            // TODO: parse args. Return value?
+            match(RPAREN_TOKEN);
+            parseSimpleExpressionPrime(null); // TODO: pass a value?
+            
+        } else if (nextToken.equals(LBRACKET_TOKEN)) {
+            match(LBRACKET_TOKEN);
+            // TODO: parse args. Return value?
+            match(RBRACKET_TOKEN);
+            parseExpressionDoublePrime(null);
+            
+        } else if (nextToken.equals(MULT_TOKEN) || nextToken.equals(DIV_TOKEN) ) { // TODO: goes to epsilon
+            parseSimpleExpressionPrime(null);
+            
+        } else {
+            throw new CminusException(nextToken, LPAREN_TOKEN, LBRACKET_TOKEN, MULT_TOKEN, DIV_TOKEN);
+        }
+        return expression;
+    }
+    
+    // 16. exp-doubleprime → = expression | simple-exp-prime
+    private Expression parseExpressionDoublePrime(Token prevToken) throws CminusException {
+        Expression expression = null;
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(ASSIGN_TOKEN)) {
+            match(ASSIGN_TOKEN);
+            expression = parseExpression();
+        } else if (nextToken.equals(MULT_TOKEN) || nextToken.equals(DIV_TOKEN) ) { // TODO: goes to epsilon
+            expression = parseSimpleExpressionPrime(null); // TODO: Value?
+        } else {
+            throw new CminusException(nextToken, ASSIGN_TOKEN, MULT_TOKEN, DIV_TOKEN);
+        }
+        return expression;
+    }
+    
+    // 17. var → [ [ expression ] ]
+    private Var parseVar() throws CminusException {
+        Var var = null;
+       
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(LBRACKET_TOKEN)) { // TODO: epsilon
+            match(LBRACKET_TOKEN);
+            parseExpression();
+            match(RBRACKET_TOKEN);
+    /* TODO:   
+     *   } else if (nexTToken.equals(EPSILON)) {
+     */           
+            
+        } else {
+            throw new CminusException(nextToken, LBRACKET_TOKEN);
+        }
+        
+        return var;
+    }
+    
+    // 18. simple-exp-prime → additive-exp-prime [ relop additive-exp ]
+    private Expression parseSimpleExpressionPrime(Token prevToken) throws CminusException {
+        Expression expression = null;
+        
+        Token nextToken = scanner.viewNextToken();
+        if(nextToken.equals(MULT_TOKEN) || nextToken.equals(DIV_TOKEN)) { // TODO: epsilon
+            parseAdditiveExpressionPrime();
+        }    
+    /* TODO:   
+     *   } else if (nexTToken.equals(EPSILON)) {
+            
+            }   
+     */           
+            
+        else {
+            throw new CminusException(nextToken, LBRACKET_TOKEN);
+        }
+        
+        return expression;
+    }
+    
+    
+    private void parseAdditiveExpressionPrime() {
+        
     }
     
     // 19. relop → <= | < | > | >= | == | !=
@@ -378,9 +473,6 @@ public class Parser implements ParserInterface {
     }
     private AssignmentOperation parseAssignmentOperation() throws CminusException {
         
-        return null;
-    }
-    private Var parseVar() throws CminusException {
         return null;
     }
     
