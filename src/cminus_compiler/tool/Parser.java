@@ -508,7 +508,7 @@ public class Parser implements ParserInterface {
                 || op.getTokenType() == NEQ_TOKEN || op.getTokenType() == EQUAL_TOKEN) {
             // relop
             operator = parseRelop();
-            rhs = parseAdditiveExpressionPrime();
+            rhs = parseAdditiveExpressionPrime(null);
         }
         else if (op.getTokenType() == PLUS_TOKEN || op.getTokenType() == MINUS_TOKEN) {
             // addop
@@ -579,38 +579,42 @@ public class Parser implements ParserInterface {
     }
     
     // 23. term → factor { mulop factor }
-    private void parseTerm() throws CminusException {
-        
+    private Expression parseTerm() throws CminusException {
+        Expression returnExpression = null;
         Token t = scanner.viewNextToken();
         if(t.equals(LPAREN_TOKEN) || t.equals(NUM_TOKEN) || t.equals(ID_TOKEN)) {
-            Expression lhs = parseFactor();
+            Expression factor = parseFactor();
+            returnExpression = factor;
+            
             t = scanner.viewNextToken();
             if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
-                String operation = parseMulop();
-                Expression rhs = parseFactor();
-                BinaryOperation termOperation = new BinaryOperation(lhs, rhs, operation);
+                returnExpression = parseBinaryOperation(factor);
             }
         } else {
             throw new CminusException(t, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
         }
+        return returnExpression;
     }
     
     // 24. term-prime → { mulop factor }
     private Expression parseTermPrime(Expression lhs) throws CminusException {
         // term-prime { +, - ,<= , < , > , >= , == , !=, ;, ), ], , }
         TokenType[] followSet = {PLUS_TOKEN, MINUS_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN};
+        Expression returnExpression = lhs;
         
         Token t = scanner.viewNextToken();
         if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
-            String op = parseMulop();
-            parseFactor();
+            returnExpression = parseBinaryOperation(lhs);
+            
            
         // goes to empty
-        } else if (isInSet(t, followSet)) {
-            return null;
+        } else if (isInSet(t, followSet) && lhs == null) {
+            returnExpression = parseTerm();
+            
         } else {
             throw new CminusException(t, MULT_TOKEN, DIV_TOKEN);
         }
+        return returnExpression;
     }
     
     // 25. mulop →  * | / 
