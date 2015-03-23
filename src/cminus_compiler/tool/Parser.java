@@ -379,28 +379,32 @@ public class Parser implements ParserInterface {
     // 15. exp-prime → = expression | simple-exp-prime | ( args ) simple-exp-prime | [ expression ] exp-doubleprime
     private Expression parseExpressionPrime(Token prevToken) throws CminusException {
         Expression expression = null;
-        Token nextToken = scanner.viewNextToken();
-        if(nextToken.equals(ASSIGN_TOKEN)) {
+        Token t = scanner.viewNextToken();
+        if(t.equals(ASSIGN_TOKEN)) {
             match(ASSIGN_TOKEN);
             expression = parseExpression();
             
-        } else if (nextToken.equals(LPAREN_TOKEN)) {
+        } else if (t.equals(LPAREN_TOKEN)) {
             match(LPAREN_TOKEN);
             // TODO: parse args. Return value?
             match(RPAREN_TOKEN);
             parseSimpleExpressionPrime(null); // TODO: pass a value?
             
-        } else if (nextToken.equals(LBRACKET_TOKEN)) {
+        } else if (t.equals(LBRACKET_TOKEN)) {
             match(LBRACKET_TOKEN);
             // TODO: parse args. Return value?
             match(RBRACKET_TOKEN);
             parseExpressionDoublePrime(null);
             
-        } else if (nextToken.equals(MULT_TOKEN) || nextToken.equals(DIV_TOKEN) ) { // TODO: goes to epsilon
+        } else if (t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) ) {
             parseSimpleExpressionPrime(null);
             
+        // FollowSet of ExpressionPrime. Goes to epsilon
+        } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
+            return null;
+            
         } else {
-            throw new CminusException(nextToken, LPAREN_TOKEN, LBRACKET_TOKEN, MULT_TOKEN, DIV_TOKEN);
+            throw new CminusException(t, LPAREN_TOKEN, LBRACKET_TOKEN, MULT_TOKEN, DIV_TOKEN);
         }
         return expression;
     }
@@ -408,14 +412,19 @@ public class Parser implements ParserInterface {
     // 16. exp-doubleprime → = expression | simple-exp-prime
     private Expression parseExpressionDoublePrime(Token prevToken) throws CminusException {
         Expression expression = null;
-        Token nextToken = scanner.viewNextToken();
-        if(nextToken.equals(ASSIGN_TOKEN)) {
+        Token t = scanner.viewNextToken();
+        if(t.equals(ASSIGN_TOKEN)) {
             match(ASSIGN_TOKEN);
             expression = parseExpression();
-        } else if (nextToken.equals(MULT_TOKEN) || nextToken.equals(DIV_TOKEN) ) { // TODO: goes to epsilon
+        } else if (t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) ) {
             expression = parseSimpleExpressionPrime(null); // TODO: Value?
+            
+        // FollowSet of ExpressionPrime. Goes to epsilon
+        } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
+            return null;
+            
         } else {
-            throw new CminusException(nextToken, ASSIGN_TOKEN, MULT_TOKEN, DIV_TOKEN);
+            throw new CminusException(t, ASSIGN_TOKEN, MULT_TOKEN, DIV_TOKEN);
         }
         return expression;
     }
@@ -425,13 +434,13 @@ public class Parser implements ParserInterface {
         Var var = null;
        
         Token nextToken = scanner.viewNextToken();
-        if(nextToken.equals(LBRACKET_TOKEN)) { // TODO: epsilon
+        if(nextToken.equals(LBRACKET_TOKEN)) {
             match(LBRACKET_TOKEN);
-            parseExpression();
+            var = (Var) parseExpression();
             match(RBRACKET_TOKEN);
-    /* TODO:   
-     *   } else if (nexTToken.equals(EPSILON)) {
-     */           
+       
+        } else if (isInFollowOfVar(nextToken)) {
+            return null;
             
         } else {
             throw new CminusException(nextToken, LBRACKET_TOKEN);
@@ -444,18 +453,15 @@ public class Parser implements ParserInterface {
     private Expression parseSimpleExpressionPrime(Token prevToken) throws CminusException {
         Expression expression = null;
         
-        Token nextToken = scanner.viewNextToken();
-        if(nextToken.equals(MULT_TOKEN) || nextToken.equals(DIV_TOKEN)) { // TODO: epsilon
+        Token t = scanner.viewNextToken();
+        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
             parseAdditiveExpressionPrime();
-        }    
-    /* TODO:   
-     *   } else if (nexTToken.equals(EPSILON)) {
+        
+        } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
+            return null;
             
-            }   
-     */           
-            
-        else {
-            throw new CminusException(nextToken, LBRACKET_TOKEN);
+        } else {
+            throw new CminusException(t, LBRACKET_TOKEN);
         }
         
         return expression;
@@ -579,4 +585,21 @@ public class Parser implements ParserInterface {
                 || token.equals(SEMICOLON_TOKEN);
     }
 
+    /**
+     * Evaluates the token.getTokenType and compares it to be the follow set of Var.
+     * var { *, /, +, - ,<= , < , > , >= , == , !=, ;, ), ], , }
+     * @param token -  Token being evaluated
+     * @return -  True iff token.equals(MULT_TOKEN || DIV_TOKEN || ID_TOKEN || IF_TOKEN || WHILE_TOKEN || RETURN_TOKEN || SEMICOLON_TOKEN)
+     */
+    private boolean isInFollowOfVar(Token token) {
+        return token.equals(MULT_TOKEN) || token.equals(DIV_TOKEN) 
+                || token.equals(PLUS_TOKEN) || token.equals(MINUS_TOKEN) 
+                || token.equals(LEQ_TOKEN) || token.equals(LESS_TOKEN) 
+                || token.equals(GREAT_TOKEN) || token.equals(GEQ_TOKEN)
+                || token.equals(EQUAL_TOKEN) || token.equals(NEQ_TOKEN)
+                || token.equals(SEMICOLON_TOKEN) || token.equals(RPAREN_TOKEN)
+                || token.equals(RBRACKET_TOKEN) || token.equals(COMMA_TOKEN);
+    }
+    
+    
 }
