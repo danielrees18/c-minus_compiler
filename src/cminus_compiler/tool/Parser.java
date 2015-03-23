@@ -553,11 +553,35 @@ public class Parser implements ParserInterface {
         return null;
     }
     
+    // 28. call → ( args )
     private Call parseCall(Token ID) throws CminusException {
-        return null;   
+        Call call = null;
+        
+        Token t = scanner.viewNextToken();
+        if(t.equals(LPAREN_TOKEN)) {
+            parseArgs();
+        } else {
+            throw new CminusException(t, LPAREN_TOKEN);
+        }
+        
+        return call;
     }
+    
+    // 29. args → [ expression { , expression } ]
     private void parseArgs() throws CminusException {
         
+        Token t = scanner.viewNextToken();
+        if(t.equals(LPAREN_TOKEN) || t.equals(NUM_TOKEN) || t.equals(ID_TOKEN)) {
+            parseExpression();
+            t = scanner.viewNextToken();
+            if(t.equals(COMMA_TOKEN)) {
+                parseExpression(); // Back to args?
+            } else {
+                // No new expressions. Don't throw err
+            }
+        } else {
+            throw new CminusException(t, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
+        }
     }
     
     
