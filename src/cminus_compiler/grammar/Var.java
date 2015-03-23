@@ -1,6 +1,8 @@
 
 package cminus_compiler.grammar;
 
+import cminus_compiler.model.Token;
+
 /** 
  *
  *
@@ -20,6 +22,10 @@ public class Var extends Expression {
     // Constructors
     public Var() {
         this(null, null);
+    }
+    
+    public Var(Token ID, Expression expression) {
+        this((String)ID.getTokenData(), expression);
     }
 
     public Var(String variableName, Expression expression) {

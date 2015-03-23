@@ -430,18 +430,17 @@ public class Parser implements ParserInterface {
     }
     
     // 17. var → [ [ expression ] ]
-    private Var parseVar() throws CminusException {
+    private Var parseVar(Token ID) throws CminusException {
         Var var = null;
        
         Token nextToken = scanner.viewNextToken();
         if(nextToken.equals(LBRACKET_TOKEN)) {
             match(LBRACKET_TOKEN);
-            var = (Var) parseExpression();
+            Expression index = parseExpression();
             match(RBRACKET_TOKEN);
-       
+            var = new Var(ID, index);
         } else if (isInFollowOfVar(nextToken)) {
-            return null;
-            
+            var = new Var(ID, null);
         } else {
             throw new CminusException(nextToken, LBRACKET_TOKEN);
         }
@@ -549,8 +548,21 @@ public class Parser implements ParserInterface {
     private Expression parseVarCall() throws CminusException {
         Token ID = match(ID_TOKEN);
         Token nextToken = scanner.viewNextToken();
+        Expression varcall = null;
+        if (nextToken.equals(LPAREN_TOKEN)) {
+            varcall = parseCall(ID);
+        }
+        else if (nextToken.equals(RBRACKET_TOKEN) || isInFollowOfVar(nextToken)) {
+            varcall = parseVar(ID);
+        }
+        else {
+            throw new CminusException(nextToken, LPAREN_TOKEN, RBRACKET_TOKEN,
+                    MULT_TOKEN,DIV_TOKEN,PLUS_TOKEN,MINUS_TOKEN,LEQ_TOKEN,
+                    LESS_TOKEN,GREAT_TOKEN,GEQ_TOKEN,EQUAL_TOKEN,NEQ_TOKEN,
+                    SEMICOLON_TOKEN,RPAREN_TOKEN,RBRACKET_TOKEN,COMMA_TOKEN);
+        }
         
-        return null;
+        return varcall;
     }
     
     private Call parseCall(Token ID) throws CminusException {
