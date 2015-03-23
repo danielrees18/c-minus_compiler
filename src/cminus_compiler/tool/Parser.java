@@ -307,7 +307,8 @@ public class Parser implements ParserInterface {
             match(LPAREN_TOKEN);
             statement.setExpression(parseExpression());
             match(RPAREN_TOKEN);
-            statement.setPrimaryStatement(parseStatement());
+            Statement primarStatement = parseStatement();
+            statement.setPrimaryStatement(primarStatement);
             
             // Optional else statement. If not found, do not throw error
             if(scanner.viewNextToken().equals(ELSE_TOKEN)) {

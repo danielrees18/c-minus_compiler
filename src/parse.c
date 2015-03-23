@@ -1,5 +1,7 @@
-int variableName;
+void test(void){
 
-void add(int paramOne, int paramTwo) {
-	return paramOne + paramTwo;
+  if(a == b){
+    a + b;
+  }
+  return;
 }
