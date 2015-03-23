@@ -50,8 +50,10 @@ public class VarDeclaration extends Declaration {
     
     // Public Methods
     @Override
-    public String printTree() {
+    public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
+        builder.append(indent(indent));
+        
         builder.append(declarationName);
         builder.append("\n Size: ");
         builder.append(size);

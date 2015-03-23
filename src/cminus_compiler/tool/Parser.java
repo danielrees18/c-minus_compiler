@@ -64,12 +64,9 @@ public class Parser implements ParserInterface {
         Token nextToken = scanner.getNextToken();
         
         if(nextToken.equals(VOID_TOKEN)) {
-            declaration = parseFunctionDeclarationPrime("void");
-//            declaration.setDeclarationName((String) idToken.getTokenData());
+            declaration = parseFunctionDeclarationPrime(match(ID_TOKEN));
         } else if (nextToken.equals(INT_TOKEN)) {
-            Token idToken = match(ID_TOKEN);
-            declaration = parseDeclarationPrime(idToken);
-            declaration.setDeclarationName((String) idToken.getTokenData());
+            declaration = parseDeclarationPrime(match(ID_TOKEN));
         } else {
             throw new CminusException(nextToken, VOID_TOKEN, INT_TOKEN);
         }
@@ -94,7 +91,7 @@ public class Parser implements ParserInterface {
             ArrayList<Param> params = parseParams();
             match(RPAREN_TOKEN);
             CompoundStatement compound_statement = parseCompoundStatement();
-            declaration = new FunDeclaration("int", params, compound_statement);
+            declaration = new FunDeclaration("int", params, compound_statement, ID.data());
         }
         else {
             //error
@@ -132,7 +129,7 @@ public class Parser implements ParserInterface {
     }
      
     // 5. fun-decl-prime → ( params ) compound-stmt
-    private FunDeclaration parseFunctionDeclarationPrime(String returnType) throws CminusException {
+    private FunDeclaration parseFunctionDeclarationPrime(Token idToken) throws CminusException {
         FunDeclaration declaration = null;
         Token nextToken = scanner.viewNextToken();
         
@@ -142,7 +139,7 @@ public class Parser implements ParserInterface {
             this.match(RPAREN_TOKEN);
             
             CompoundStatement compoundStatement = parseCompoundStatement();
-            declaration = new FunDeclaration(returnType, params, compoundStatement);
+            declaration = new FunDeclaration("void", params, compoundStatement, idToken.data());
         } else {
             //error
             throw new CminusException(nextToken, LPAREN_TOKEN);
@@ -369,13 +366,16 @@ public class Parser implements ParserInterface {
             Expression lhs = parseExpression();
             match(RPAREN_TOKEN);
             expression = parseSimpleExpressionPrime(lhs);
+            
         } else if (nextToken.equals(NUM_TOKEN)) {
             Token numToken = match(NUM_TOKEN);
             Num num = new Num(numToken);
             expression = parseSimpleExpressionPrime(num);
+            
         } else if (nextToken.equals(ID_TOKEN)) {
             Token idToken = match(ID_TOKEN);
             expression = parseExpressionPrime(idToken);
+            
         } else {
             throw new CminusException(nextToken, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
         }
@@ -386,6 +386,7 @@ public class Parser implements ParserInterface {
     // 15. exp-prime → = expression | simple-exp-prime | ( args ) simple-exp-prime | [ expression ] exp-doubleprime
     private Expression parseExpressionPrime(Token prevToken) throws CminusException {
         Expression expression = null;
+        
         Token t = scanner.viewNextToken();
         if(t.equals(ASSIGN_TOKEN)) {
             match(ASSIGN_TOKEN);
@@ -393,18 +394,29 @@ public class Parser implements ParserInterface {
             
         } else if (t.equals(LPAREN_TOKEN)) {
             match(LPAREN_TOKEN);
-            // TODO: parse args. Return value?
+            ArrayList<Expression> args = parseArgs();
             match(RPAREN_TOKEN);
-            parseSimpleExpressionPrime(null); // TODO: pass a value?
+            Call call = new Call(prevToken.data(), args);
+            expression = parseSimpleExpressionPrime(call);
             
         } else if (t.equals(LBRACKET_TOKEN)) {
             match(LBRACKET_TOKEN);
-            // TODO: parse args. Return value?
+            Expression index = parseExpression();
             match(RBRACKET_TOKEN);
-            parseExpressionDoublePrime(null);
+            Var arrayVar = new Var(prevToken.data(), expression);
+            
+            expression = parseExpressionDoublePrime(arrayVar);
             
         } else if (t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN) ) {
-            parseSimpleExpressionPrime(null);
+            Expression lhs;
+            
+            if(prevToken.equals(ID_TOKEN)) {
+                lhs = new Var(prevToken, null);
+            } else {
+                lhs = new Num(prevToken);
+            }
+            
+            expression = parseSimpleExpressionPrime(lhs);
             
         // FollowSet of ExpressionPrime. Goes to epsilon
         } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
@@ -417,14 +429,15 @@ public class Parser implements ParserInterface {
     }
     
     // 16. exp-doubleprime → = expression | simple-exp-prime
-    private Expression parseExpressionDoublePrime(Token prevToken) throws CminusException {
+    private Expression parseExpressionDoublePrime(Var lhs) throws CminusException {
         Expression expression = null;
+        
         Token t = scanner.viewNextToken();
         if(t.equals(ASSIGN_TOKEN)) {
-            match(ASSIGN_TOKEN);
-            expression = parseExpression();
+            expression = parseAssignmentOperation(lhs);
+            
         } else if (t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) ) {
-            expression = parseSimpleExpressionPrime(null); // TODO: Value?
+            expression = parseSimpleExpressionPrime(lhs); 
             
         // FollowSet of ExpressionPrime. Goes to epsilon
         } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
@@ -463,11 +476,11 @@ public class Parser implements ParserInterface {
         
         Token t = scanner.viewNextToken();
         if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN)) {
-            Expression exp = parseAdditiveExpressionPrime(lhs);
+            expression = parseAdditiveExpressionPrime(lhs);
             
             t = scanner.viewNextToken();
             if(isInSet(t, firstOfRelop)) {
-                BinaryOperation relop = parseBinaryOperation(exp);
+                BinaryOperation relop = parseBinaryOperation(expression);
             }
         
         } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
@@ -692,20 +705,24 @@ public class Parser implements ParserInterface {
     }
     
     // 29. args → [ expression { , expression } ]
-    private void parseArgs() throws CminusException {
+    private ArrayList<Expression> parseArgs() throws CminusException {
+        ArrayList<Expression> args = new ArrayList<>();
+        
         
         Token t = scanner.viewNextToken();
         if(t.equals(LPAREN_TOKEN) || t.equals(NUM_TOKEN) || t.equals(ID_TOKEN)) {
-            parseExpression();
+            args.add(parseExpression());
             t = scanner.viewNextToken();
-            if(t.equals(COMMA_TOKEN)) {
-                parseExpression(); // Back to args?
-            } else {
-                // No new expressions. Don't throw err
-            }
+            
+            while(t.equals(COMMA_TOKEN)) {
+                args.add(parseExpression());
+                t = scanner.viewNextToken();
+            } 
         } else {
             throw new CminusException(t, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
         }
+        
+        return args;
     }
     
     

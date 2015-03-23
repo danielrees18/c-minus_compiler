@@ -55,11 +55,15 @@ public class Var extends Expression {
     
     // Public Methods
     @Override
-    public String printTree() {
+    public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
+        builder.append(indent(indent));
+        
         builder.append(variableName);
         builder.append("\n---");
-        builder.append(expression.printTree());
+        if(expression != null) {
+            builder.append(expression.printTree(indent+1));
+        }
         
         return builder.toString();
     }

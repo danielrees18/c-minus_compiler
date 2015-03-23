@@ -43,10 +43,12 @@ public class ReturnStatement extends Statement {
     
     // Public Methods
     @Override
-    public String printTree() {
+    public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
-        builder.append("return\n---");
-        builder.append(expression.printTree());
+        builder.append(indent(indent));
+        
+        builder.append("return\n");
+        builder.append(expression.printTree(indent+1));
         
         return builder.toString();
     }

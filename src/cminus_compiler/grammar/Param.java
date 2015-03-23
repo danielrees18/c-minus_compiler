@@ -58,12 +58,23 @@ public class Param {
     
     
     // Public Methods
-    public String printTree() {
+    public String printTree(int indent) {
+        
         StringBuilder builder = new StringBuilder();
+        builder.append(indent(indent));
+        
         builder.append(paramName);
         builder.append(" is array: ");
         builder.append(isArray);
         
+        return builder.toString();
+    }
+    
+    private String indent(int indent) {
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < indent; i++) {
+            builder.append("---");
+        }
         return builder.toString();
     }
     

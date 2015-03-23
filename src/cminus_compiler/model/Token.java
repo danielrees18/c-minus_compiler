@@ -43,6 +43,10 @@ public class Token {
         return "Token{" + "tokenType=" + tokenType + ", tokenData=" + tokenData + '}';
     }
     
+    public String data() {
+        return (String) tokenData;
+    }
+    
     
     // Getters
     public TokenType getTokenType() {
@@ -62,4 +66,5 @@ public class Token {
     public void setTokenData(Object tokenData) {
         this.tokenData = tokenData;
     }   
+    
 }

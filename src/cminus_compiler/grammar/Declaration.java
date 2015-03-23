@@ -32,8 +32,16 @@ public abstract class Declaration {
         this.declarationName = declarationName;
     }
     
+    public String indent(int indent) {
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < indent; i++) {
+            builder.append("---");
+        }
+        return builder.toString();
+    }
+    
     
     // Abstract Methods
-    public abstract String printTree();
+    public abstract String printTree(int indent);
     
 }

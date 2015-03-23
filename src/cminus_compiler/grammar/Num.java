@@ -50,11 +50,8 @@ public class Num extends Expression {
     
     // Public Methods
     @Override
-    public String printTree() {
-        String treeOutput = "";
-        
-        
-        return treeOutput;
+    public String printTree(int indent) {
+        return toString();
     }   
 
     @Override

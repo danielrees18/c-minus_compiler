@@ -56,12 +56,14 @@ public class Call extends Expression {
     
     // Public Methods
     @Override
-    public String printTree() {
+    public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
+        builder.append(indent(indent));
+        
         builder.append(callName);
         for(Expression arg : args) {
             builder.append("\n---");
-            builder.append(arg.printTree());
+            builder.append(arg.printTree(indent+1));
         }        
         return builder.toString();
     }

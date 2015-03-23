@@ -59,13 +59,16 @@ public class AssignmentOperation extends Expression {
   
     // Public Methods
     @Override
-    public String printTree() {
+    public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
+        
+        builder.append(indent(indent));
+        
         builder.append(operation);
         builder.append("\n---");
-        builder.append(variable.printTree());
+        builder.append(variable.printTree(indent+1));
         builder.append("\n---");
-        builder.append(rightHandExpression.printTree());
+        builder.append(rightHandExpression.printTree(indent+1));
         
         return builder.toString();
     }

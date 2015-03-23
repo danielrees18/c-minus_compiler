@@ -43,7 +43,7 @@ public class ExpressionStatement extends Statement {
     
     // Public Methods
     @Override
-    public String printTree() {
-        return expression.printTree();
+    public String printTree(int indent) {
+        return expression.printTree(indent+1);
     }
 }

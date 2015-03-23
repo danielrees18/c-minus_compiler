@@ -64,12 +64,14 @@ public class SelectionStatement extends Statement {
     
     // Public Methods
     @Override
-    public String printTree() {
+    public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
-        builder.append(expression.printTree());
-        builder.append(primaryStatement.printTree());
+        builder.append(indent(indent));
+        
+        builder.append(expression.printTree(indent+1));
+        builder.append(primaryStatement.printTree(indent+1));
         if(optionalStatement != null) {
-            builder.append(optionalStatement.printTree());
+            builder.append(optionalStatement.printTree(indent+1));
         }
         
         return builder.toString();

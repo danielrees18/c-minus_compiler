@@ -50,10 +50,12 @@ public class IterationStatement extends Statement {
     
     // Public Methods
     @Override
-    public String printTree() {
+    public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
-        builder.append(expression.printTree());
-        builder.append(statement.printTree());
+        builder.append(indent(indent));
+        
+        builder.append(expression.printTree(indent+1));
+        builder.append(statement.printTree(indent+1));
         
         return builder.toString();
     }

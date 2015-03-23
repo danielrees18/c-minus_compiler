@@ -32,10 +32,9 @@ public class Program {
     
     public String printTree() {
         StringBuilder builder = new StringBuilder();
-        builder.append("\n*** Begin Tree *** \nProgram");
+        builder.append("\n*** Begin Tree *** \nProgramn\n");
         for(Declaration declaration : declarations) {
-            builder.append("\n---");
-            builder.append(declaration.printTree());
+            builder.append(declaration.printTree(1));
         }
         
         return builder.toString();

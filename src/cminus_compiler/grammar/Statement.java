@@ -17,6 +17,14 @@ package cminus_compiler.grammar;
  */
 public abstract class Statement {
 
-    public abstract String printTree();
+    public String indent(int indent) {
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < indent; i++) {
+            builder.append("---");
+        }
+        return builder.toString();
+    }
+    
+    public abstract String printTree(int indent);
     
 }
