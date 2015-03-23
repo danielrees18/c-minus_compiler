@@ -62,7 +62,6 @@ public class Call extends Expression {
         
         builder.append(callName);
         for(Expression arg : args) {
-            builder.append("\n---");
             builder.append(arg.printTree(indent+1));
         }        
         return builder.toString();

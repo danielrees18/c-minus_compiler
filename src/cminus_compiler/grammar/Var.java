@@ -60,7 +60,6 @@ public class Var extends Expression {
         builder.append(indent(indent));
         
         builder.append(variableName);
-        builder.append("\n---");
         if(expression != null) {
             builder.append(expression.printTree(indent+1));
         }

@@ -57,12 +57,10 @@ public class CompoundStatement extends Statement {
         builder.append(indent(indent));
         
         for(VarDeclaration decl : variableDeclartions) {
-//            builder.append("\n---");
             builder.append(decl.printTree(indent+1));
         }
         
         for(Statement stmt : statements) {
-//            builder.append("\n---");
             builder.append(stmt.printTree(indent+1));
         }
         

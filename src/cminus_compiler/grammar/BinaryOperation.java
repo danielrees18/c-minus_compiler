@@ -71,9 +71,7 @@ public class BinaryOperation extends Expression {
         builder.append(indent(indent));
         
         builder.append(operation);
-        builder.append("\n---");
         builder.append(leftHandExpression.printTree(indent+1));
-        builder.append("\n---");
         builder.append(rightHandExpression.printTree(indent+1));
         
         return builder.toString();

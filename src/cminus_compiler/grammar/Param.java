@@ -6,6 +6,7 @@
 package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
+import cminus_compiler.tool.IndentTool;
 
 /** 
  *
@@ -61,7 +62,7 @@ public class Param {
     public String printTree(int indent) {
         
         StringBuilder builder = new StringBuilder();
-        builder.append(indent(indent));
+        builder.append(IndentTool.indent(indent));
         
         builder.append(paramName);
         builder.append(" is array: ");
@@ -69,13 +70,6 @@ public class Param {
         
         return builder.toString();
     }
-    
-    private String indent(int indent) {
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < indent; i++) {
-            builder.append("---");
-        }
-        return builder.toString();
-    }
+
     
 }
