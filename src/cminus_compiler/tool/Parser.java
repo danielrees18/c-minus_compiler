@@ -470,7 +470,7 @@ public class Parser implements ParserInterface {
     // 22. addop → + | -
     // 25. mulop →  * | / 
     private BinaryOperation parseBinaryOperation(Expression lhs) throws CminusException {
-        
+        // TODO: we need to read what kind of operator it is...create a BinaryOperation object and add the lhs and parse whats next and add it as well
         return null;
     }
     private AssignmentOperation parseAssignmentOperation() throws CminusException {
@@ -479,11 +479,17 @@ public class Parser implements ParserInterface {
     }
     
     private Num parseNum() throws CminusException {
-        
-        return null;
+        Token num = match(NUM_TOKEN);
+        return new Num(num);
     }
-    private void parseRelop() throws CminusException {
-        
+    private Token parseRelop() throws CminusException {
+        Token op = scanner.getNextToken();
+        if (op == LESS_TOKEN || op == LEQ_TOKEN || op == GREAT_TOKEN || op == GEQ_TOKEN || op == NEQ_TOKEN || op == EQUAL_TOKEN) {
+            return op;
+        }
+        else {
+            throw new CminusException(op, LESS_TOKEN,LEQ_TOKEN,GREAT_TOKEN,GEQ_TOKEN,NEQ_TOKEN, EQUAL_TOKEN);
+        }
     }
     
     private void parseAddop() throws CminusException {
