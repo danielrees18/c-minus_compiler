@@ -473,7 +473,7 @@ public class Parser implements ParserInterface {
         
         Token t = scanner.viewNextToken();
         if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
-            pars
+            Expression exp = parseTermPrime();
             
         // Epsilon Followset of additive-exp-prime _{ <= , < , > , >= , == , !=, ;, ), ], , }_    
         } else if (isInSet(t, followSet)) {
@@ -588,7 +588,7 @@ public class Parser implements ParserInterface {
     }
     
     // 24. term-prime → { mulop factor }
-    private void parseTermPrime() throws CminusException {
+    private Expression parseTermPrime(Expression lhs) throws CminusException {
         // term-prime { +, - ,<= , < , > , >= , == , !=, ;, ), ], , }
         TokenType[] followSet = {PLUS_TOKEN, MINUS_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN};
         
