@@ -451,11 +451,18 @@ public class Parser implements ParserInterface {
     
     // 18. simple-exp-prime → additive-exp-prime [ relop additive-exp ]
     private Expression parseSimpleExpressionPrime(Expression lhs) throws CminusException {
+        //relop { <= , < , > , >= , == , != }
+        TokenType[] firstOfRelop = {LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN};
         Expression expression = null;
         
         Token t = scanner.viewNextToken();
         if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
-            parseAdditiveExpressionPrime();
+            Expression exp = parseAdditiveExpressionPrime(lhs);
+            
+            t = scanner.viewNextToken();
+            if(isInSet(t, firstOfRelop)) {
+                BinaryOperation relop = parseBinaryOperation(exp);
+            }
         
         } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
             return null;
@@ -468,21 +475,22 @@ public class Parser implements ParserInterface {
     }
     
     // 21. additive-exp-prime → term-prime { addop term }
-    private Expression parseAdditiveExpressionPrime() throws CminusException {
+    private Expression parseAdditiveExpressionPrime(Expression lhs) throws CminusException {
         TokenType[] followSet = { LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, SEMICOLON_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN };
+        Expression returnExpression = null;
         
         Token t = scanner.viewNextToken();
         if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
-            Expression exp = parseTermPrime();
+            returnExpression = parseTermPrime(lhs);
             
-        // Epsilon Followset of additive-exp-prime _{ <= , < , > , >= , == , !=, ;, ), ], , }_    
-        } else if (isInSet(t, followSet)) {
-            return;
-            
+            t = scanner.viewNextToken();
+            if(t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN)) {
+                returnExpression = parseBinaryOperation(returnExpression);
+            }
         } else {
             throw new CminusException(t, followSet);
         }
-        return;
+        return returnExpression;
     }
     
     
@@ -599,7 +607,7 @@ public class Parser implements ParserInterface {
            
         // goes to empty
         } else if (isInSet(t, followSet)) {
-            return;
+            return null;
         } else {
             throw new CminusException(t, MULT_TOKEN, DIV_TOKEN);
         }
