@@ -487,23 +487,28 @@ public class Parser implements ParserInterface {
     // 22. addop → + | -
     // 25. mulop →  * | / 
     private BinaryOperation parseBinaryOperation(Expression lhs) throws CminusException {
-        // TODO: we need to read what kind of operator it is...create a BinaryOperation object and add the lhs and parse whats next and add it as well
+        // we need to read what kind of operator it is...create a BinaryOperation object and add the lhs and parse whats next and add it as well
         Token op = scanner.viewNextToken();
+        Expression rhs = null;
+        String operator = "";
         if (op.getTokenType() == LESS_TOKEN || op.getTokenType() == LEQ_TOKEN 
                 || op.getTokenType() == GREAT_TOKEN || op.getTokenType() == GEQ_TOKEN 
                 || op.getTokenType() == NEQ_TOKEN || op.getTokenType() == EQUAL_TOKEN) {
             // relop
-            String relop = parseRelop();
+            operator = parseRelop();
+            rhs = parseAdditiveExpressionPrime();
         }
         else if (op.getTokenType() == PLUS_TOKEN || op.getTokenType() == MINUS_TOKEN) {
             // addop
-            String addop = parseAddop();
+            operator = parseAddop();
+            rhs = parseTerm();
         }
         else if (op.getTokenType() == MULT_TOKEN || op.getTokenType() == DIV_TOKEN) {
             // mulop
-            String mulop = parseMulop();
+            operator = parseMulop();
+            rhs = parseFactor();
         }
-        return null;
+        return new BinaryOperation(lhs, rhs, operator);
     }
     private AssignmentOperation parseAssignmentOperation() throws CminusException {
         
