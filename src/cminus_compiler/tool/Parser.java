@@ -621,6 +621,10 @@ public class Parser implements ParserInterface {
         TokenType[] followSet = {PLUS_TOKEN, MINUS_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN};
         Expression returnExpression = lhs;
         
+        if (lhs == null) {
+            return parseTerm();
+        }
+        
         Token t = scanner.viewNextToken();
         if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN)) {
             returnExpression = parseBinaryOperation(lhs);
