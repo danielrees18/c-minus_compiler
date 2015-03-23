@@ -28,7 +28,7 @@ public class Num extends Expression {
     }
     
     public Num(Token token) {
-       this((int) token.getTokenData());
+       this(Integer.parseInt(token.data()));
    }
 
     public Num(int value) {

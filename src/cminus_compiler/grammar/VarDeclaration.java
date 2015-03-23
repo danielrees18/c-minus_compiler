@@ -55,8 +55,11 @@ public class VarDeclaration extends Declaration {
         builder.append(indent(indent));
         
         builder.append(declarationName);
-        builder.append("\n Size: ");
-        builder.append(size);
+        if(size > 0) {
+            builder.append("[");
+            builder.append(size);
+            builder.append("]");
+        }
         
         
         return builder.toString();

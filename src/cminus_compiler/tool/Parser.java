@@ -24,6 +24,8 @@ public class Parser implements ParserInterface {
     private ScannerInterface scanner;
     private TokenType[] firstOfStatement = {LPAREN_TOKEN, LCURLY_TOKEN, NUM_TOKEN, ID_TOKEN, IF_TOKEN, WHILE_TOKEN, RETURN_TOKEN, SEMICOLON_TOKEN};
     private TokenType[] firstOfExpressionStatement = { SEMICOLON_TOKEN, COMMA_TOKEN, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN };
+    private TokenType[] firstOfRelop = {LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN};
+
  
         
     // Constructor
@@ -84,6 +86,7 @@ public class Parser implements ParserInterface {
             declaration = new VarDeclaration(number, ID);
         }
         else if (nextToken.equals(SEMICOLON_TOKEN)) {
+            match(SEMICOLON_TOKEN);
             declaration = new VarDeclaration(new Num(), ID);
         }
         else if (nextToken.equals(LPAREN_TOKEN)) {
@@ -153,6 +156,7 @@ public class Parser implements ParserInterface {
         Token nextToken = scanner.viewNextToken();
         if (nextToken.equals(VOID_TOKEN)) {
             // just pass up an empty arraylist
+            match(VOID_TOKEN);
         }
         else {
             params.add(parseParam());
@@ -385,6 +389,8 @@ public class Parser implements ParserInterface {
     
     // 15. exp-prime → = expression | simple-exp-prime | ( args ) simple-exp-prime | [ expression ] exp-doubleprime
     private Expression parseExpressionPrime(Token prevToken) throws CminusException {
+        TokenType[] firstOfSimpleExpPrime = { PLUS_TOKEN, MINUS_TOKEN, MULT_TOKEN, DIV_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN };
+        
         Expression expression = null;
         
         Token t = scanner.viewNextToken();
@@ -407,7 +413,7 @@ public class Parser implements ParserInterface {
             
             expression = parseExpressionDoublePrime(arrayVar);
             
-        } else if (t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN) ) {
+        } else if (isInSet(t, firstOfSimpleExpPrime)) {
             Expression lhs;
             
             if(prevToken.equals(ID_TOKEN)) {
@@ -483,8 +489,11 @@ public class Parser implements ParserInterface {
                 BinaryOperation relop = parseBinaryOperation(expression);
             }
         
+        } else if (isInSet(t, firstOfRelop)) {    
+            expression = parseBinaryOperation(lhs);
+            
         } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
-            return null;
+            // nada
             
         } else {
             throw new CminusException(t, LBRACKET_TOKEN);
@@ -499,7 +508,7 @@ public class Parser implements ParserInterface {
         Expression returnExpression = null;
         
         Token t = scanner.viewNextToken();
-        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN)) {
+        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN) || t.equals(LPAREN_TOKEN) || t.equals(NUM_TOKEN) || t.equals(ID_TOKEN)) {
             returnExpression = parseTermPrime(lhs);
             
             t = scanner.viewNextToken();
@@ -522,9 +531,7 @@ public class Parser implements ParserInterface {
         Token op = scanner.viewNextToken();
         Expression rhs = null;
         String operator = "";
-        if (op.getTokenType() == LESS_TOKEN || op.getTokenType() == LEQ_TOKEN 
-                || op.getTokenType() == GREAT_TOKEN || op.getTokenType() == GEQ_TOKEN 
-                || op.getTokenType() == NEQ_TOKEN || op.getTokenType() == EQUAL_TOKEN) {
+        if (isInSet(op, firstOfRelop)) {
             // relop
             operator = parseRelop();
             rhs = parseAdditiveExpressionPrime(null);
@@ -786,11 +793,11 @@ public class Parser implements ParserInterface {
     
     private boolean isInSet(Token token, TokenType[] set) {
         for(TokenType type : set) {
-            if(token.equals(type) == false) {
-                return false;
+            if(token.equals(type) == true) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
     
     
