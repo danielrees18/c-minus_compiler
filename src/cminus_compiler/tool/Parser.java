@@ -144,6 +144,8 @@ public class Parser implements ParserInterface {
             CompoundStatement compoundStatement = parseCompoundStatement();
             declaration = new FunDeclaration(returnType, params, compoundStatement);
         } else {
+            //error
+            throw new CminusException(nextToken, LPAREN_TOKEN);
         }
         return declaration;
     }

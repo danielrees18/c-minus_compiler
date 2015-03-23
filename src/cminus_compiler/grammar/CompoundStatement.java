@@ -21,7 +21,7 @@ public class CompoundStatement extends Statement {
     
     // Constructors
     public CompoundStatement() {
-        this(new ArrayList<>(), new ArrayList<>());
+        this(new ArrayList<VarDeclaration>(), new ArrayList<Statement>());
     }
 
     public CompoundStatement(ArrayList<VarDeclaration> variableDeclartions, ArrayList<Statement> statements) {
