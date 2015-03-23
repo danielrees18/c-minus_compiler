@@ -476,6 +476,21 @@ public class Parser implements ParserInterface {
     // 25. mulop →  * | / 
     private BinaryOperation parseBinaryOperation(Expression lhs) throws CminusException {
         // TODO: we need to read what kind of operator it is...create a BinaryOperation object and add the lhs and parse whats next and add it as well
+        Token op = scanner.viewNextToken();
+        if (op.getTokenType() == LESS_TOKEN || op.getTokenType() == LEQ_TOKEN 
+                || op.getTokenType() == GREAT_TOKEN || op.getTokenType() == GEQ_TOKEN 
+                || op.getTokenType() == NEQ_TOKEN || op.getTokenType() == EQUAL_TOKEN) {
+            // relop
+            String relop = parseRelop();
+        }
+        else if (op.getTokenType() == PLUS_TOKEN || op.getTokenType() == MINUS_TOKEN) {
+            // addop
+            String addop = parseAddop();
+        }
+        else if (op.getTokenType() == MULT_TOKEN || op.getTokenType() == DIV_TOKEN) {
+            // mulop
+            String mulop = parseMulop();
+        }
         return null;
     }
     private AssignmentOperation parseAssignmentOperation() throws CminusException {
@@ -488,22 +503,38 @@ public class Parser implements ParserInterface {
         return new Num(num);
     }
     // 19. relop → <= | < | > | >= | == | !=
-    private Token parseRelop() throws CminusException {
+    private String parseRelop() throws CminusException {
         Token op = scanner.getNextToken();
-        if (op.getTokenType() == LESS_TOKEN || op.getTokenType() == LEQ_TOKEN 
-                || op.getTokenType() == GREAT_TOKEN || op.getTokenType() == GEQ_TOKEN 
-                || op.getTokenType() == NEQ_TOKEN || op.getTokenType() == EQUAL_TOKEN) {
-            return op;
+        if (op.getTokenType() == LESS_TOKEN) {
+            return "<";
+        }
+        else if (op.getTokenType() == LEQ_TOKEN){
+            return "<=";
+        }
+        else if (op.getTokenType() == GREAT_TOKEN) {
+            return ">";
+        }
+        else if (op.getTokenType() == GEQ_TOKEN) {
+            return ">=";
+        }
+        else if (op.getTokenType() == NEQ_TOKEN) {
+            return "!=";
+        }
+        else if (op.getTokenType() == EQUAL_TOKEN) {
+            return "==";
         }
         else {
             throw new CminusException(op, LESS_TOKEN,LEQ_TOKEN,GREAT_TOKEN,GEQ_TOKEN,NEQ_TOKEN, EQUAL_TOKEN);
         }
     }
     // 22. addop → + | -
-    private Token parseAddop() throws CminusException {
+    private String parseAddop() throws CminusException {
         Token op = scanner.getNextToken();
-        if (op.getTokenType() == PLUS_TOKEN || op.getTokenType() == MINUS_TOKEN) {
-            return op;
+        if (op.getTokenType() == PLUS_TOKEN) {
+            return "+";
+        }
+        else if (op.getTokenType() == MINUS_TOKEN) {
+            return "-";
         }
         else {
             throw new CminusException(op, PLUS_TOKEN, MINUS_TOKEN);
@@ -515,10 +546,13 @@ public class Parser implements ParserInterface {
     }
     
     // 25. mulop →  * | / 
-    private Token parseMulop() throws CminusException {
+    private String parseMulop() throws CminusException {
         Token op = scanner.getNextToken();
-        if (op.getTokenType() == MULT_TOKEN || op.getTokenType() == DIV_TOKEN) {
-            return op;
+        if (op.getTokenType() == MULT_TOKEN) {
+            return "*";
+        }
+        else if (op.getTokenType() == DIV_TOKEN) {
+            return "/";
         }
         else {
             throw new CminusException(op, MULT_TOKEN, DIV_TOKEN);
