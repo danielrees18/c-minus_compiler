@@ -203,11 +203,13 @@ public class Parser implements ParserInterface {
                 // there is at least one stmt
                 statements = parseStatementList();
             }
+            compoundStatement = new CompoundStatement(localDeclarations, statements);
         }
         // first set of stmt => (, NUM, ID, {, if, while, return, ; 
         else if (isInFirstOfStatement(nextToken)) {
             // there is at least one stmt
             statements = parseStatementList();
+            compoundStatement = new CompoundStatement(localDeclarations, statements);
         }
         else {
             //error
