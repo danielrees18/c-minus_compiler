@@ -288,7 +288,7 @@ public class Parser implements ParserInterface {
             
         } else if(isInFirstOfExpressionStatement(nextToken)) {
             expressionStatement = new ExpressionStatement(parseExpression());
-            
+            match(SEMICOLON_TOKEN);
         } else {
           throw new CminusException(nextToken, firstOfExpressionStatement);
         }
