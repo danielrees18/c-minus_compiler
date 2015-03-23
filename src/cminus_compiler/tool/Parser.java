@@ -468,7 +468,7 @@ public class Parser implements ParserInterface {
     }
     
     // 21. additive-exp-prime → term-prime { addop term }
-    private void parseAdditiveExpressionPrime() throws CminusException {
+    private Expression parseAdditiveExpressionPrime() throws CminusException {
         TokenType[] followSet = { LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, SEMICOLON_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN };
         
         Token t = scanner.viewNextToken();
