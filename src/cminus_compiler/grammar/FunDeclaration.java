@@ -22,7 +22,7 @@ public class FunDeclaration extends Declaration {
     
     // Constructors
     public FunDeclaration() {
-        this(null, new ArrayList<>(), null);
+        this(null, new ArrayList<Param>(), null);
     }
 
     public FunDeclaration(String returnType, ArrayList<Param> params, CompoundStatement compoundStatement) {
