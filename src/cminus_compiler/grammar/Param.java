@@ -61,7 +61,7 @@ public class Param {
     public String printTree() {
         StringBuilder builder = new StringBuilder();
         builder.append(paramName);
-        builder.append("is array: ");
+        builder.append(" is array: ");
         builder.append(isArray);
         
         return builder.toString();

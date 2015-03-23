@@ -46,7 +46,7 @@ public class ReturnStatement extends Statement {
     public String printTree() {
         StringBuilder builder = new StringBuilder();
         builder.append("return\n---");
-        builder.append(expression.toString());
+        builder.append(expression.printTree());
         
         return builder.toString();
     }

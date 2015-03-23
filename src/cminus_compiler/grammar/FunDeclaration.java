@@ -65,7 +65,7 @@ public class FunDeclaration extends Declaration {
     public String printTree() {
         StringBuilder builder = new StringBuilder();
         builder.append(returnType);
-        builder.append("\n");
+        builder.append(" ");
         builder.append(declarationName);
         for(Param param : params) {
             builder.append("\n---");

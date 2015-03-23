@@ -65,8 +65,11 @@ public class Parser implements ParserInterface {
         
         if(nextToken.equals(VOID_TOKEN)) {
             declaration = parseFunctionDeclarationPrime("void");
+//            declaration.setDeclarationName((String) idToken.getTokenData());
         } else if (nextToken.equals(INT_TOKEN)) {
-            declaration = parseDeclarationPrime(match(ID_TOKEN));
+            Token idToken = match(ID_TOKEN);
+            declaration = parseDeclarationPrime(idToken);
+            declaration.setDeclarationName((String) idToken.getTokenData());
         } else {
             throw new CminusException(nextToken, VOID_TOKEN, INT_TOKEN);
         }
@@ -158,6 +161,7 @@ public class Parser implements ParserInterface {
             while (!nextToken.equals(RPAREN_TOKEN)) {
                 match(COMMA_TOKEN);
                 params.add(parseParam());
+                nextToken = scanner.viewNextToken();
             }
         }
         
@@ -397,7 +401,7 @@ public class Parser implements ParserInterface {
             match(RBRACKET_TOKEN);
             parseExpressionDoublePrime(null);
             
-        } else if (t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) ) {
+        } else if (t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN) ) {
             parseSimpleExpressionPrime(null);
             
         // FollowSet of ExpressionPrime. Goes to epsilon
@@ -456,7 +460,7 @@ public class Parser implements ParserInterface {
         Expression expression = null;
         
         Token t = scanner.viewNextToken();
-        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
+        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN)) {
             Expression exp = parseAdditiveExpressionPrime(lhs);
             
             t = scanner.viewNextToken();
@@ -480,7 +484,7 @@ public class Parser implements ParserInterface {
         Expression returnExpression = null;
         
         Token t = scanner.viewNextToken();
-        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
+        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN)) {
             returnExpression = parseTermPrime(lhs);
             
             t = scanner.viewNextToken();
@@ -603,7 +607,7 @@ public class Parser implements ParserInterface {
         Expression returnExpression = lhs;
         
         Token t = scanner.viewNextToken();
-        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
+        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN)) {
             returnExpression = parseBinaryOperation(lhs);
             
            
