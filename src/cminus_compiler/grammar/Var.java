@@ -21,7 +21,6 @@ public class Var extends Expression {
     
     // Constructors
     public Var() {
-        this(null, null);
     }
     
     public Var(Token ID, Expression expression) {

@@ -360,12 +360,13 @@ public class Parser implements ParserInterface {
         Token nextToken = scanner.viewNextToken();
         if(nextToken.equals(LPAREN_TOKEN)) {
             match(LPAREN_TOKEN);
-            parseExpression();
+            Expression lhs = parseExpression();
             match(RPAREN_TOKEN);
-            expression = parseSimpleExpressionPrime();
+            expression = parseSimpleExpressionPrime(lhs);
         } else if (nextToken.equals(NUM_TOKEN)) {
             Token numToken = match(NUM_TOKEN);
-            expression = parseSimpleExpressionPrime(numToken);
+            Num num = new Num(numToken);
+            expression = parseSimpleExpressionPrime(num);
         } else if (nextToken.equals(ID_TOKEN)) {
             Token idToken = match(ID_TOKEN);
             expression = parseExpressionPrime(idToken);
@@ -449,7 +450,7 @@ public class Parser implements ParserInterface {
     }
     
     // 18. simple-exp-prime → additive-exp-prime [ relop additive-exp ]
-    private Expression parseSimpleExpressionPrime(Token prevToken) throws CminusException {
+    private Expression parseSimpleExpressionPrime(Expression lhs) throws CminusException {
         Expression expression = null;
         
         Token t = scanner.viewNextToken();
@@ -472,6 +473,7 @@ public class Parser implements ParserInterface {
         
         Token t = scanner.viewNextToken();
         if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
+            pars
             
         // Epsilon Followset of additive-exp-prime _{ <= , < , > , >= , == , !=, ;, ), ], , }_    
         } else if (isInSet(t, followSet)) {
@@ -482,6 +484,8 @@ public class Parser implements ParserInterface {
         }
         return;
     }
+    
+    
     
     // 19. relop → <= | < | > | >= | == | !=
     // 22. addop → + | -
@@ -580,6 +584,24 @@ public class Parser implements ParserInterface {
             }
         } else {
             throw new CminusException(t, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
+        }
+    }
+    
+    // 24. term-prime → { mulop factor }
+    private void parseTermPrime() throws CminusException {
+        // term-prime { +, - ,<= , < , > , >= , == , !=, ;, ), ], , }
+        TokenType[] followSet = {PLUS_TOKEN, MINUS_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN};
+        
+        Token t = scanner.viewNextToken();
+        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
+            String op = parseMulop();
+            parseFactor();
+           
+        // goes to empty
+        } else if (isInSet(t, followSet)) {
+            return;
+        } else {
+            throw new CminusException(t, MULT_TOKEN, DIV_TOKEN);
         }
     }
     
