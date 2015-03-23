@@ -510,9 +510,17 @@ public class Parser implements ParserInterface {
         }
         return new BinaryOperation(lhs, rhs, operator);
     }
-    private AssignmentOperation parseAssignmentOperation() throws CminusException {
+    
+    private AssignmentOperation parseAssignmentOperation(Var lhs) throws CminusException {
+        Token t = scanner.viewNextToken();
+        if(t.equals(EQUAL_TOKEN)) {
+            match(EQUAL_TOKEN);
+            Expression rhs = parseExpression();
+            return new AssignmentOperation(lhs, rhs);
         
-        return null;
+        } else {
+            throw new CminusException(t, EQUAL_TOKEN);
+        }
     }
     
     private Num parseNum() throws CminusException {
