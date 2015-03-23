@@ -482,6 +482,7 @@ public class Parser implements ParserInterface {
         Token num = match(NUM_TOKEN);
         return new Num(num);
     }
+    // 19. relop → <= | < | > | >= | == | !=
     private Token parseRelop() throws CminusException {
         Token op = scanner.getNextToken();
         if (op.getTokenType() == LESS_TOKEN || op.getTokenType() == LEQ_TOKEN 
@@ -493,19 +494,41 @@ public class Parser implements ParserInterface {
             throw new CminusException(op, LESS_TOKEN,LEQ_TOKEN,GREAT_TOKEN,GEQ_TOKEN,NEQ_TOKEN, EQUAL_TOKEN);
         }
     }
-    
-    private void parseAddop() throws CminusException {
-        
+    // 22. addop → + | -
+    private Token parseAddop() throws CminusException {
+        Token op = scanner.getNextToken();
+        if (op.getTokenType() == PLUS_TOKEN || op.getTokenType() == MINUS_TOKEN) {
+            return op;
+        }
+        else {
+            throw new CminusException(op, PLUS_TOKEN, MINUS_TOKEN);
+        }
     }
+    
     private void parseTerm() throws CminusException {
         
     }
-    private void parseMulop() throws CminusException {
+    
+    // 25. mulop →  * | / 
+    private Token parseMulop() throws CminusException {
+        Token op = scanner.getNextToken();
+        if (op.getTokenType() == MULT_TOKEN || op.getTokenType() == DIV_TOKEN) {
+            return op;
+        }
+        else {
+            throw new CminusException(op, MULT_TOKEN, DIV_TOKEN);
+        }
+    }
+    // 26. factor → ( expression ) | varcall | NUM
+    private Expression parseFactor() throws CminusException {
+        Token token = scanner.viewNextToken();
+        return null;
+    }
+    
+    private Expression parseVarCall() {
         
     }
-    private void parseFactor() throws CminusException {
-        
-    }
+    
     private Call parseCall() throws CminusException {
         return null;   
     }
