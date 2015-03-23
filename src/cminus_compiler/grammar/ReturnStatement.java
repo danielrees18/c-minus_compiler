@@ -47,7 +47,7 @@ public class ReturnStatement extends Statement {
         StringBuilder builder = new StringBuilder();
         builder.append(indent(indent));
         
-        builder.append("return\n");
+        builder.append("return");
         builder.append(expression.printTree(indent+1));
         
         return builder.toString();

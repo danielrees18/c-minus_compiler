@@ -71,11 +71,9 @@ public class FunDeclaration extends Declaration {
         builder.append(" ");
         builder.append(declarationName);
         for(Param param : params) {
-            builder.append("\n");
             builder.append(param.printTree(indent+1));
         }
         
-        builder.append("\n");
         builder.append(compoundStatement.printTree(indent+1));
         
         return builder.toString();

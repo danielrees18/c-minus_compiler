@@ -65,9 +65,7 @@ public class AssignmentOperation extends Expression {
         builder.append(indent(indent));
         
         builder.append(operation);
-        builder.append("\n---");
         builder.append(variable.printTree(indent+1));
-        builder.append("\n---");
         builder.append(rightHandExpression.printTree(indent+1));
         
         return builder.toString();

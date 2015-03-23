@@ -5,6 +5,8 @@
  */
 package cminus_compiler.grammar;
 
+import cminus_compiler.tool.IndentTool;
+
 /** 
  *
  *
@@ -18,11 +20,7 @@ package cminus_compiler.grammar;
 public abstract class Expression {
     
     public String indent(int indent) {
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < indent; i++) {
-            builder.append("---");
-        }
-        return builder.toString();
+        return IndentTool.indent(indent);
     }
     
     public abstract String printTree(int indent);
