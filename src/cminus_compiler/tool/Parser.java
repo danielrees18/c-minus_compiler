@@ -484,7 +484,9 @@ public class Parser implements ParserInterface {
     }
     private Token parseRelop() throws CminusException {
         Token op = scanner.getNextToken();
-        if (op == LESS_TOKEN || op == LEQ_TOKEN || op == GREAT_TOKEN || op == GEQ_TOKEN || op == NEQ_TOKEN || op == EQUAL_TOKEN) {
+        if (op.getTokenType() == LESS_TOKEN || op.getTokenType() == LEQ_TOKEN 
+                || op.getTokenType() == GREAT_TOKEN || op.getTokenType() == GEQ_TOKEN 
+                || op.getTokenType() == NEQ_TOKEN || op.getTokenType() == EQUAL_TOKEN) {
             return op;
         }
         else {
