@@ -5,6 +5,8 @@
  */
 package cminus_compiler.grammar;
 
+import cminus_compiler.model.Token;
+
 /** 
  *
  *
@@ -26,7 +28,7 @@ public class BinaryOperation extends Expression {
     public BinaryOperation() {
         this(null, null, null);
     }
-
+    
     public BinaryOperation(Expression leftHandExpression, Expression rightHandExpression, String operation) {
         this.leftHandExpression = leftHandExpression;
         this.rightHandExpression = rightHandExpression;

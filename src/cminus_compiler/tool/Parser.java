@@ -467,9 +467,21 @@ public class Parser implements ParserInterface {
         return expression;
     }
     
-    
-    private void parseAdditiveExpressionPrime() {
+    // 21. additive-exp-prime → term-prime { addop term }
+    private void parseAdditiveExpressionPrime() throws CminusException {
+        TokenType[] followSet = { LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, SEMICOLON_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN };
         
+        Token t = scanner.viewNextToken();
+        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
+            
+        // Epsilon Followset of additive-exp-prime _{ <= , < , > , >= , == , !=, ;, ), ], , }_    
+        } else if (isInSet(t, followSet)) {
+            return;
+            
+        } else {
+            throw new CminusException(t, followSet);
+        }
+        return;
     }
     
     // 19. relop → <= | < | > | >= | == | !=
@@ -511,8 +523,21 @@ public class Parser implements ParserInterface {
         }
     }
     
+    // 23. term → factor { mulop factor }
     private void parseTerm() throws CminusException {
         
+        Token t = scanner.viewNextToken();
+        if(t.equals(LPAREN_TOKEN) || t.equals(NUM_TOKEN) || t.equals(ID_TOKEN)) {
+            Expression lhs = parseFactor();
+            t = scanner.viewNextToken();
+            if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
+                String operation = parseMulop();
+                Expression rhs = parseFactor();
+                BinaryOperation termOperation = new BinaryOperation(lhs, rhs, operation);
+            }
+        } else {
+            throw new CminusException(t, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
+        }
     }
     
     // 25. mulop →  * | / 
@@ -641,6 +666,15 @@ public class Parser implements ParserInterface {
                 || token.equals(EQUAL_TOKEN) || token.equals(NEQ_TOKEN)
                 || token.equals(SEMICOLON_TOKEN) || token.equals(RPAREN_TOKEN)
                 || token.equals(RBRACKET_TOKEN) || token.equals(COMMA_TOKEN);
+    }
+    
+    private boolean isInSet(Token token, TokenType[] set) {
+        for(TokenType type : set) {
+            if(token.equals(type) == false) {
+                return false;
+            }
+        }
+        return true;
     }
     
     
