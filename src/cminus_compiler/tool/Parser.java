@@ -522,14 +522,32 @@ public class Parser implements ParserInterface {
     // 26. factor → ( expression ) | varcall | NUM
     private Expression parseFactor() throws CminusException {
         Token token = scanner.viewNextToken();
+        Expression expression = null;
+        if (token.equals(NUM_TOKEN)) {
+            expression = parseNum();
+        }
+        else if (token.equals(LPAREN_TOKEN)) {
+            match(LPAREN_TOKEN);
+            expression = parseExpression();
+            match(RPAREN_TOKEN);
+        }
+        else if (token.equals(ID_TOKEN)) {
+            expression = parseVarCall();
+        }
+        else {
+            throw new CminusException(token, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
+        }
+        return expression;
+    }
+    // 27.  varcall → ID var | ID call
+    private Expression parseVarCall() throws CminusException {
+        Token ID = match(ID_TOKEN);
+        Token nextToken = scanner.viewNextToken();
+        
         return null;
     }
     
-    private Expression parseVarCall() {
-        
-    }
-    
-    private Call parseCall() throws CminusException {
+    private Call parseCall(Token ID) throws CminusException {
         return null;   
     }
     private void parseArgs() throws CminusException {
