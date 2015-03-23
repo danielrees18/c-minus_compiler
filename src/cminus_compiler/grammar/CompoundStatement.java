@@ -54,7 +54,6 @@ public class CompoundStatement extends Statement {
     @Override
     public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
-        builder.append(indent(indent));
         
         for(VarDeclaration decl : variableDeclartions) {
             builder.append(decl.printTree(indent+1));
