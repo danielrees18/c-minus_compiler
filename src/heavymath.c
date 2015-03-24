@@ -1,7 +1,7 @@
 int answer;
 
 int main(void) {
-    int a;
+    int a;;
     int b;
     int c;
     int d;
