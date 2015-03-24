@@ -1,11 +1,9 @@
-
 package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
 
 /** 
- *
- *
+ *]
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0
  * File: Var.java
@@ -61,7 +59,9 @@ public class Var extends Expression {
         
         builder.append(variableName);
         if(expression != null) {
+            builder.append("[");
             builder.append(expression.printTree(indent+1));
+            builder.append("]");
         }
         
         return builder.toString();

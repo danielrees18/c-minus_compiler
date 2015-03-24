@@ -1,42 +1,32 @@
-int a;
+int answer;
 
-int addThem(int d, int e) {
-  int f;
-  f = d + e;
+int main(void) {
+    int a;
+    int b;
+    int c;
+    int d;
+    int e;
+    int f;
+    int arr[4];
 
-  return f;
+    a = 594;
+    b= 2432;
+    c = 2600/2;
+    d = e = f = b + c;
+    
+    arr[0] = a;
+    arr[arr[0]-a + 1*2 - 1] = b/c*d+a-b / f;
+
+    arr[1] = 2;
+    arr[arr[1]] = 3;
+    arr[arr[arr[1]]] = arr[0]-c/a;
+
+    if(arr[0] > 3) {
+        answer = 42;
+    }else{
+    answer = arr[0];
+    }
+
+    return 0;
+
 }
-
-int main (void) {
-
-  int b;
-  int c;
-  int g;
-  int h;
-  int i;
-
-  b = 5;
-
-  if (b == 5) {
-    a = 3;
-  }
-  else {
-    a = 4;
-  }
-
-  g = 0;
-  i = 1;
-  while (i <= 8) {
-    g = g + i;
-    i = i+1;
-  }
-  h = g / 3;
-  g = h * 4;
-
-  c = addThem(a, b);
-  putchar (c+g);
-  putchar (12);
- 
-  return 0;
-}
-

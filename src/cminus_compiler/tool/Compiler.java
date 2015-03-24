@@ -3,9 +3,7 @@ package cminus_compiler.tool;
 import cminus_compiler.grammar.Program;
 import cminus_compiler.interfaces.ParserInterface;
 import cminus_compiler.interfaces.ScannerInterface;
-import cminus_compiler.jflex.CMinusFlexScanner;
 import cminus_compiler.model.Token;
-import cminus_compiler.model.TokenType;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,25 +45,13 @@ public class Compiler {
             BufferedReader br = new BufferedReader(new FileReader(file)); 
 
             ScannerInterface scanner = new Scanner(br);
-//            ScannerInterface scanner = new CMinusFlexScanner(br);
-            
-              
-            // scan for tokens while we haven't reached the end of the file
-//            while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
-//                Token token = scanner.getNextToken();
-//                tokens.add(token);
-//            }
-//            
-//            
-//            
-//            // write tokens to output file
-//            writeTokensToFile(tokens);
-//            
+
             // parse
             ParserInterface parser = new Parser(scanner);
             Program program = parser.parse();
-            System.out.println(program.printTree());
             br.close();
+            
+            writeToFile(program);
             
         }
         catch (FileNotFoundException e) {
@@ -81,49 +67,14 @@ public class Compiler {
      * Write the array of tokens to the output file
      * @param tokens    -   ArrayList of tokens to write to file
      */
-    private void writeTokensToFile(ArrayList<Token> tokens) {
-        File fout = new File("tokens.txt");
+    private void writeToFile(Program program) throws IOException {
+        File fout = new File("program.ast");
         
-        try{
-            FileWriter writer = new FileWriter(fout);
-            StringBuilder builder = new StringBuilder();
-            for (Token token : tokens) {
-                boolean write = false;
-                TokenType type = token.getTokenType();
-                builder.append(type.toString());
-                
-                Object tokenData = token.getTokenData();
-                String tokenDataString = ": ";
-                if (tokenData != null) {
-                    builder.append(":(");
-                    builder.append(tokenData.toString());
-                    builder.append(") ");
-                } else {
-                    builder.append(" ");
-                }
-                
-                if (type == TokenType.LCURLY_TOKEN
-                        || type == TokenType.COMMA_TOKEN) {
-                    builder.append("\n \t");
-                    write = true;
-                } else if (type == TokenType.RCURLY_TOKEN) {
-                    builder.append("\n");
-                } else if (type == TokenType.SEMICOLON_TOKEN) {
-                    builder.append("\n \n");
-                    write = true;
-                }
-                
-                if(write) {
-                    writer.write(builder.toString());
-                    builder.setLength(0);
-                }
+        FileWriter writer = new FileWriter(fout);
+        writer.write(program.printTree());
 
-            }
-            writer.close();
-            System.out.println("Finished writing tokens to " + fout.getName());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        writer.close();
+        System.out.println("Finished writing program to " + fout.getName());
+
     }
 }

@@ -1,8 +1,6 @@
-
 package cminus_compiler.grammar;
 
 /** 
- *
  *
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0

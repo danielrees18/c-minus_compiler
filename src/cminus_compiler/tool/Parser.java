@@ -12,9 +12,9 @@ import java.util.ArrayList;
 /**
  * Lorem Ipsum Dolor Sit Amet.
  *
- * @author Nathan
+ * @author Nathan Kallman, Daniel Rees
  * @version 1.0
- * Created:
+ * Created: March 2015
  * Summary of Modifications:
  *
  * Description:
@@ -25,6 +25,9 @@ public class Parser implements ParserInterface {
     private TokenType[] firstOfStatement = {LPAREN_TOKEN, LCURLY_TOKEN, NUM_TOKEN, ID_TOKEN, IF_TOKEN, WHILE_TOKEN, RETURN_TOKEN, SEMICOLON_TOKEN};
     private TokenType[] firstOfExpressionStatement = { SEMICOLON_TOKEN, COMMA_TOKEN, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN };
     private TokenType[] firstOfRelop = {LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN};
+    
+    // simple-expression-prime { *, /, ε, <= , < , > , >= , == , !=, +, -   }
+    private TokenType[] firstOfSimpleExpPrime = {MULT_TOKEN, DIV_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, PLUS_TOKEN, MINUS_TOKEN};
 
  
         
@@ -393,10 +396,7 @@ public class Parser implements ParserInterface {
         TokenType[] firstOfSimpleExpPrime = { PLUS_TOKEN, MINUS_TOKEN, MULT_TOKEN, DIV_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN };
         
         Expression expression = null;
-        
-        
-        
-        
+
         Token t = scanner.viewNextToken();
         if(t.equals(ASSIGN_TOKEN)) {
             Var var = new Var(prevToken, null);
@@ -413,7 +413,7 @@ public class Parser implements ParserInterface {
             match(LBRACKET_TOKEN);
             Expression index = parseExpression();
             match(RBRACKET_TOKEN);
-            Var arrayVar = new Var(prevToken.data(), expression);
+            Var arrayVar = new Var(prevToken.data(), index);
             
             expression = parseExpressionDoublePrime(arrayVar);
             
@@ -438,12 +438,12 @@ public class Parser implements ParserInterface {
         if(t.equals(ASSIGN_TOKEN)) {
             expression = parseAssignmentOperation(lhs);
             
-        } else if (t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) ) {
+        } else if (isInSet(t, firstOfSimpleExpPrime)) {
             expression = parseSimpleExpressionPrime(lhs); 
             
         // FollowSet of ExpressionPrime. Goes to epsilon
         } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
-            return null;
+            return lhs;
             
         } else {
             throw new CminusException(t, ASSIGN_TOKEN, MULT_TOKEN, DIV_TOKEN);
@@ -508,8 +508,9 @@ public class Parser implements ParserInterface {
             returnExpression = parseTermPrime(lhs);
             
             t = scanner.viewNextToken();
-            if(t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN)) {
+            while(t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN) || t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
                 returnExpression = parseBinaryOperation(returnExpression);
+                t = scanner.viewNextToken();
             }
         } else {
             throw new CminusException(t, followSet);
@@ -745,7 +746,7 @@ public class Parser implements ParserInterface {
      */
     private Token match(TokenType expectedType) throws CminusException {
         Token token = scanner.getNextToken();
-        if(!token.equals(expectedType)) {
+            if(!token.equals(expectedType)) {
             throw new CminusException(token, expectedType);
         }
         
@@ -811,6 +812,5 @@ public class Parser implements ParserInterface {
         }
             
         return lhs;
-    }
-    
+    }   
 }

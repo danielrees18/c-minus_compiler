@@ -1,10 +1,8 @@
-
 package cminus_compiler.grammar;
 
 import java.util.ArrayList;
 
 /** 
- *
  *
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0
