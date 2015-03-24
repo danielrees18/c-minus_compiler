@@ -22,8 +22,7 @@ import java.util.ArrayList;
 public class Parser implements ParserInterface {
     
     private ScannerInterface scanner;
-    private TokenType[] firstOfStatement = {LPAREN_TOKEN, LCURLY_TOKEN, NUM_TOKEN, ID_TOKEN, IF_TOKEN, WHILE_TOKEN, RETURN_TOKEN, SEMICOLON_TOKEN};
-    private TokenType[] firstOfExpressionStatement = { SEMICOLON_TOKEN, COMMA_TOKEN, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN };
+    
     private TokenType[] firstOfRelop = {LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN};
     
     // simple-expression-prime { *, /, ε, <= , < , > , >= , == , !=, +, -   }
@@ -209,14 +208,14 @@ public class Parser implements ParserInterface {
                 localDeclarations.add(parseVariableDeclaration());
                 nextToken = scanner.viewNextToken();
             }
-            if (isInFirstOfStatement(nextToken)) {
+            if (isInSet(nextToken, firstOfStatement)) {
                 // there is at least one stmt
                 statements = parseStatementList();
             }
             compoundStatement = new CompoundStatement(localDeclarations, statements);
         }
         // first set of stmt => (, NUM, ID, {, if, while, return, ; 
-        else if (isInFirstOfStatement(nextToken)) {
+        else if (isInSet(nextToken, firstOfStatement)) {
             // there is at least one stmt
             statements = parseStatementList();
             compoundStatement = new CompoundStatement(localDeclarations, statements);
@@ -234,9 +233,9 @@ public class Parser implements ParserInterface {
         ArrayList<Statement> list = new ArrayList<>();
         Token nextToken = scanner.viewNextToken();
         
-        if (isInFirstOfStatement(nextToken)) {
+        if (isInSet(nextToken, firstOfStatement)) {
             list.add(parseStatement());
-            while (isInFirstOfStatement(scanner.viewNextToken())) {
+            while (isInSet(scanner.viewNextToken(), firstOfStatement)) {
                 list.add(parseStatement());
             }
         }
@@ -256,7 +255,7 @@ public class Parser implements ParserInterface {
         
         // Look ahead to the next token
         Token nextToken = scanner.viewNextToken();
-        if(this.isInFirstOfExpressionStatement(nextToken)) {
+        if(isInSet(nextToken, firstOfExpressionStatement)) {
             // Parse expression statement
             statement = parseExpressionStatement();
         } else if (nextToken.equals(LCURLY_TOKEN)) {
@@ -289,7 +288,7 @@ public class Parser implements ParserInterface {
             expressionStatement = new ExpressionStatement();
             match(SEMICOLON_TOKEN);
             
-        } else if(isInFirstOfExpressionStatement(nextToken)) {
+        } else if(isInSet(nextToken, firstOfExpressionStatement)) {
             expressionStatement = new ExpressionStatement(parseExpression());
             match(SEMICOLON_TOKEN);
         } else {
@@ -752,30 +751,9 @@ public class Parser implements ParserInterface {
         
         return token;
     }
-    
-    /**
-     * Evaluates the token.getTokenType and compares it to the first set of expression-statement.
-     * expression-statement =>  ; , (, NUM, ID
-     * @param token -   Token being evaluated
-     * @return  -   True if token.equals(SEMICOLON || COMMA || LPAREN || NUM || ID). False otherwise
-     */
-    private boolean isInFirstOfExpressionStatement(Token token) {
-        return token.equals(SEMICOLON_TOKEN) || token.equals(COMMA_TOKEN) || token.equals(LPAREN_TOKEN) 
-                    || token.equals(NUM_TOKEN) || token.equals(ID_TOKEN);
-    }
-    
-    /**
-     * Evaluates the token.getTokenType and compares it to be the first set of statement.
-     * stmt => (, NUM, ID, {, if, while, return, ; 
-     * @param token -  Token being evaluated
-     * @return -  True iff token.equals(LPAREN_TOKEN || NUM_TOKEN || ID_TOKEN || IF_TOKEN || WHILE_TOKEN || RETURN_TOKEN || SEMICOLON_TOKEN)
-     */
-    private boolean isInFirstOfStatement(Token token) {
-        return token.equals(LPAREN_TOKEN) || token.equals(NUM_TOKEN) 
-                || token.equals(ID_TOKEN) || token.equals(IF_TOKEN) 
-                || token.equals(WHILE_TOKEN) || token.equals(RETURN_TOKEN) 
-                || token.equals(SEMICOLON_TOKEN);
-    }
+   
+    private TokenType[] firstOfStatement = {LPAREN_TOKEN, LCURLY_TOKEN, NUM_TOKEN, ID_TOKEN, IF_TOKEN, WHILE_TOKEN, RETURN_TOKEN, SEMICOLON_TOKEN};
+    private TokenType[] firstOfExpressionStatement = { SEMICOLON_TOKEN, COMMA_TOKEN, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN };
 
     /**
      * Evaluates the token.getTokenType and compares it to be the follow set of Var.
