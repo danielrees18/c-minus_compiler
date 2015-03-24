@@ -21,20 +21,40 @@ import java.util.ArrayList;
  */
 public class Parser implements ParserInterface {
     
-    private ScannerInterface scanner;
+    // First Sets
+    private final TokenType[] firstOfStatement = { 
+        LPAREN_TOKEN, LCURLY_TOKEN, NUM_TOKEN, ID_TOKEN, 
+        IF_TOKEN, WHILE_TOKEN, RETURN_TOKEN, SEMICOLON_TOKEN };
     
-    private TokenType[] firstOfRelop = {LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN};
+    private final TokenType[] firstOfExpressionStatement = { 
+        SEMICOLON_TOKEN, COMMA_TOKEN, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN };
     
-    // simple-expression-prime { *, /, ε, <= , < , > , >= , == , !=, +, -   }
-    private TokenType[] firstOfSimpleExpPrime = {MULT_TOKEN, DIV_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, PLUS_TOKEN, MINUS_TOKEN};
-
- 
+    private final TokenType[] firstOfRelop = {
+        LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN };
+    
+    private final TokenType[] firstOfSimpleExpPrime = {
+        MULT_TOKEN, DIV_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, 
+        EQUAL_TOKEN, NEQ_TOKEN, PLUS_TOKEN, MINUS_TOKEN };
+    
+    // Follow Sets
+    private final TokenType[] followOfVar = { 
+        MULT_TOKEN, DIV_TOKEN, PLUS_TOKEN, MINUS_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, 
+        EQUAL_TOKEN, NEQ_TOKEN, SEMICOLON_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN };
+    
+    private final TokenType[] followOfExpressionPrime = { 
+        SEMICOLON_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN };
+    
+    private final TokenType[] followOfTermPrime = { 
+        PLUS_TOKEN, MINUS_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, 
+        EQUAL_TOKEN, NEQ_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN };
+  
+    // Variables
+    private final ScannerInterface scanner;
         
     // Constructor
     public Parser(ScannerInterface scanner) {
         this.scanner = scanner;
     }
-    
     
     // Interface Methods
     @Override
@@ -50,9 +70,8 @@ public class Parser implements ParserInterface {
     
     
     /*
-        PARSE GRAMMAR METHODS
-    */
-    
+     *   PARSE GRAMMAR METHODS
+     */
     // 1. program → decl {decl}
     private Program parseProgram() throws CminusException {
         Program program = new Program();
@@ -244,7 +263,6 @@ public class Parser implements ParserInterface {
             throw new CminusException(nextToken, ERROR);
         }
         
-        
         return list;
     }
     
@@ -390,10 +408,9 @@ public class Parser implements ParserInterface {
         return expression;
     }
     
-    // 15. exp-prime → = expression | simple-exp-prime | ( args ) simple-exp-prime | [ expression ] exp-doubleprime
+    // 15. exp-prime → = expression | simple-exp-prime | ( args ) simple-exp-prime 
+    //      | [ expression ] exp-doubleprime
     private Expression parseExpressionPrime(Token prevToken) throws CminusException {
-        TokenType[] firstOfSimpleExpPrime = { PLUS_TOKEN, MINUS_TOKEN, MULT_TOKEN, DIV_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN };
-        
         Expression expression = null;
 
         Token t = scanner.viewNextToken();
@@ -419,8 +436,7 @@ public class Parser implements ParserInterface {
         } else if (isInSet(t, firstOfSimpleExpPrime)) {
             expression = parseSimpleExpressionPrime(varOrId(prevToken));
             
-        // FollowSet of ExpressionPrime. Goes to epsilon
-        } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
+        } else if (isInSet(t, followOfExpressionPrime)) {
             expression = varOrId(prevToken);
             
         } else {
@@ -441,7 +457,7 @@ public class Parser implements ParserInterface {
             expression = parseSimpleExpressionPrime(lhs); 
             
         // FollowSet of ExpressionPrime. Goes to epsilon
-        } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
+        } else if (isInSet(t, followOfExpressionPrime)) {
             return lhs;
             
         } else {
@@ -460,7 +476,7 @@ public class Parser implements ParserInterface {
             Expression index = parseExpression();
             match(RBRACKET_TOKEN);
             var = new Var(ID, index);
-        } else if (isInFollowOfVar(nextToken)) {
+        } else if (isInSet(nextToken, followOfVar)) {
             var = new Var(ID, null);
         } else {
             throw new CminusException(nextToken, LBRACKET_TOKEN);
@@ -471,8 +487,6 @@ public class Parser implements ParserInterface {
     
     // 18. simple-exp-prime → additive-exp-prime [ relop additive-exp ]
     private Expression parseSimpleExpressionPrime(Expression lhs) throws CminusException {
-        //relop { <= , < , > , >= , == , != }
-        TokenType[] firstOfRelop = {LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN};
         Expression expression = null;
         
         Token t = scanner.viewNextToken();
@@ -487,7 +501,8 @@ public class Parser implements ParserInterface {
         } else if (isInSet(t, firstOfRelop)) {    
             expression = parseBinaryOperation(lhs);
             
-        } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
+        // Has same followset of expression prime    
+        } else if (isInSet(t, followOfExpressionPrime)) {
             expression = lhs;
             
         } else {
@@ -499,31 +514,28 @@ public class Parser implements ParserInterface {
     
     // 21. additive-exp-prime → term-prime { addop term }
     private Expression parseAdditiveExpressionPrime(Expression lhs) throws CminusException {
-        TokenType[] followSet = { LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, SEMICOLON_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN };
+        TokenType[] mathOps = { PLUS_TOKEN, MINUS_TOKEN, MULT_TOKEN, DIV_TOKEN };
         Expression returnExpression = null;
         
         Token t = scanner.viewNextToken();
-        if(t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN) || t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN) || t.equals(LPAREN_TOKEN) || t.equals(NUM_TOKEN) || t.equals(ID_TOKEN)) {
+        if(isInSet(t, mathOps) || t.equals(LPAREN_TOKEN) || t.equals(NUM_TOKEN) || t.equals(ID_TOKEN)) {
             returnExpression = parseTermPrime(lhs);
             
             t = scanner.viewNextToken();
-            while(t.equals(PLUS_TOKEN) || t.equals(MINUS_TOKEN) || t.equals(MULT_TOKEN) || t.equals(DIV_TOKEN)) {
+            while(isInSet(t, mathOps)) {
                 returnExpression = parseBinaryOperation(returnExpression);
                 t = scanner.viewNextToken();
             }
         } else {
-            throw new CminusException(t, followSet);
+            throw new CminusException(t, mathOps);
         }
         return returnExpression;
     }
-    
-    
     
     // 19. relop → <= | < | > | >= | == | !=
     // 22. addop → + | -
     // 25. mulop →  * | / 
     private BinaryOperation parseBinaryOperation(Expression lhs) throws CminusException {
-        // we need to read what kind of operator it is...create a BinaryOperation object and add the lhs and parse whats next and add it as well
         Token op = scanner.viewNextToken();
         Expression rhs = null;
         String operator = "";
@@ -620,8 +632,6 @@ public class Parser implements ParserInterface {
     
     // 24. term-prime → { mulop factor }
     private Expression parseTermPrime(Expression lhs) throws CminusException {
-        // term-prime { +, - ,<= , < , > , >= , == , !=, ;, ), ], , }
-        TokenType[] followSet = {PLUS_TOKEN, MINUS_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, EQUAL_TOKEN, NEQ_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN};
         Expression returnExpression = lhs;
         
         if (lhs == null) {
@@ -634,7 +644,7 @@ public class Parser implements ParserInterface {
             
            
         // goes to empty
-        } else if (isInSet(t, followSet) && lhs == null) {
+        } else if (isInSet(t, followOfTermPrime)) {
             returnExpression = parseTerm();
             
         } else {
@@ -684,14 +694,11 @@ public class Parser implements ParserInterface {
         if (nextToken.equals(LPAREN_TOKEN)) {
             varcall = parseCall(ID);
         }
-        else if (nextToken.equals(RBRACKET_TOKEN) || isInFollowOfVar(nextToken)) {
+        else if (nextToken.equals(RBRACKET_TOKEN) || isInSet(nextToken, followOfVar)) {
             varcall = parseVar(ID);
         }
         else {
-            throw new CminusException(nextToken, LPAREN_TOKEN, RBRACKET_TOKEN,
-                    MULT_TOKEN,DIV_TOKEN,PLUS_TOKEN,MINUS_TOKEN,LEQ_TOKEN,
-                    LESS_TOKEN,GREAT_TOKEN,GEQ_TOKEN,EQUAL_TOKEN,NEQ_TOKEN,
-                    SEMICOLON_TOKEN,RPAREN_TOKEN,RBRACKET_TOKEN,COMMA_TOKEN);
+            throw new CminusException(nextToken, followOfVar);
         }
         
         return varcall;
@@ -714,8 +721,7 @@ public class Parser implements ParserInterface {
     // 29. args → [ expression { , expression } ]
     private ArrayList<Expression> parseArgs() throws CminusException {
         ArrayList<Expression> args = new ArrayList<>();
-        
-        
+
         Token t = scanner.viewNextToken();
         if(t.equals(LPAREN_TOKEN) || t.equals(NUM_TOKEN) || t.equals(ID_TOKEN)) {
             args.add(parseExpression());
@@ -732,8 +738,6 @@ public class Parser implements ParserInterface {
         
         return args;
     }
-    
-    
     
     // Parsing Helping Methods
     
@@ -752,25 +756,12 @@ public class Parser implements ParserInterface {
         return token;
     }
    
-    private TokenType[] firstOfStatement = {LPAREN_TOKEN, LCURLY_TOKEN, NUM_TOKEN, ID_TOKEN, IF_TOKEN, WHILE_TOKEN, RETURN_TOKEN, SEMICOLON_TOKEN};
-    private TokenType[] firstOfExpressionStatement = { SEMICOLON_TOKEN, COMMA_TOKEN, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN };
-
     /**
-     * Evaluates the token.getTokenType and compares it to be the follow set of Var.
-     * var { *, /, +, - ,<= , < , > , >= , == , !=, ;, ), ], , }
-     * @param token -  Token being evaluated
-     * @return -  True iff token.equals(MULT_TOKEN || DIV_TOKEN || ID_TOKEN || IF_TOKEN || WHILE_TOKEN || RETURN_TOKEN || SEMICOLON_TOKEN)
+     * Walks a given set array checking if the toke exists in the set  
+     * @param token -   Token that is being checked
+     * @param set   -   Set of token types
+     * @return  -   Returns true if the token type exists in the set. False otherwise
      */
-    private boolean isInFollowOfVar(Token token) {
-        return token.equals(MULT_TOKEN) || token.equals(DIV_TOKEN) 
-                || token.equals(PLUS_TOKEN) || token.equals(MINUS_TOKEN) 
-                || token.equals(LEQ_TOKEN) || token.equals(LESS_TOKEN) 
-                || token.equals(GREAT_TOKEN) || token.equals(GEQ_TOKEN)
-                || token.equals(EQUAL_TOKEN) || token.equals(NEQ_TOKEN)
-                || token.equals(SEMICOLON_TOKEN) || token.equals(RPAREN_TOKEN)
-                || token.equals(RBRACKET_TOKEN) || token.equals(COMMA_TOKEN);
-    }
-    
     private boolean isInSet(Token token, TokenType[] set) {
         for(TokenType type : set) {
             if(token.equals(type) == true) {
@@ -780,6 +771,11 @@ public class Parser implements ParserInterface {
         return false;
     }
     
+    /**
+     * Creates a new var or num depending on the value of token
+     * @param token -   Token that is var or num
+     * @return  -   Num or Var result
+     */
     private Expression varOrId(Token token) {
         Expression lhs;
             

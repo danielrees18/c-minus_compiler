@@ -19,10 +19,10 @@ public class CMinusCompilerMain {
     public static void main(String[] args) {
         
 //        File file = new File("./src/test.c");
-        File file = new File("./src/parse.c");
+//        File file = new File("./src/parse.c");
 //        File file = new File("./src/ben.c");
 //        File file = new File("./src/heavymath.c");
-//        File file = new File("./src/testcode.c");
+        File file = new File("./src/testcode.c");
  
         Compiler compiler = new Compiler(file);
         compiler.compile();
