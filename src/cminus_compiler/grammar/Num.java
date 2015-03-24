@@ -6,6 +6,7 @@
 package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
+import cminus_compiler.tool.IndentTool;
 
 /** 
  *
@@ -51,7 +52,10 @@ public class Num extends Expression {
     // Public Methods
     @Override
     public String printTree(int indent) {
-        return toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(IndentTool.indent(indent));
+        builder.append(toString());
+        return builder.toString();
     }   
 
     @Override

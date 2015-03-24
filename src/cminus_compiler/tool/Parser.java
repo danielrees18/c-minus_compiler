@@ -396,8 +396,8 @@ public class Parser implements ParserInterface {
         
         Token t = scanner.viewNextToken();
         if(t.equals(ASSIGN_TOKEN)) {
-            match(ASSIGN_TOKEN);
-            expression = parseExpression();
+            Var var = new Var(prevToken, null);
+            expression = parseAssignmentOperation(var);
             
         } else if (t.equals(LPAREN_TOKEN)) {
             match(LPAREN_TOKEN);
@@ -494,7 +494,7 @@ public class Parser implements ParserInterface {
             expression = parseBinaryOperation(lhs);
             
         } else if (t.equals(SEMICOLON_TOKEN) || t.equals(RPAREN_TOKEN) || t.equals(RBRACKET_TOKEN) || t.equals(COMMA_TOKEN)) {
-            // nada
+            expression = lhs;
             
         } else {
             throw new CminusException(t, LBRACKET_TOKEN);
@@ -552,8 +552,8 @@ public class Parser implements ParserInterface {
     
     private AssignmentOperation parseAssignmentOperation(Var lhs) throws CminusException {
         Token t = scanner.viewNextToken();
-        if(t.equals(EQUAL_TOKEN)) {
-            match(EQUAL_TOKEN);
+        if(t.equals(ASSIGN_TOKEN)) {
+            match(ASSIGN_TOKEN);
             Expression rhs = parseExpression();
             return new AssignmentOperation(lhs, rhs);
         
