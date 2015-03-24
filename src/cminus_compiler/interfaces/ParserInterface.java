@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cminus_compiler.tool;
+package cminus_compiler.interfaces;
+
+import cminus_compiler.grammar.Program;
 
 /**
  *
  * @author drees
  */
-public class JFlexScanner {
+public interface ParserInterface {
+   
+    public Program parse();
     
 }

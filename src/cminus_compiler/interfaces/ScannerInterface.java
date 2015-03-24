@@ -1,4 +1,4 @@
-package cminus_compiler.main;
+package cminus_compiler.interfaces;
 
 import cminus_compiler.model.Token;
 

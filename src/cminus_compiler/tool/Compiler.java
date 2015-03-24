@@ -1,6 +1,9 @@
 package cminus_compiler.tool;
 
-import cminus_compiler.main.ScannerInterface;
+import cminus_compiler.grammar.Program;
+import cminus_compiler.interfaces.ParserInterface;
+import cminus_compiler.interfaces.ScannerInterface;
+import cminus_compiler.jflex.CMinusFlexScanner;
 import cminus_compiler.model.Token;
 import cminus_compiler.model.TokenType;
 import java.io.BufferedReader;
@@ -42,21 +45,28 @@ public class Compiler {
         ArrayList<Token> tokens = new ArrayList();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file)); 
-            
+
             ScannerInterface scanner = new Scanner(br);
 //            ScannerInterface scanner = new CMinusFlexScanner(br);
             
+              
             // scan for tokens while we haven't reached the end of the file
-            while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
-                Token token = scanner.getNextToken();
-                System.out.println("Token Found: " + token.getTokenType().toString());
-                tokens.add(token);
-            }
-            
+//            while (scanner.viewNextToken().getTokenType() != TokenType.EOF_TOKEN) {
+//                Token token = scanner.getNextToken();
+//                tokens.add(token);
+//            }
+//            
+//            
+//            
+//            // write tokens to output file
+//            writeTokensToFile(tokens);
+//            
+            // parse
+            ParserInterface parser = new Parser(scanner);
+            Program program = parser.parse();
+            System.out.println(program.printTree());
             br.close();
             
-            // write tokens to output file
-            writeTokensToFile(tokens);
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -64,6 +74,7 @@ public class Compiler {
         catch (IOException e) {
             e.printStackTrace();
         }
+        
     }
     
     /**
@@ -109,6 +120,7 @@ public class Compiler {
 
             }
             writer.close();
+            System.out.println("Finished writing tokens to " + fout.getName());
         }
         catch (IOException e) {
             e.printStackTrace();
