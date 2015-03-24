@@ -68,9 +68,12 @@ public class SelectionStatement extends Statement {
         StringBuilder builder = new StringBuilder();
         builder.append(indent(indent));
         
+        builder.append("if");
         builder.append(expression.printTree(indent+1));
         builder.append(primaryStatement.printTree(indent+1));
+        
         if(optionalStatement != null) {
+            builder.append("else");
             builder.append(optionalStatement.printTree(indent+1));
         }
         

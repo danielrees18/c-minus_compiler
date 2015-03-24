@@ -54,6 +54,7 @@ public class IterationStatement extends Statement {
         StringBuilder builder = new StringBuilder();
         builder.append(indent(indent));
         
+        builder.append("while");
         builder.append(expression.printTree(indent+1));
         builder.append(statement.printTree(indent+1));
         

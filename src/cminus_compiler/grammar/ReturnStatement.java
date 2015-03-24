@@ -48,7 +48,9 @@ public class ReturnStatement extends Statement {
         builder.append(indent(indent));
         
         builder.append("return");
-        builder.append(expression.printTree(indent+1));
+        if(expression != null) {
+            builder.append(expression.printTree(indent+1));
+        }
         
         return builder.toString();
     }
