@@ -44,6 +44,10 @@ public class ExpressionStatement extends Statement {
     // Public Methods
     @Override
     public String printTree(int indent) {
-        return expression.printTree(indent+1);
+        String output = "";
+        if(expression != null) {
+            output = expression.printTree(indent+1);
+        }
+        return output;
     }
 }
