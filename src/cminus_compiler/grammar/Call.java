@@ -3,7 +3,6 @@ package cminus_compiler.grammar;
 import java.util.ArrayList;
 
 /** 
- *
  * @authors Daniel Rees, Nathan Kallman
  * @version 1.0
  * File: Call.java
@@ -16,8 +15,6 @@ public class Call extends Expression {
     private String callName;
     private ArrayList<Expression> args;
 
-    
-    // Constructors
     public Call() {
         this(null, new ArrayList<>());
     }
@@ -27,8 +24,6 @@ public class Call extends Expression {
         this.args = args;
     }
 
-    
-    // Getters
     public String getCallName() {
         return callName;
     }
@@ -37,8 +32,6 @@ public class Call extends Expression {
         return args;
     }
 
-    
-    // Setters
     public void setCallName(String callName) {
         this.callName = callName;
     }
@@ -47,8 +40,6 @@ public class Call extends Expression {
         this.args = args;
     }
     
-    
-    // Public Methods
     @Override
     public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();

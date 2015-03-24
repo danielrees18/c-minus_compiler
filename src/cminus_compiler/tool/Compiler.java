@@ -51,7 +51,7 @@ public class Compiler {
             Program program = parser.parse();
             br.close();
             
-            writeToFile(program);
+            writeToFile(program, file.getName());
             
         }
         catch (FileNotFoundException e) {
@@ -67,10 +67,11 @@ public class Compiler {
      * Write the array of tokens to the output file
      * @param tokens    -   ArrayList of tokens to write to file
      */
-    private void writeToFile(Program program) throws IOException {
-        File fout = new File("program.ast");
+    private void writeToFile(Program program, String fileName) throws IOException {
+        File fout = new File(fileName + "_ast.txt");
         
         FileWriter writer = new FileWriter(fout);
+        writer.write("Filename: " + fileName);
         writer.write(program.printTree());
 
         writer.close();

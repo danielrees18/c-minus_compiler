@@ -14,8 +14,6 @@ public class IterationStatement extends Statement {
     private Expression expression;
     private Statement statement;
     
-    
-    // Constructors
     public IterationStatement() {
         this(null, null);
     }
@@ -25,8 +23,6 @@ public class IterationStatement extends Statement {
         this.statement = statement;
     }
     
-    
-    // Getters
     public Expression getExpression() {
         return expression;
     }
@@ -35,8 +31,6 @@ public class IterationStatement extends Statement {
         return statement;
     }
 
-    
-    // Setters
     public void setExpression(Expression expression) {
         this.expression = expression;
     }
@@ -45,8 +39,6 @@ public class IterationStatement extends Statement {
         this.statement = statement;
     }
     
-    
-    // Public Methods
     @Override
     public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();

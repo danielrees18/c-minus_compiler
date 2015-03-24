@@ -16,7 +16,6 @@ public class Num extends Expression {
 
     private int value;
     
-    
     // Constructors
     public Num() {
         this(0);
@@ -24,26 +23,20 @@ public class Num extends Expression {
     
     public Num(Token token) {
        this(Integer.parseInt(token.data()));
-   }
+    }
 
     public Num(int value) {
         this.value = value;
     }
 
-    
-    // Getters
     public int getValue() {
         return value;
     }
 
-    
-    // Setters
     public void setValue(int value) {
         this.value = value;
     }
     
-    
-    // Public Methods
     @Override
     public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
