@@ -19,7 +19,7 @@ public class Call extends Expression {
     
     // Constructors
     public Call() {
-        this(null, new ArrayList<Expression>());
+        this(null, new ArrayList<>());
     }
 
     public Call(String callName, ArrayList<Expression> args) {

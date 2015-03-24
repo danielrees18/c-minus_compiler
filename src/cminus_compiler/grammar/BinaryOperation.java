@@ -21,10 +21,10 @@ public class BinaryOperation extends Expression {
         this(null, null, null);
     }
     
-    public BinaryOperation(Expression leftHandExpression, Expression rightHandExpression, String operation) {
+    public BinaryOperation(Expression leftHandExpression, Expression rightHandExpression, String op) {
         this.leftHandExpression = leftHandExpression;
         this.rightHandExpression = rightHandExpression;
-        this.operation = operation;
+        this.operation = op;
     }
 
     

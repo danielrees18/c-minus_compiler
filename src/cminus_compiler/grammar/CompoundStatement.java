@@ -19,11 +19,11 @@ public class CompoundStatement extends Statement {
     
     // Constructors
     public CompoundStatement() {
-        this(new ArrayList<VarDeclaration>(), new ArrayList<Statement>());
+        this(new ArrayList<>(), new ArrayList<>());
     }
 
-    public CompoundStatement(ArrayList<VarDeclaration> variableDeclartions, ArrayList<Statement> statements) {
-        this.variableDeclartions = variableDeclartions;
+    public CompoundStatement(ArrayList<VarDeclaration> varDecls, ArrayList<Statement> statements) {
+        this.variableDeclartions = varDecls;
         this.statements = statements;
     }
 

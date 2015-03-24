@@ -20,13 +20,13 @@ public class FunDeclaration extends Declaration {
     
     // Constructors
     public FunDeclaration() {
-        this(null, new ArrayList<Param>(), null, null);
+        this(null, new ArrayList<>(), null, null);
     }
 
-    public FunDeclaration(String returnType, ArrayList<Param> params, CompoundStatement compoundStatement, String name) {
-        this.returnType = returnType;
+    public FunDeclaration(String type, ArrayList<Param> params, CompoundStatement stmt, String name) {
+        this.returnType = type;
         this.params = params;
-        this.compoundStatement = compoundStatement;
+        this.compoundStatement = stmt;
         this.declarationName = name;
     }
     

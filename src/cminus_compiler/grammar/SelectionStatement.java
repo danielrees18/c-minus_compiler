@@ -21,10 +21,10 @@ public class SelectionStatement extends Statement {
         this(null, null, null);
     }
 
-    public SelectionStatement(Expression expression, Statement primaryStatement, Statement optionalStatement) {
+    public SelectionStatement(Expression expression, Statement primary, Statement optional) {
         this.expression = expression;
-        this.primaryStatement = primaryStatement;
-        this.optionalStatement = optionalStatement;
+        this.primaryStatement = primary;
+        this.optionalStatement = optional;
     }
 
     
