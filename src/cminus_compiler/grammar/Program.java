@@ -1,6 +1,7 @@
 package cminus_compiler.grammar;
 
 import java.util.ArrayList;
+import lowlevel.CodeItem;
 
 /** 
  *
@@ -26,6 +27,10 @@ public class Program {
     // Program Methods
     public void addDeclaration(Declaration declaration) {
         declarations.add(declaration);
+    }
+    
+    public CodeItem genLLCode() {
+        return null;
     }
     
     public String printTree() {

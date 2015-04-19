@@ -7,6 +7,11 @@ import cminus_compiler.model.CminusException;
 import cminus_compiler.model.Token;
 import cminus_compiler.model.TokenType;
 import static cminus_compiler.model.TokenType.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -48,6 +53,18 @@ public class Parser implements ParserInterface {
         PLUS_TOKEN, MINUS_TOKEN, LEQ_TOKEN, LESS_TOKEN, GREAT_TOKEN, GEQ_TOKEN, 
         EQUAL_TOKEN, NEQ_TOKEN, RPAREN_TOKEN, RBRACKET_TOKEN, COMMA_TOKEN };
   
+    
+    
+    // Parse exception
+    public static class CodeGenerationException extends Exception {
+
+        public CodeGenerationException(String message) {
+            super(message);
+        }
+        
+    }
+    
+    
     // Variables
     private final ScannerInterface scanner;
         
@@ -55,6 +72,21 @@ public class Parser implements ParserInterface {
     public Parser(ScannerInterface scanner) {
         this.scanner = scanner;
     }
+    
+    public Parser(String filename) {
+        ScannerInterface temp = null;
+        try {
+            File file = new File(filename);
+            BufferedReader br = new BufferedReader(new FileReader(file)); 
+
+            temp = new Scanner(br);            
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        this.scanner = temp;
+    }
+    
     
     // Interface Methods
     @Override
