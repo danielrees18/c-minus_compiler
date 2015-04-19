@@ -34,14 +34,14 @@ public class CMinusCompiler implements Compiler {
             ParserInterface myParser = new Parser(fileName);
 
             Program parseTree = myParser.parse();
-            parseTree.printTree();
+            String tree = parseTree.printTree();
+            System.out.print(tree);
 //            myParser.printAST(parseTree);
 
             CodeItem lowLevelCode = parseTree.genLLCode();
 
             fileName = filePrefix + ".ll";
-            PrintWriter outFile =
-                    new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+            PrintWriter outFile = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
             lowLevelCode.printLLCode(outFile);
             outFile.close();
 
