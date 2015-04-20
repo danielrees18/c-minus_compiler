@@ -1,9 +1,11 @@
 (FUNCTION  doAddition  [(void void)]
   (BB 1
-    (OPER 6 Mov [(r 1)]  [(m EDI)])
+    (OPER 8 Mov [(r 1)]  [(m EDI)])
   )
   (BB 2
-    (OPER 4 Mov [(r 2)]  [(i 5)])
+    (OPER 4 Mov [(r 4)]  [(i 5)])
+    (OPER 5 Mov [(r 2)]  [(r 4)])
+    (OPER 6 Mov [(m EAX)]  [(r 2)])
   )
   (BB 0
     (OPER 2 Return []  [(m EAX)])

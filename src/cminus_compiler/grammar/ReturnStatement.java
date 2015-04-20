@@ -58,17 +58,22 @@ public class ReturnStatement extends Statement {
     public CodeItem gencode(Function function) {
         expression.gencode(function);
         
+        // Source to retReg operation
         Operand src = new Operand(Operand.OperandType.REGISTER, expression.getRegNum());
-        Operand dest = new Operand(Operand.OperandType.REGISTER, "RetReg");
+        Operand dest = new Operand(Operand.OperandType.MACRO, "RetReg");
        
-        Operation op = new Operation(Operation.OperationType.RETURN, function.getCurrBlock());
+        Operation op = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
         op.setDestOperand(0, dest);
         op.setSrcOperand(0, src);
         
-        Operation jmp = new Operation(Operation.OperationType.JMP, function.getCurrBlock());
+        // Jump operation to return block
         Operand jmpSrc = new Operand(Operand.OperandType.BLOCK, function.getReturnBlock().getBlockNum());
+                
+        Operation jmp = new Operation(Operation.OperationType.JMP, function.getCurrBlock());
         jmp.setSrcOperand(0, jmpSrc);
         
+        
+        // Append blocks
         function.getCurrBlock().appendOper(op);
         function.getCurrBlock().appendOper(jmp);
         
