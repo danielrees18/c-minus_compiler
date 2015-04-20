@@ -1,5 +1,8 @@
 package cminus_compiler.grammar;
 
+import lowlevel.CodeItem;
+import lowlevel.Function;
+
 /** 
  *
  * @authors Daniel Rees, Nathan Kallman
@@ -47,5 +50,10 @@ public class ReturnStatement extends Statement {
         }
         
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 package cminus_compiler.grammar;
 
 import cminus_compiler.tool.IndentTool;
+import lowlevel.CodeItem;
+import lowlevel.Function;
 
 /** 
  *
@@ -18,5 +20,6 @@ public abstract class Expression {
     }
     
     public abstract String printTree(int indent);
+    public abstract CodeItem gencode(Function function);
     
 }

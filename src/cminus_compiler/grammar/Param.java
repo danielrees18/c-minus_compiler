@@ -2,6 +2,8 @@ package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
 import cminus_compiler.tool.IndentTool;
+import lowlevel.CodeItem;
+import lowlevel.Function;
 
 /** 
  *
@@ -63,6 +65,11 @@ public class Param {
         builder.append(isArray);
         
         return builder.toString();
+    }
+    
+    
+    public CodeItem gencode(Function function) {
+        return null;
     }
 
     

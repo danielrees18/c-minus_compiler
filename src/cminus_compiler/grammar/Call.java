@@ -1,6 +1,8 @@
 package cminus_compiler.grammar;
 
 import java.util.ArrayList;
+import lowlevel.CodeItem;
+import lowlevel.Function;
 
 /** 
  * @authors Daniel Rees, Nathan Kallman
@@ -50,5 +52,10 @@ public class Call extends Expression {
             builder.append(arg.printTree(indent+1));
         }        
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        return null;
     }
 }

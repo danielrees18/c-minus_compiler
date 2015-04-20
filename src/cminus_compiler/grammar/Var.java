@@ -1,6 +1,8 @@
 package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
+import lowlevel.CodeItem;
+import lowlevel.Function;
 
 /** 
  *]
@@ -65,5 +67,10 @@ public class Var extends Expression {
         }
         
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        return null;
     }
 }

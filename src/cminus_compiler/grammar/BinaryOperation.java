@@ -1,5 +1,8 @@
 package cminus_compiler.grammar;
 
+import lowlevel.CodeItem;
+import lowlevel.Function;
+
 /** 
  *
  * @authors Daniel Rees, Nathan Kallman
@@ -67,5 +70,10 @@ public class BinaryOperation extends Expression {
         builder.append(rightHandExpression.printTree(indent+1));
         
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        return null;
     }
 }

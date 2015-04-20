@@ -2,6 +2,8 @@ package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
 import cminus_compiler.tool.IndentTool;
+import lowlevel.CodeItem;
+import lowlevel.Function;
 
 /** 
  *
@@ -50,5 +52,9 @@ public class Num extends Expression {
         return Integer.toString(value);
     }
     
+    @Override
+    public CodeItem gencode(Function function) {
+        return null;
+    }
     
 }

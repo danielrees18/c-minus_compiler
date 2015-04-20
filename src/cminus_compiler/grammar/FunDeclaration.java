@@ -1,6 +1,8 @@
 package cminus_compiler.grammar;
 
 import java.util.ArrayList;
+import lowlevel.CodeItem;
+import lowlevel.Function;
 
 /** 
  *
@@ -75,5 +77,10 @@ public class FunDeclaration extends Declaration {
         builder.append(compoundStatement.printTree(indent+1));
         
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        return null;
     }
 }
