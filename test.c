@@ -1,5 +1,7 @@
 int doAddition(void) {
   int k;
-  k = 5;
+  int i;
+  i = 4;
+  k = i + 5;
   return k;
 } 

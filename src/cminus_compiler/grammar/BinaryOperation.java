@@ -2,6 +2,8 @@ package cminus_compiler.grammar;
 
 import lowlevel.CodeItem;
 import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
 
 /** 
  *
@@ -74,6 +76,64 @@ public class BinaryOperation extends Expression {
     
     @Override
     public CodeItem gencode(Function function) {
+        this.setRegNum(function.getNewRegNum());
+        leftHandExpression.gencode(function);
+        rightHandExpression.gencode(function);
+        
+        // Generate Operand sources and desitination for the binary operation
+        Operand srcLeft = new Operand(Operand.OperandType.REGISTER, leftHandExpression.getRegNum());
+        Operand srcRight = new Operand(Operand.OperandType.REGISTER, rightHandExpression.getRegNum());
+        Operand dest = new Operand(Operand.OperandType.REGISTER, this.getRegNum());
+        
+        // Create the binary operation of specified type and set sources/destination
+        Operation.OperationType operationType = convertToOperationType();
+        Operation binaryOperation = new Operation(operationType, function.getCurrBlock());
+        binaryOperation.setDestOperand(0, dest);
+        binaryOperation.setSrcOperand(0, srcLeft);
+        binaryOperation.setSrcOperand(1, srcRight);
+        
+        function.getCurrBlock().appendOper(binaryOperation);
+        
         return null;
+    }
+    
+    private Operation.OperationType convertToOperationType() {
+        Operation.OperationType type = Operation.OperationType.UNKNOWN;
+        
+        switch(operation) {
+            case "+":
+                type = Operation.OperationType.ADD_I;
+                break;
+            case "-":
+                type = Operation.OperationType.SUB_I;
+                break;
+            case "*":
+                type = Operation.OperationType.MUL_I;
+                break;
+            case "/":
+                type = Operation.OperationType.DIV_I;
+                break;
+            case "<":
+                type = Operation.OperationType.LT;
+                break;
+            case "<=":
+                type = Operation.OperationType.LTE;
+                break;
+            case ">":
+                type = Operation.OperationType.GT;
+                break;
+            case ">=":
+                type = Operation.OperationType.GTE;
+                break;
+            case "==":
+                type = Operation.OperationType.EQUAL;
+                break;    
+            case "!=":
+                type = Operation.OperationType.NOT_EQUAL;
+                break;
+            default:
+                break;
+        }
+        return type;
     }
 }
