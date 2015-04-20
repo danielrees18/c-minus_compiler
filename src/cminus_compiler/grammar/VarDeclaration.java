@@ -2,6 +2,7 @@ package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
 import lowlevel.CodeItem;
+import lowlevel.Data;
 import lowlevel.Function;
 
 /** 
@@ -63,6 +64,6 @@ public class VarDeclaration extends Declaration {
     
     @Override
     public CodeItem gencode(Function function) {
-        return null;
+        return new Data(Data.TYPE_INT, declarationName);
     }
 }
