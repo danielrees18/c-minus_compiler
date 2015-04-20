@@ -3,6 +3,8 @@ package cminus_compiler.grammar;
 import cminus_compiler.model.Token;
 import cminus_compiler.tool.IndentTool;
 import lowlevel.CodeItem;
+import lowlevel.Data;
+import lowlevel.FuncParam;
 import lowlevel.Function;
 
 /** 
@@ -68,8 +70,8 @@ public class Param {
     }
     
     
-    public CodeItem gencode(Function function) {
-        return null;
+    public FuncParam gencode() {
+        return new FuncParam(Data.TYPE_INT, paramName);
     }
 
     

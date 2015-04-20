@@ -64,6 +64,12 @@ public class VarDeclaration extends Declaration {
     
     @Override
     public CodeItem gencode(Function function) {
-        return new Data(Data.TYPE_INT, declarationName);
+        Data data = new Data(Data.TYPE_INT, declarationName);
+        
+        if(function != null) {
+            function.getTable().put(declarationName, data);
+        }
+        
+        return data;
     }
 }

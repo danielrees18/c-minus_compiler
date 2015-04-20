@@ -50,6 +50,9 @@ public class ExpressionStatement extends Statement {
     
     @Override
     public CodeItem gencode(Function function) {
-        return null;
+        if(expression != null) {
+            expression.gencode(function);
+        }
+        return function;
     }
 }

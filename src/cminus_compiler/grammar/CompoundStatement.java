@@ -68,6 +68,15 @@ public class CompoundStatement extends Statement {
     
     @Override
     public CodeItem gencode(Function function) {
-        return null;
+        
+        for(VarDeclaration decl : variableDeclartions) {
+            decl.gencode(function);
+        }
+        
+        for(Statement stmt : statements) {
+            stmt.gencode(function);
+        }
+        
+        return function;
     }
 }

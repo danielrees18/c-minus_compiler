@@ -91,12 +91,11 @@ public class FunDeclaration extends Declaration {
         FuncParam tempParam = new FuncParam();
         int i = 0;
         for(Param param : params) {
-            
             if(i == 0) {
-                tempParam = new FuncParam(Data.TYPE_INT, param.getParamName(), param.isArray());
+                tempParam = param.gencode();
                 firstParam = tempParam;
             } else {
-                tempParam.setNextParam(new FuncParam(Data.TYPE_INT, param.getParamName(), param.isArray()));
+                tempParam.setNextParam(param.gencode());
                 tempParam = tempParam.getNextParam();
             }
             i++;

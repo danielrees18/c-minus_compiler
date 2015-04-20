@@ -2,6 +2,7 @@ package cminus_compiler.grammar;
 
 import lowlevel.CodeItem;
 import lowlevel.Function;
+import lowlevel.Operation;
 
 /** 
  *
@@ -70,6 +71,7 @@ public class AssignmentOperation extends Expression {
     
     @Override
     public CodeItem gencode(Function function) {
-        return null;
+        Operation lowLevelOperation = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
+        return function;
     }
 }
