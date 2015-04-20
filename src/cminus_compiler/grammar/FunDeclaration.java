@@ -1,7 +1,10 @@
 package cminus_compiler.grammar;
 
 import java.util.ArrayList;
+import lowlevel.BasicBlock;
 import lowlevel.CodeItem;
+import lowlevel.Data;
+import lowlevel.FuncParam;
 import lowlevel.Function;
 
 /** 
@@ -81,6 +84,60 @@ public class FunDeclaration extends Declaration {
     
     @Override
     public CodeItem gencode(Function function) {
-        return null;
+        
+        // Convert all of the function parameters into FuncParams to pass to the Function object. Need
+        // to maintain a pointer to the front of the linked list, while still adding to the linked list
+        FuncParam firstParam = new FuncParam();
+        FuncParam tempParam = new FuncParam();
+        int i = 0;
+        for(Param param : params) {
+            
+            if(i == 0) {
+                tempParam = new FuncParam(Data.TYPE_INT, param.getParamName(), param.isArray());
+                firstParam = tempParam;
+            } else {
+                tempParam.setNextParam(new FuncParam(Data.TYPE_INT, param.getParamName(), param.isArray()));
+                tempParam = tempParam.getNextParam();
+            }
+            i++;
+        }
+        
+        // Generating the function and compound statement of the function
+        int type = convertReturnType();
+        Function topFunction = new Function(type, declarationName, firstParam);
+        
+        // Create BB0
+        topFunction.createBlock0();
+        
+        // Make BB
+        BasicBlock bbOne = new BasicBlock(topFunction);
+        
+        // Append BB
+        topFunction.appendBlock(bbOne);
+        
+        // Set CB = BB
+        topFunction.setCurrBlock(bbOne);
+        
+        // gencode { }
+        this.compoundStatement.gencode(topFunction);
+        
+        // append return block
+        BasicBlock returnBlock = topFunction.getReturnBlock();
+        topFunction.appendBlock(returnBlock);
+        
+        // append Unconnected chain
+        BasicBlock unconnectedChainBlock = topFunction.getFirstUnconnectedBlock();
+        topFunction.appendBlock(unconnectedChainBlock);
+        
+        // Return CodeItem
+        return topFunction;
+    }
+    
+    private int convertReturnType() {
+        if(this.returnType.equalsIgnoreCase("void")) {
+            return Data.TYPE_VOID;
+        } else {
+            return Data.TYPE_INT;
+        }
     }
 }
