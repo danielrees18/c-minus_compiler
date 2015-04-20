@@ -35,7 +35,7 @@ public class CMinusCompiler implements Compiler {
 
             Program parseTree = myParser.parse();
             String tree = parseTree.printTree();
-            System.out.print(tree);
+            System.out.println(tree);
 //            myParser.printAST(parseTree);
 
             CodeItem lowLevelCode = parseTree.genLLCode();

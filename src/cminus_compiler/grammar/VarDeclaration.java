@@ -67,7 +67,7 @@ public class VarDeclaration extends Declaration {
         Data data = new Data(Data.TYPE_INT, declarationName);
         
         if(function != null) {
-            function.getTable().put(declarationName, data);
+            function.getTable().put(declarationName, function.getNewRegNum());
         }
         
         return data;

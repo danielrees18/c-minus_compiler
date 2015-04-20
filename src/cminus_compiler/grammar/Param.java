@@ -70,8 +70,10 @@ public class Param {
     }
     
     
-    public FuncParam gencode() {
-        return new FuncParam(Data.TYPE_INT, paramName);
+    public FuncParam gencode(Function function) {
+        FuncParam param = new FuncParam(Data.TYPE_INT, paramName);
+        function.getTable().put(paramName, function.getNewRegNum());
+        return param;
     }
 
     

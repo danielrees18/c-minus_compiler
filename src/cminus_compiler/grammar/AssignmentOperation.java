@@ -2,6 +2,7 @@ package cminus_compiler.grammar;
 
 import lowlevel.CodeItem;
 import lowlevel.Function;
+import lowlevel.Operand;
 import lowlevel.Operation;
 
 /** 
@@ -71,7 +72,21 @@ public class AssignmentOperation extends Expression {
     
     @Override
     public CodeItem gencode(Function function) {
-        Operation lowLevelOperation = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
+        this.setRegNum(function.getNewRegNum());
+        
+        variable.gencode(function);
+        rightHandExpression.gencode(function);
+        
+        Operation assignOperation = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
+        
+        Operand dest = new Operand(Operand.OperandType.REGISTER, variable.getRegNum());
+        Operand src = new Operand(Operand.OperandType.REGISTER, rightHandExpression.getRegNum());
+        
+        assignOperation.setDestOperand(0, dest);
+        assignOperation.setSrcOperand(0, src);
+        
+        function.getCurrBlock().appendOper(assignOperation);
+        
         return function;
     }
 }

@@ -16,12 +16,23 @@ import lowlevel.Function;
  */
 public abstract class Expression implements CodeGen {
     
+    public int regNum;
+    
     public String indent(int indent) {
         return IndentTool.indent(indent);
     }
     
-    public abstract String printTree(int indent);
+    public void setRegNum(int regNum) {
+        this.regNum = regNum;
+    }
+    
+    public int getRegNum() {
+        return this.regNum;
+    }
+    
     @Override
     public abstract CodeItem gencode(Function function);
+    public abstract String printTree(int indent);
+    
     
 }

@@ -2,6 +2,8 @@ package cminus_compiler.grammar;
 
 import lowlevel.CodeItem;
 import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
 
 /** 
  *
@@ -54,6 +56,22 @@ public class ReturnStatement extends Statement {
     
     @Override
     public CodeItem gencode(Function function) {
-        return null;
+        expression.gencode(function);
+        
+        Operand src = new Operand(Operand.OperandType.REGISTER, expression.getRegNum());
+        Operand dest = new Operand(Operand.OperandType.REGISTER, "RetReg");
+       
+        Operation op = new Operation(Operation.OperationType.RETURN, function.getCurrBlock());
+        op.setDestOperand(0, dest);
+        op.setSrcOperand(0, src);
+        
+        Operation jmp = new Operation(Operation.OperationType.JMP, function.getCurrBlock());
+        Operand jmpSrc = new Operand(Operand.OperandType.BLOCK, function.getReturnBlock().getBlockNum());
+        jmp.setSrcOperand(0, jmpSrc);
+        
+        function.getCurrBlock().appendOper(op);
+        function.getCurrBlock().appendOper(jmp);
+        
+        return function;
     }
 }

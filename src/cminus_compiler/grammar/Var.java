@@ -71,6 +71,14 @@ public class Var extends Expression {
     
     @Override
     public CodeItem gencode(Function function) {
+        
+        Integer obj = (Integer) function.getTable().get(variableName);
+        if(obj == null) {
+            // TODO: check globals
+        } else {
+            this.setRegNum(obj);
+        }
+        
         return null;
     }
 }

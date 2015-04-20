@@ -83,53 +83,70 @@ public class FunDeclaration extends Declaration {
     }
     
     @Override
-    public CodeItem gencode(Function function) {
+    public CodeItem gencode(Function f) {
+        
+        int type = convertReturnType();
+        Function function = new Function(type, declarationName);
         
         // Convert all of the function parameters into FuncParams to pass to the Function object. Need
         // to maintain a pointer to the front of the linked list, while still adding to the linked list
+        FuncParam firstParam;
+        if(!params.isEmpty()) {
+            firstParam = generateFuncParams(function);
+        } else {
+            firstParam = new FuncParam(Data.TYPE_VOID, "void");
+            function.getTable().put(firstParam.getName(), function.getNewRegNum());
+        }
+       
+        // Generating the function and compound statement of the function
+        function.setFirstParam(firstParam);
+        
+        // Create BB0
+        function.createBlock0();
+        
+        // Make BB
+        BasicBlock bbOne = new BasicBlock(function);
+        
+        // Append BB
+        function.appendBlock(bbOne);
+        
+        // Set CB = BB
+        function.setCurrBlock(bbOne);
+        
+        // gencode { }
+        this.compoundStatement.gencode(function);
+        
+        // append return block
+        BasicBlock returnBlock = function.getReturnBlock();
+        function.appendBlock(returnBlock);
+        
+        // append Unconnected chain
+        BasicBlock unconnectedChainBlock = function.getFirstUnconnectedBlock();
+        if(unconnectedChainBlock != null) {
+            function.appendBlock(unconnectedChainBlock);
+        }
+        
+        // Return CodeItem
+        return function;
+    }
+    
+    
+    private FuncParam generateFuncParams(Function f) {
         FuncParam firstParam = new FuncParam();
         FuncParam tempParam = new FuncParam();
         int i = 0;
         for(Param param : params) {
             if(i == 0) {
-                tempParam = param.gencode();
+                tempParam = param.gencode(f);
                 firstParam = tempParam;
             } else {
-                tempParam.setNextParam(param.gencode());
+                tempParam.setNextParam(param.gencode(f));
                 tempParam = tempParam.getNextParam();
             }
             i++;
         }
         
-        // Generating the function and compound statement of the function
-        int type = convertReturnType();
-        Function topFunction = new Function(type, declarationName, firstParam);
-        
-        // Create BB0
-        topFunction.createBlock0();
-        
-        // Make BB
-        BasicBlock bbOne = new BasicBlock(topFunction);
-        
-        // Append BB
-        topFunction.appendBlock(bbOne);
-        
-        // Set CB = BB
-        topFunction.setCurrBlock(bbOne);
-        
-        // gencode { }
-        this.compoundStatement.gencode(topFunction);
-        
-        // append return block
-        BasicBlock returnBlock = topFunction.getReturnBlock();
-        topFunction.appendBlock(returnBlock);
-        
-        // append Unconnected chain
-        BasicBlock unconnectedChainBlock = topFunction.getFirstUnconnectedBlock();
-        topFunction.appendBlock(unconnectedChainBlock);
-        
-        // Return CodeItem
-        return topFunction;
+        return firstParam;
     }
     
     private int convertReturnType() {
