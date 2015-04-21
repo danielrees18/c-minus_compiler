@@ -78,8 +78,6 @@ public class IterationStatement extends Statement {
         
         // Recheck condition
         expression.gencode(function);
-        Operation recheckOperation = getBranchOperation(Operation.OperationType.BEQ, postBlock, function.getCurrBlock());
-        function.getCurrBlock().appendOper(recheckOperation);
         
         // Loop Condition
         Operation bneBranchOperation = 

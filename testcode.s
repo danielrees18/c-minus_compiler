@@ -133,12 +133,13 @@ printInt_bb15:
 .globl  main
 main:
 main_bb2:
-	pushq	%R12
 	pushq	%R13
 	pushq	%R14
 	pushq	%R15
 main_bb3:
 	movl	$5, %EAX
+	movl	%EAX, %R15D
+	movl	%R15D, %EDI
 	movl	$5, %EAX
 	cmpl	%EAX, %EDI
 	jne	main_bb6
@@ -163,21 +164,18 @@ main_bb7:
 	movl	%EDX, %R15D
 	movl	$8, %EAX
 	cmpl	%EAX, %R15D
-	jg	main_bb8
-	cmpl	$0, %ESI
-	jne	main_bb7
+	jle	main_bb7
 main_bb8:
-	movl	$3, %ESI
+	movl	$3, %ECX
 	movl	$0, %EDX
 	movl	%R14D, %EAX
-	idivl	%ESI, %EAX
-	movl	%EAX, %EDX
-	movl	$4, %ESI
-	movl	%EDX, %EAX
-	imull	%ESI, %EAX
+	idivl	%ECX, %EAX
+	movl	%EAX, %ECX
+	movl	$4, %EDX
+	movl	%ECX, %EAX
+	imull	%EDX, %EAX
 	movl	%EAX, %R14D
-	movl	a(%RIP), %EAX
-	movl	%EAX, %EDI
+	movl	%ESI, %EDI
 	movl	%EDI, %ESI
 	call	addThem
 	movl	%R13D, %R15D
@@ -210,9 +208,7 @@ main_bb9:
 	movl	%EDI, %R15D
 	movl	$10, %EAX
 	cmpl	%EAX, %R15D
-	jge	main_bb10
-	cmpl	$0, %R12D
-	jne	main_bb9
+	jl	main_bb9
 main_bb10:
 	movl	$10, %EAX
 	movl	%EAX, %EDI
@@ -236,7 +232,7 @@ main_bb10:
 	movl	$1, %EAX
 	movl	%EAX, %R14D
 	movl	$0, %EAX
-	movl	%EAX, %EDX
+	movl	%EAX, %ECX
 	movl	$0, %EAX
 	movl	$0, %EAX
 	cmpl	%EAX, %EDI
@@ -274,7 +270,6 @@ main_bb1:
 	popq	%R13
 	popq	%R14
 	popq	%R15
-	popq	%R12
 	ret
 main_bb6:
 	movl	$4, %EAX
@@ -286,7 +281,7 @@ main_bb22:
 	jmp	main_bb12
 main_bb19:
 	movl	$0, %EAX
-	cmpl	%EAX, %EDX
+	cmpl	%EAX, %ECX
 	jne	main_bb22
 main_bb20:
 	movl	$10, %EAX

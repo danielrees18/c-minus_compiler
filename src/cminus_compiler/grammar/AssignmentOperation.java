@@ -72,10 +72,10 @@ public class AssignmentOperation extends Expression {
     
     @Override
     public CodeItem gencode(Function function) {
-        this.setRegNum(function.getNewRegNum());
         
         variable.gencode(function);
         rightHandExpression.gencode(function);
+        this.setRegNum(variable.getRegNum());
         
         Operation assignOperation = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
         

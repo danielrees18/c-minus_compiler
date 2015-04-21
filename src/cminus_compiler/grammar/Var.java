@@ -79,15 +79,15 @@ public class Var extends Expression {
         if(obj == null) {
             this.setRegNum(function.getNewRegNum());
         
-            Operation loadOp = new Operation(Operation.OperationType.LOAD_I, function.getCurrBlock());
-            
-            Operand srcLoad = new Operand(Operand.OperandType.STRING, this.variableName);
-            Operand destLoad = new Operand(Operand.OperandType.REGISTER, this.getRegNum());
-            
-            loadOp.setDestOperand(0, destLoad);
-            loadOp.setSrcOperand(0, srcLoad);
-            
-            function.getCurrBlock().appendOper(loadOp);
+//            Operation loadOp = new Operation(Operation.OperationType.LOAD_I, function.getCurrBlock());
+//            
+//            Operand srcLoad = new Operand(Operand.OperandType.STRING, this.variableName);
+//            Operand destLoad = new Operand(Operand.OperandType.REGISTER, this.getRegNum());
+//            
+//            loadOp.setDestOperand(0, destLoad);
+//            loadOp.setSrcOperand(0, srcLoad);
+//            
+//            function.getCurrBlock().appendOper(loadOp);
             
             
         } else {

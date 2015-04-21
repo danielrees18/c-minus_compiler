@@ -1,66 +1,75 @@
 .text
 	.align 4
-.globl  test
-test:
-test_bb1:
-test_bb2:
-	movl	$0, %EDI
-	movl	$1, %EDI
-	movl	$0, %EDI
-	cmpl	%EDI, %ESI
-	jle	test_bb5
-test_bb3:
+.globl  main
+main:
+main_bb2:
+main_bb3:
+	movl	$0, %EAX
 	movl	$1, %EAX
+	movl	$0, %EAX
+	movl	%EAX, %ESI
+	movl	%ESI, %EAX
+	cmpl	%ESI, %EAX
+	jle	main_bb6
+main_bb4:
+	movl	$1, %EDI
+	subl	%EDI, %ESI
+main_bb5:
+	cmpl	%ESI, %EAX
+	jne	main_bb15
+main_bb14:
+	cmpl	%ESI, %EAX
+	jne	main_bb15
+main_bb16:
+	cmpl	%ESI, %EAX
+	jne	main_bb19
+main_bb18:
+	movl	$1, %EAX
+	movl	%ESI, %EDI
 	subl	%EAX, %EDI
-test_bb4:
-	cmpl	%EDI, %ESI
-	jne	test_bb14
-test_bb13:
-	cmpl	%EDI, %ESI
-	jne	test_bb14
-test_bb15:
-	cmpl	%EDI, %ESI
-	jne	test_bb18
-test_bb17:
-	movl	$1, %EAX
-	movl	%EDI, %ESI
-	subl	%EAX, %ESI
-	cmpl	$0, %ECX
-	jne	test_bb17
-test_bb18:
-	cmpl	$0, %R8D
-	jne	test_bb15
-test_bb14:
+	movl	%EDI, %EAX
+	cmpl	%ESI, %EAX
+	je	main_bb18
+main_bb19:
+	cmpl	%ESI, %EAX
+	je	main_bb16
+main_bb15:
 	movl	$3, %EAX
-	movl	%EDX, %EAX
+	movl	$0, %EAX
+main_bb1:
 	ret
-test_bb10:
+main_bb11:
 	movl	$1, %EDI
-	movl	$1, %R9D
-	cmpl	%R9D, %EDI
-	jne	test_bb9
-test_bb11:
-	movl	$2, %R9D
-	addl	%R9D, %EDI
-	cmpl	$0, %R10D
-	jne	test_bb11
-test_bb12:
-	jmp	test_bb9
-test_bb5:
+	movl	%EDI, %ESI
+	movl	$1, %EDI
+	cmpl	%EDI, %ESI
+	jne	main_bb10
+main_bb12:
 	movl	$2, %EDI
-	movl	$2, %R9D
-	cmpl	%R9D, %EDI
-	jne	test_bb4
-test_bb6:
+	addl	%EDI, %ESI
+	movl	$1, %EDI
+	cmpl	%EDI, %ESI
+	je	main_bb12
+main_bb13:
+	jmp	main_bb10
+main_bb6:
 	movl	$2, %EDI
-	movl	$2, %R9D
-	cmpl	%R9D, %EDI
-	jne	test_bb10
-test_bb8:
-	movl	$1, %R9D
-	addl	%R9D, %EDI
-test_bb9:
-	cmpl	$0, %EAX
-	jne	test_bb6
-test_bb7:
-	jmp	test_bb4
+	movl	%EDI, %ESI
+	movl	$2, %EDI
+	cmpl	%EDI, %ESI
+	jne	main_bb5
+main_bb7:
+	movl	$2, %EDI
+	movl	%EDI, %ESI
+	movl	$2, %EDI
+	cmpl	%EDI, %ESI
+	jne	main_bb11
+main_bb9:
+	movl	$1, %EDI
+	addl	%EDI, %ESI
+main_bb10:
+	movl	$2, %EDI
+	cmpl	%EDI, %ESI
+	je	main_bb7
+main_bb8:
+	jmp	main_bb5
