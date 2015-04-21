@@ -68,7 +68,7 @@ int main (void) {
   b = c = 5;
 
   if (b == 5) {
-    a = 3;
+    a = a + 3;
   }
   else {
     a = 4;

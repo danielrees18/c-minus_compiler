@@ -145,7 +145,8 @@ main_bb3:
 	jne	main_bb6
 main_bb4:
 	movl	$3, %EAX
-	movl	%EAX, a(%RIP)
+	addl	%EAX, %EDX
+	movl	%EDX, a(%RIP)
 main_bb5:
 	movl	$0, %EAX
 	movl	%EAX, %R14D
