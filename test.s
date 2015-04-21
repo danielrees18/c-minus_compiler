@@ -1,31 +1,39 @@
-.data
-.comm	z,4,4
-
 .text
 	.align 4
-.globl  doAddition
-doAddition:
-doAddition_bb1:
-	pushq	%R14
-	pushq	%R15
-doAddition_bb2:
+.globl  doIfStatement
+doIfStatement:
+doIfStatement_bb1:
+doIfStatement_bb2:
+	movl	$0, %EAX
+	cmpl	%EAX, %EDX
+	jne	doIfStatement_bb5
+doIfStatement_bb3:
+	movl	y(%RIP), %EDX
+	movl	$1, %EAX
+	cmpl	%EAX, %EDX
+	jne	doIfStatement_bb8
+doIfStatement_bb6:
+	movl	$1, %EAX
+	movl	%EAX, %ESI
+doIfStatement_bb7:
+	movl	%ESI, %EAX
+	addl	%EDI, %EAX
+doIfStatement_bb4:
+	movl	$999999, %EAX
+	ret
+doIfStatement_bb8:
+	movl	$12, %EAX
+	movl	%EAX, %EDI
+	jmp	doIfStatement_bb7
+doIfStatement_bb11:
 	movl	$4, %EAX
-	movl	%EAX, %EDI
+	jmp	doIfStatement_bb4
+doIfStatement_bb5:
+	movl	x(%RIP), %EDI
 	movl	$2, %EAX
-	addl	%EAX, %EDI
-	movl	%EDI, z(%RIP)
-	movl	z(%RIP), %R15D
-	movl	$9, %EAX
-	movl	%EAX, %EDI
-	call	getValue
-	movl	%R15D, %EAX
-	addl	%R14D, %EAX
-	popq	%R14
-	popq	%R15
-	ret
-.globl  getValue
-getValue:
-getValue_bb1:
-	movl	%EDI, %EAX
-getValue_bb2:
-	ret
+	cmpl	%EAX, %EDI
+	jne	doIfStatement_bb11
+doIfStatement_bb9:
+	movl	$3, %EAX
+doIfStatement_bb10:
+	jmp	doIfStatement_bb4

@@ -1,14 +1,26 @@
-int z;
+void doIfStatement(void) {
+  int z;
 
-int doAddition(void) {
-  int k;
-  int i;
-  i = 4;
-  z = i + 2;
-  k = z + getValue(9);
-  return k;
+  if (z == 0) {
+
+    if(y == 1) {
+      int a;
+      a = 1;
+    } else {
+      int b;
+      b = 12;
+    }
+
+    z = a + b;
+
+  } else {
+    if(x == 2) {
+      int c;
+      c = 3;
+    } else {
+      int d;
+      d = 4;
+    }
+  }
+
 } 
-
-int getValue(int x) {
-  return x;
-}

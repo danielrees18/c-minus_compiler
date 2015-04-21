@@ -1,7 +1,10 @@
 package cminus_compiler.grammar;
 
+import lowlevel.BasicBlock;
 import lowlevel.CodeItem;
 import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
 
 /** 
  *
@@ -80,6 +83,70 @@ public class SelectionStatement extends Statement {
     
     @Override
     public CodeItem gencode(Function function) {
-        return null;
+       
+        // 1. Gencode expression
+        expression.gencode(function);
+        
+        // 2. Make 2/3 blocks
+        BasicBlock thenBlock = new BasicBlock(function);
+        BasicBlock postBlock = new BasicBlock(function);
+        BasicBlock elseBlock = null;
+        
+        // 3. Branch to else/post
+        int blockNum = -1;
+        if (optionalStatement != null) {
+            // Branch to elseBlock
+            elseBlock = new BasicBlock(function);
+            blockNum = elseBlock.getBlockNum();
+        } else {
+            // Branch to postBlock
+            blockNum = postBlock.getBlockNum();
+        }
+        Operation branchOperation = new Operation(Operation.OperationType.BEQ, function.getCurrBlock());
+        Operand srcOne = new Operand(Operand.OperandType.REGISTER, expression.getRegNum());
+        Operand srcConst = new Operand(Operand.OperandType.INTEGER, 0);
+        Operand srcTarget = new Operand(Operand.OperandType.BLOCK, blockNum);
+        
+        branchOperation.setSrcOperand(0, srcOne);
+        branchOperation.setSrcOperand(1, srcConst);
+        branchOperation.setSrcOperand(2, srcTarget);
+        
+        function.getCurrBlock().appendOper(branchOperation);
+        
+        // 4. Append 'then' block
+        function.appendToCurrentBlock(thenBlock);
+        
+        // 5. CB = THEN
+        function.setCurrBlock(thenBlock);
+        
+        // 6. gencode then
+        primaryStatement.gencode(function);
+        
+        // 7. append post
+        function.appendToCurrentBlock(postBlock);
+        
+        
+        if(optionalStatement != null) {
+            // 8. CB = Else
+            function.setCurrBlock(elseBlock);
+            
+            // 9. gencode else
+            optionalStatement.gencode(function);
+            
+            // 10. JMP to POST
+            Operation jmp = new Operation(Operation.OperationType.JMP, function.getCurrBlock());
+            Operand jmpSrc = new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum());
+            jmp.setSrcOperand(0, jmpSrc);
+            
+            function.getCurrBlock().appendOper(jmp);
+            
+            // 11. Else to unconnected Chain
+            function.appendUnconnectedBlock(elseBlock);
+        }
+        
+        // 12. 
+        function.setCurrBlock(postBlock);
+        
+        return function;
     }
 }
