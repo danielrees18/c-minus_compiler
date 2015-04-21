@@ -1,8 +1,11 @@
+int z;
+
 int doAddition(void) {
   int k;
   int i;
   i = 4;
-  k = i + getValue(9);
+  z = i + 2;
+  k = z + getValue(9);
   return k;
 } 
 

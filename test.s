@@ -1,3 +1,6 @@
+.data
+.comm	z,4,4
+
 .text
 	.align 4
 .globl  doAddition
@@ -7,7 +10,11 @@ doAddition_bb1:
 	pushq	%R15
 doAddition_bb2:
 	movl	$4, %EAX
-	movl	%EAX, %R15D
+	movl	%EAX, %EDI
+	movl	$2, %EAX
+	addl	%EAX, %EDI
+	movl	%EDI, z(%RIP)
+	movl	z(%RIP), %R15D
 	movl	$9, %EAX
 	movl	%EAX, %EDI
 	call	getValue

@@ -87,6 +87,23 @@ public class AssignmentOperation extends Expression {
         
         function.getCurrBlock().appendOper(assignOperation);
         
+        // Store global variables if they changed
+        if(variable.isGlobal(function)) {
+            this.storeGlobalVariable(function);
+        }
+        
         return function;
+    }
+    
+    private void storeGlobalVariable(Function function) {
+        Operation storeOperation = new Operation(Operation.OperationType.STORE_I, function.getCurrBlock());
+        
+        Operand srcZero = new Operand(Operand.OperandType.REGISTER, rightHandExpression.getRegNum());
+        Operand srcOne = new Operand(Operand.OperandType.STRING, variable.getVariableName());
+        
+        storeOperation.setSrcOperand(0, srcZero);
+        storeOperation.setSrcOperand(1, srcOne);
+        
+        function.getCurrBlock().appendOper(storeOperation);
     }
 }
