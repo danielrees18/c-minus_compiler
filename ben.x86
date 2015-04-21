@@ -1,0 +1,103 @@
+(FUNCTION  test  [(void void)]
+  (BB 1
+    (OPER 56 Mov [(r 1)]  [(m EDI)])
+  )
+  (BB 2
+    (OPER 4 Mov [(r 5)]  [(i 0)])
+    (OPER 5 Mov [(r 2)]  [(r 5)])
+    (OPER 6 Mov [(r 7)]  [(i 1)])
+    (OPER 7 Mov [(r 3)]  [(r 7)])
+    (OPER 8 Mov [(r 10)]  [(i 0)])
+    (OPER 9 Mov [(r 3)]  [(r 10)])
+    (OPER 10 Mov [(r 2)]  [(r 9)])
+    (OPER 57 Cmp [(m Flags)]  [(r 2)(r 3)])
+    (OPER 58 BLE []  [(bb 5)(m Flags)])
+  )
+  (BB 3
+    (OPER 13 Mov [(r 14)]  [(i 1)])
+    (OPER 59 Mov [(r 13)]  [(r 3)])
+    (OPER 14 Sub_I [(r 13)]  [(r 13)(r 14)])
+    (OPER 15 Mov [(r 3)]  [(r 13)])
+  )
+  (BB 4
+    (OPER 60 Cmp [(m Flags)]  [(r 2)(r 3)])
+    (OPER 61 BNE []  [(bb 14)(m Flags)])
+  )
+  (BB 13
+    (OPER 62 Cmp [(m Flags)]  [(r 2)(r 3)])
+    (OPER 63 BNE []  [(bb 14)(m Flags)])
+  )
+  (BB 15
+    (OPER 64 Cmp [(m Flags)]  [(r 2)(r 3)])
+    (OPER 65 BNE []  [(bb 18)(m Flags)])
+  )
+  (BB 17
+    (OPER 47 Mov [(r 38)]  [(i 1)])
+    (OPER 66 Mov [(r 37)]  [(r 3)])
+    (OPER 48 Sub_I [(r 37)]  [(r 37)(r 38)])
+    (OPER 49 Mov [(r 2)]  [(r 37)])
+    (OPER 67 Cmp [(m Flags)]  [(r 35)(i 0)])
+    (OPER 50 BNE []  [(bb 17)(m Flags)()
+])
+  )
+  (BB 18
+    (OPER 68 Cmp [(m Flags)]  [(r 34)(i 0)])
+    (OPER 51 BNE []  [(bb 15)(m Flags)()
+])
+  )
+  (BB 14
+    (OPER 52 Mov [(r 40)]  [(i 3)])
+    (OPER 53 Mov [(r 3)]  [(r 40)])
+    (OPER 54 Mov [(m EAX)]  [(r 41)])
+  )
+  (BB 0
+    (OPER 2 Return []  [(m EAX)])
+  )
+  (BB 10
+    (OPER 29 Mov [(r 27)]  [(i 1)])
+    (OPER 30 Mov [(r 3)]  [(r 27)])
+    (OPER 31 Mov [(r 29)]  [(i 1)])
+    (OPER 69 Cmp [(m Flags)]  [(r 3)(r 29)])
+    (OPER 70 BNE []  [(bb 9)(m Flags)])
+  )
+  (BB 11
+    (OPER 34 Mov [(r 32)]  [(i 2)])
+    (OPER 71 Mov [(r 31)]  [(r 3)])
+    (OPER 35 Add_I [(r 31)]  [(r 31)(r 32)])
+    (OPER 36 Mov [(r 3)]  [(r 31)])
+    (OPER 72 Cmp [(m Flags)]  [(r 28)(i 0)])
+    (OPER 37 BNE []  [(bb 11)(m Flags)()
+])
+  )
+  (BB 12
+    (OPER 38 Jmp []  [(bb 9)])
+  )
+  (BB 5
+    (OPER 16 Mov [(r 16)]  [(i 2)])
+    (OPER 17 Mov [(r 3)]  [(r 16)])
+    (OPER 18 Mov [(r 18)]  [(i 2)])
+    (OPER 73 Cmp [(m Flags)]  [(r 3)(r 18)])
+    (OPER 74 BNE []  [(bb 4)(m Flags)])
+  )
+  (BB 6
+    (OPER 21 Mov [(r 20)]  [(i 2)])
+    (OPER 22 Mov [(r 3)]  [(r 20)])
+    (OPER 23 Mov [(r 22)]  [(i 2)])
+    (OPER 75 Cmp [(m Flags)]  [(r 3)(r 22)])
+    (OPER 76 BNE []  [(bb 10)(m Flags)])
+  )
+  (BB 8
+    (OPER 26 Mov [(r 25)]  [(i 1)])
+    (OPER 77 Mov [(r 24)]  [(r 3)])
+    (OPER 27 Add_I [(r 24)]  [(r 24)(r 25)])
+    (OPER 28 Mov [(r 3)]  [(r 24)])
+  )
+  (BB 9
+    (OPER 78 Cmp [(m Flags)]  [(r 17)(i 0)])
+    (OPER 39 BNE []  [(bb 6)(m Flags)()
+])
+  )
+  (BB 7
+    (OPER 40 Jmp []  [(bb 4)])
+  )
+)

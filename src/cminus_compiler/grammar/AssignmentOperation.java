@@ -79,6 +79,7 @@ public class AssignmentOperation extends Expression {
         
         Operation assignOperation = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
         
+        //
         Operand dest = new Operand(Operand.OperandType.REGISTER, variable.getRegNum());
         Operand src = new Operand(Operand.OperandType.REGISTER, rightHandExpression.getRegNum());
         

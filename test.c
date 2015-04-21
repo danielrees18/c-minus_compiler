@@ -1,8 +1,7 @@
 void doLoop(void) {
   int z;
-
-  if(a == 0) {
-    int x;
-    x = z;
+  z=0;
+  while(z < 5)
+    z = z + 1;
   }
 } 
