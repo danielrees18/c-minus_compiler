@@ -1,55 +1,25 @@
-(FUNCTION  doIfStatement  [(void void)]
+(FUNCTION  doLoop  [(void void)]
   (BB 1
-    (OPER 30 Mov [(r 1)]  [(m EDI)])
+    (OPER 13 Mov [(r 1)]  [(m EDI)])
   )
   (BB 2
     (OPER 4 Mov [(r 4)]  [(i 0)])
-    (OPER 31 Cmp [(m Flags)]  [(r 2)(r 4)])
-    (OPER 32 BNE []  [(bb 5)(m Flags)])
+    (OPER 14 Cmp [(m Flags)]  [(r 2)(r 4)])
+    (OPER 15 BNE []  [(bb 4)(m Flags)])
   )
   (BB 3
-    (OPER 7 Load [(r 6)]  [(s y)])
-    (OPER 8 Mov [(r 7)]  [(i 1)])
-    (OPER 33 Cmp [(m Flags)]  [(r 6)(r 7)])
-    (OPER 34 BNE []  [(bb 8)(m Flags)])
-  )
-  (BB 6
-    (OPER 11 Mov [(r 10)]  [(i 1)])
-    (OPER 12 Mov [(r 8)]  [(r 10)])
-  )
-  (BB 7
-    (OPER 35 Mov [(r 15)]  [(r 8)])
-    (OPER 16 Add_I [(r 15)]  [(r 15)(r 11)])
-    (OPER 17 Mov [(r 2)]  [(r 15)])
+    (OPER 7 Mov [(r 7)]  [(i 1)])
+    (OPER 16 Mov [(r 6)]  [(r 2)])
+    (OPER 8 Add_I [(r 6)]  [(r 6)(r 7)])
+    (OPER 9 Mov [(r 2)]  [(r 6)])
+    (OPER 17 Cmp [(m Flags)]  [(r 3)(i 0)])
+    (OPER 10 BNE []  [(bb 3)(m Flags)()
+])
   )
   (BB 4
-    (OPER 28 Mov [(r 26)]  [(i 999999)])
-    (OPER 29 Mov [(r 2)]  [(r 26)])
+    (OPER 11 Mov [(m EAX)]  [(r 2)])
   )
   (BB 0
     (OPER 2 Return []  [(m EAX)])
-  )
-  (BB 8
-    (OPER 13 Mov [(r 13)]  [(i 12)])
-    (OPER 14 Mov [(r 11)]  [(r 13)])
-    (OPER 15 Jmp []  [(bb 7)])
-  )
-  (BB 11
-    (OPER 24 Mov [(r 24)]  [(i 4)])
-    (OPER 25 Mov [(r 22)]  [(r 24)])
-    (OPER 26 Jmp []  [(bb 4)])
-  )
-  (BB 5
-    (OPER 18 Load [(r 17)]  [(s x)])
-    (OPER 19 Mov [(r 18)]  [(i 2)])
-    (OPER 36 Cmp [(m Flags)]  [(r 17)(r 18)])
-    (OPER 37 BNE []  [(bb 11)(m Flags)])
-  )
-  (BB 9
-    (OPER 22 Mov [(r 21)]  [(i 3)])
-    (OPER 23 Mov [(r 19)]  [(r 21)])
-  )
-  (BB 10
-    (OPER 27 Jmp []  [(bb 4)])
   )
 )
