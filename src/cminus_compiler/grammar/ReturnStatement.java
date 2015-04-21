@@ -56,10 +56,16 @@ public class ReturnStatement extends Statement {
     
     @Override
     public CodeItem gencode(Function function) {
-        expression.gencode(function);
+        int returnRegNum;
+        if(expression != null) {
+            expression.gencode(function);
+            returnRegNum = expression.getRegNum();
+        } else {
+            returnRegNum = function.getNewRegNum();
+        }
         
         // Source to retReg operation
-        Operand src = new Operand(Operand.OperandType.REGISTER, expression.getRegNum());
+        Operand src = new Operand(Operand.OperandType.REGISTER, returnRegNum);
         Operand dest = new Operand(Operand.OperandType.MACRO, "RetReg");
        
         Operation op = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());

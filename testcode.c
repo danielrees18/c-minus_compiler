@@ -54,7 +54,7 @@ void printInt(int r) {
 
     putDigit(r);
   }
-
+  
 }
 
 int main (void) {
