@@ -69,8 +69,8 @@ public class Call extends Expression {
             Operation passOperation = new Operation(Operation.OperationType.PASS, function.getCurrBlock());
             passOperation.setSrcOperand(0, src);
             
-            String size = Integer.toString(count);
-            Attribute attribute = new Attribute("PARAM_NUM", size);
+            String pos = Integer.toString(count);
+            Attribute attribute = new Attribute("PARAM_NUM", pos);
             passOperation.addAttribute(attribute);
             count++;
 
@@ -94,8 +94,10 @@ public class Call extends Expression {
         function.getCurrBlock().appendOper(callOperation);
         
         // RetReg Operation
+        int destRegNum = function.getNewRegNum();
+        this.setRegNum(destRegNum);
         Operand src = new Operand(Operand.OperandType.MACRO, "RetReg");
-        Operand dest = new Operand(Operand.OperandType.REGISTER, function.getNewRegNum());
+        Operand dest = new Operand(Operand.OperandType.REGISTER, destRegNum);
         Operation assignOperation = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
         assignOperation.setDestOperand(0, dest);
         assignOperation.setSrcOperand(0, src);

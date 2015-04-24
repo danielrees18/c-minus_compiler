@@ -83,7 +83,13 @@ int main (void) {
   h = g / 3;
   g = h * 4;
 
+
   c = addThem(a, b);
+  
+  putDigit(a);
+  putchar (10);
+  putDigit(b);
+  putchar (10);
   putchar (56);
   putchar (61);
   putchar (c+g);
