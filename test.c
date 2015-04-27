@@ -1,22 +1,47 @@
-int testInt=2;		
-int[] testArray={101,102,103};
-int 123failure = 123;
-int cat3 = 4;
+/* testcode.c */
 
-/* magic */
-void testMethod() {
-	if(getTestInt() <  5){
-		while(testInt < 5){
-			testInt = testInt+2-1*15/123;
-			testInt == testInt;
-			!error;
-		}
-	} else {
-	  testInt = 2;
-	  2<3<=4>15>=16!=17;
-	}
+int a;
+
+int addThem(int d, int e) {
+  int f;
+  f = d + e;
+
+  return f;
 }
 
-int getTestInt() {
-	return testInt;
+int main (void) {
+
+  int b;
+  int c;
+  int g;
+  int h;
+  int i;
+
+  b = c = 5;
+
+  if (b == 5) {
+    a = a + 3;
+  }
+  else {
+    a = 4;
+  }
+
+  g = 0;
+  i = 1;
+  while (i <= 8) {
+    g = g + i;
+    i = i+1;
+  }
+  h = g / 3;
+  g = h * 4;
+
+
+  c = addThem(a, b);
+  putchar (56);
+  putchar (61);
+  putchar (g+c);
+  putchar (10);
+
+  return 0;
 }
+

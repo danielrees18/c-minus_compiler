@@ -821,7 +821,7 @@ public class X64RegisterAllocator {
                             new String(getMacroNameFromNum(13)));
                     newOper.setDestOperand(0, src);
                     currBlock.insertOperBefore(insertOper, newOper);
-                    //insertOper = newOper;
+                    insertOper = newOper;
                 }
                 if (usedRegs[14]) {
                     Operation newOper = new Operation(Operation.OperationType.X86_POP, currBlock);
@@ -829,7 +829,7 @@ public class X64RegisterAllocator {
                             new String(getMacroNameFromNum(14)));
                     newOper.setDestOperand(0, src);
                     currBlock.insertOperBefore(insertOper, newOper);
-                    //insertOper = newOper;
+                    insertOper = newOper;
                 }
                 if (usedRegs[15]) {
                     Operation newOper = new Operation(Operation.OperationType.X86_POP, currBlock);
@@ -837,7 +837,7 @@ public class X64RegisterAllocator {
                             new String(getMacroNameFromNum(15)));
                     newOper.setDestOperand(0, src);
                     currBlock.insertOperBefore(insertOper, newOper);
-                    //insertOper = newOper;
+                    insertOper = newOper;
                 }
             }
         }

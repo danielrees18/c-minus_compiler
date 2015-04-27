@@ -1,5 +1,10 @@
 package cminus_compiler.grammar;
 
+import lowlevel.CodeItem;
+import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
+
 /** 
  *
  * @authors Daniel Rees, Nathan Kallman
@@ -47,5 +52,37 @@ public class ReturnStatement extends Statement {
         }
         
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        int returnRegNum;
+        if(expression != null) {
+            expression.gencode(function);
+            returnRegNum = expression.getRegNum();
+        } else {
+            returnRegNum = function.getNewRegNum();
+        }
+        
+        // Source to retReg operation
+        Operand src = new Operand(Operand.OperandType.REGISTER, returnRegNum);
+        Operand dest = new Operand(Operand.OperandType.MACRO, "RetReg");
+       
+        Operation op = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
+        op.setDestOperand(0, dest);
+        op.setSrcOperand(0, src);
+        
+        // Jump operation to return block
+        Operand jmpSrc = new Operand(Operand.OperandType.BLOCK, function.getReturnBlock().getBlockNum());
+                
+        Operation jmp = new Operation(Operation.OperationType.JMP, function.getCurrBlock());
+        jmp.setSrcOperand(0, jmpSrc);
+        
+        
+        // Append blocks
+        function.getCurrBlock().appendOper(op);
+        function.getCurrBlock().appendOper(jmp);
+        
+        return function;
     }
 }

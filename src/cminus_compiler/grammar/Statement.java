@@ -1,6 +1,9 @@
 package cminus_compiler.grammar;
 
+import cminus_compiler.interfaces.CodeGen;
 import cminus_compiler.tool.IndentTool;
+import lowlevel.CodeItem;
+import lowlevel.Function;
 
 /** 
  *
@@ -11,12 +14,14 @@ import cminus_compiler.tool.IndentTool;
  *
  * Description:
  */
-public abstract class Statement {
+public abstract class Statement implements CodeGen {
 
     public String indent(int indent) {
         return IndentTool.indent(indent);
     }
     
     public abstract String printTree(int indent);
+    @Override
+    public abstract CodeItem gencode(Function function);
     
 }

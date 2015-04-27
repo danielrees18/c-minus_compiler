@@ -1,6 +1,11 @@
 package cminus_compiler.grammar;
 
 import java.util.ArrayList;
+import lowlevel.Attribute;
+import lowlevel.CodeItem;
+import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
 
 /** 
  * @authors Daniel Rees, Nathan Kallman
@@ -40,6 +45,7 @@ public class Call extends Expression {
         this.args = args;
     }
     
+    
     @Override
     public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
@@ -50,5 +56,50 @@ public class Call extends Expression {
             builder.append(arg.printTree(indent+1));
         }        
         return builder.toString();
+    }
+    
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        // Pass Operations
+        int count = 0;
+        for(Expression arg : args) {
+            arg.gencode(function);
+            
+            Operand src = new Operand(Operand.OperandType.REGISTER, arg.getRegNum());
+            Operation passOperation = new Operation(Operation.OperationType.PASS, function.getCurrBlock());
+            passOperation.setSrcOperand(0, src);
+            
+            String pos = Integer.toString(count);
+            Attribute attribute = new Attribute("PARAM_NUM", pos);
+            passOperation.addAttribute(attribute);
+            count++;
+
+            function.getCurrBlock().appendOper(passOperation);
+        }
+        
+        // Call Operation
+        String size = Integer.toString(args.size());
+        Attribute attribute = new Attribute("numParams", size);
+        Operand callSrc = new Operand(Operand.OperandType.STRING, this.callName);
+        Operation callOperation = new Operation(Operation.OperationType.CALL, function.getCurrBlock());
+        callOperation.setSrcOperand(0, callSrc);
+        callOperation.addAttribute(attribute);
+        
+        function.getCurrBlock().appendOper(callOperation);
+        
+        // RetReg Operation
+        int destRegNum = function.getNewRegNum();
+        this.setRegNum(destRegNum);
+        Operand src = new Operand(Operand.OperandType.MACRO, "RetReg");
+        Operand dest = new Operand(Operand.OperandType.REGISTER, destRegNum);
+        Operation assignOperation = new Operation(Operation.OperationType.ASSIGN, function.getCurrBlock());
+        assignOperation.setDestOperand(0, dest);
+        assignOperation.setSrcOperand(0, src);
+        
+        function.getCurrBlock().appendOper(assignOperation);
+        
+        
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 package cminus_compiler.grammar;
 
 import java.util.ArrayList;
+import lowlevel.CodeItem;
+import lowlevel.Function;
 
 /** 
  *
@@ -62,5 +64,19 @@ public class CompoundStatement extends Statement {
         }
         
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        
+        for(VarDeclaration decl : variableDeclartions) {
+            decl.gencode(function);
+        }
+        
+        for(Statement stmt : statements) {
+            stmt.gencode(function);
+        }
+        
+        return function;
     }
 }

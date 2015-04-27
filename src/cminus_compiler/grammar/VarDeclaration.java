@@ -1,6 +1,9 @@
 package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
+import lowlevel.CodeItem;
+import lowlevel.Data;
+import lowlevel.Function;
 
 /** 
  *
@@ -57,5 +60,16 @@ public class VarDeclaration extends Declaration {
         
         
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function function) {
+        Data data = new Data(Data.TYPE_INT, declarationName);
+        
+        if(function != null) {
+            function.getTable().put(declarationName, function.getNewRegNum());
+        }
+        
+        return data;
     }
 }

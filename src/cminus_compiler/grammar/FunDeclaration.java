@@ -1,6 +1,11 @@
 package cminus_compiler.grammar;
 
 import java.util.ArrayList;
+import lowlevel.BasicBlock;
+import lowlevel.CodeItem;
+import lowlevel.Data;
+import lowlevel.FuncParam;
+import lowlevel.Function;
 
 /** 
  *
@@ -75,5 +80,80 @@ public class FunDeclaration extends Declaration {
         builder.append(compoundStatement.printTree(indent+1));
         
         return builder.toString();
+    }
+    
+    @Override
+    public CodeItem gencode(Function f) {
+        
+        int type = convertReturnType();
+        Function function = new Function(type, declarationName);
+        
+        // Convert all of the function parameters into FuncParams to pass to the Function object. Need
+        // to maintain a pointer to the front of the linked list, while still adding to the linked list
+        FuncParam firstParam;
+        if(!params.isEmpty()) {
+            firstParam = generateFuncParams(function);
+        } else {
+            firstParam = new FuncParam(Data.TYPE_VOID, "void");
+            function.getTable().put(firstParam.getName(), function.getNewRegNum());
+        }
+       
+        // Generating the function and compound statement of the function
+        function.setFirstParam(firstParam);
+        
+        // Create BB0
+        function.createBlock0();
+        
+        // Make BB
+        BasicBlock bbOne = new BasicBlock(function);
+        
+        // Append BB
+        function.appendBlock(bbOne);
+        
+        // Set CB = BB
+        function.setCurrBlock(bbOne);
+        
+        // gencode { }
+        this.compoundStatement.gencode(function);
+        
+        // append return block
+        BasicBlock returnBlock = function.getReturnBlock();
+        function.appendBlock(returnBlock);
+        
+        // append Unconnected chain
+        BasicBlock unconnectedChainBlock = function.getFirstUnconnectedBlock();
+        if(unconnectedChainBlock != null) {
+            function.appendBlock(unconnectedChainBlock);
+        }
+        
+        // Return CodeItem
+        return function;
+    }
+    
+    
+    private FuncParam generateFuncParams(Function f) {
+        FuncParam firstParam = new FuncParam();
+        FuncParam tempParam = new FuncParam();
+        int i = 0;
+        for(Param param : params) {
+            if(i == 0) {
+                tempParam = param.gencode(f);
+                firstParam = tempParam;
+            } else {
+                tempParam.setNextParam(param.gencode(f));
+                tempParam = tempParam.getNextParam();
+            }
+            i++;
+        }
+        
+        return firstParam;
+    }
+    
+    private int convertReturnType() {
+        if(this.returnType.equalsIgnoreCase("void")) {
+            return Data.TYPE_VOID;
+        } else {
+            return Data.TYPE_INT;
+        }
     }
 }

@@ -2,6 +2,10 @@ package cminus_compiler.grammar;
 
 import cminus_compiler.model.Token;
 import cminus_compiler.tool.IndentTool;
+import lowlevel.CodeItem;
+import lowlevel.Data;
+import lowlevel.FuncParam;
+import lowlevel.Function;
 
 /** 
  *
@@ -63,6 +67,13 @@ public class Param {
         builder.append(isArray);
         
         return builder.toString();
+    }
+    
+    
+    public FuncParam gencode(Function function) {
+        FuncParam param = new FuncParam(Data.TYPE_INT, paramName);
+        function.getTable().put(paramName, function.getNewRegNum());
+        return param;
     }
 
     

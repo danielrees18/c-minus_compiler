@@ -433,6 +433,9 @@ public class Parser implements ParserInterface {
             Token idToken = match(ID_TOKEN);
             expression = parseExpressionPrime(idToken);
             
+        } else if (nextToken.equals(RPAREN_TOKEN)) {
+            // do nothing, expression will return null and be handled in parse args
+            
         } else {
             throw new CminusException(nextToken, LPAREN_TOKEN, NUM_TOKEN, ID_TOKEN);
         }
@@ -742,7 +745,7 @@ public class Parser implements ParserInterface {
         
         Token t = scanner.viewNextToken();
         if(t.equals(LPAREN_TOKEN)) {
-            parseArgs();
+            call = new Call(ID.data(), parseArgs());
         } else {
             throw new CminusException(t, LPAREN_TOKEN);
         }

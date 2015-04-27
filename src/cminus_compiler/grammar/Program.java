@@ -30,7 +30,14 @@ public class Program {
     }
     
     public CodeItem genLLCode() {
-        return null;
+        CodeItem nextItem = declarations.get(0).gencode(null);
+        CodeItem firstItem = nextItem; 
+        for(int i = 1; i < declarations.size(); i++) {
+            nextItem.setNextItem(declarations.get(i).gencode(null));
+            nextItem = nextItem.getNextItem();
+        }
+        
+        return firstItem;
     }
     
     public String printTree() {
