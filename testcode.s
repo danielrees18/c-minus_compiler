@@ -44,9 +44,9 @@ printInt_bb4:
 	call	putDigit
 	movl	%R14D, %EAX
 printInt_bb1:
-	popq	%R13
-	popq	%R14
 	popq	%R15
+	popq	%R14
+	popq	%R13
 	ret
 printInt_bb11:
 	movl	$1, %EAX
@@ -281,9 +281,9 @@ main_bb24:
 	call	putchar
 	movl	$0, %EAX
 main_bb1:
-	popq	%R13
-	popq	%R14
 	popq	%R15
+	popq	%R14
+	popq	%R13
 	ret
 main_bb6:
 	movl	$4, %EAX

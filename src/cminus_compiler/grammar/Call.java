@@ -45,6 +45,7 @@ public class Call extends Expression {
         this.args = args;
     }
     
+    
     @Override
     public String printTree(int indent) {
         StringBuilder builder = new StringBuilder();
@@ -56,6 +57,7 @@ public class Call extends Expression {
         }        
         return builder.toString();
     }
+    
     
     @Override
     public CodeItem gencode(Function function) {
@@ -76,10 +78,7 @@ public class Call extends Expression {
             function.getCurrBlock().appendOper(passOperation);
         }
         
-        
-        
         // Call Operation
-        
         String size = Integer.toString(args.size());
         Attribute attribute = new Attribute("numParams", size);
         Operand callSrc = new Operand(Operand.OperandType.STRING, this.callName);
