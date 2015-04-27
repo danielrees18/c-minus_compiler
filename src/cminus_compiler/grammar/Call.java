@@ -60,7 +60,6 @@ public class Call extends Expression {
     @Override
     public CodeItem gencode(Function function) {
         // Pass Operations
-        ArrayList<Operation> passOperations = new ArrayList<>();
         int count = 0;
         for(Expression arg : args) {
             arg.gencode(function);
@@ -74,12 +73,9 @@ public class Call extends Expression {
             passOperation.addAttribute(attribute);
             count++;
 
-            passOperations.add(passOperation);
+            function.getCurrBlock().appendOper(passOperation);
         }
         
-        for(Operation passOp : passOperations) {
-            function.getCurrBlock().appendOper(passOp);
-        }
         
         
         // Call Operation
